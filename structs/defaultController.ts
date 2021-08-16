@@ -1,4 +1,4 @@
-import { DefaultServerResponse } from "~/server/structs/DefaultServerResponse"
+import { DefaultServerResponse } from "~/structs/DefaultServerResponse"
 import { UserDto } from "~/server/User/dto/user.dto"
 export type allDto = UserDto
 export interface DefaultController {

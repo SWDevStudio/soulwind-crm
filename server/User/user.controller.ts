@@ -1,29 +1,34 @@
 import { Request, Response } from "express"
-import WebManager from "../express/WebManager"
-import UserModel from "./user.model"
-import { DefaultServerResponse } from "~/server/structs/DefaultServerResponse"
-import { UserDto } from "~/server/User/dto/user.dto"
+import WebManager from "../WebManager"
+import UserService from "./user.service"
+import { UserRegisterDto } from "~/server/User/dto/user.dto"
 
-class UserController {
-  create(data: string): DefaultServerResponse<number | string> | any {
-    console.log(data)
-    WebManager.AppExpress.post(
-      "/user/create",
-      async (req: Request<any, UserDto>, res: Response) => {
-        try {
-          console.log(req.body, 123)
-          const resp = await UserModel.create(Object.assign({}, req.body))
-          res.send({ cats: resp })
-        } catch (e) {
-          res.send({ e })
-        }
+function UserController(path: string) {
+  WebManager.AppExpress.post(
+    path + "/create",
+    async (req: Request<any, UserRegisterDto>, res: Response) => {
+      try {
+        await UserService.create(req.body)
+        res.send({
+          response: true,
+        })
+      } catch (e) {
+        console.log(e.response)
+        res.send({ e })
       }
-    )
-  }
+    }
+  )
 
-  init() {
-    this.create("123")
-  }
+  WebManager.AppExpress.get(path + "/:id", async (req, res) => {
+    try {
+      res.send({
+        response: await UserService.get(req.params?.id),
+      })
+    } catch (e) {
+      console.log(e.response)
+      res.send({ e })
+    }
+  })
 }
 
-export default new UserController()
+export default UserController

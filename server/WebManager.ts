@@ -7,8 +7,6 @@ class WebManager {
     this.AppExpress = express()
     this.AppExpress.use(bodyParser.json())
     this.AppExpress.get("/echo/:what", (req: Request, res: Response) => {
-      // const allCats: Cat[] = await Cats.find({})
-      // res.send({ cats: allCats })
       res.send(req.params)
     })
   }

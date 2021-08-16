@@ -87,16 +87,8 @@ export default {
       title: "Vuetify.js",
     }
   },
-  async created() {
-    // console.log(window)
-    if (!process.server) {
-      // const r = await this.$axios.get("/api/echo/hello-world")
-      // console.log(r.data)
-      const t = await this.$axios.post("/api/user/create", {
-        name: "Kotaro Rotor",
-      })
-      console.log(t.data)
-    }
+   created() {
+
   },
 }
 </script>
