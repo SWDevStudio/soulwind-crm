@@ -87,8 +87,6 @@ export default {
       title: "Vuetify.js",
     }
   },
-   created() {
-
-  },
+  created() {},
 }
 </script>
