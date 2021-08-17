@@ -1,34 +1,40 @@
 import { Request, Response } from "express"
 import WebManager from "../WebManager"
+import { ServerController } from "../utils/ServerController"
 import UserService from "./user.service"
-import { UserRegisterDto } from "~/server/User/dto/user.dto"
 
-function UserController(path: string) {
-  WebManager.AppExpress.post(
-    path + "/create",
-    async (req: Request<any, UserRegisterDto>, res: Response) => {
-      try {
-        await UserService.create(req.body)
-        res.send({
-          response: true,
-        })
-      } catch (e) {
-        console.log(e.response)
-        res.send({ e })
-      }
-    }
-  )
-
-  WebManager.AppExpress.get(path + "/:id", async (req, res) => {
-    try {
+class UserController extends ServerController {
+  post() {
+    this.postDecorator("/create", async (req: Request, res: Response) => {
+      await UserService.create(req.body)
       res.send({
-        response: await UserService.get(req.params?.id),
+        response: true,
       })
-    } catch (e) {
-      console.log(e.response)
-      res.send({ e })
-    }
-  })
+    })
+  }
+
+  get() {
+    this.getDecorator("/:id", async (req: Request, res: Response) => {
+      res.send({
+        response: await UserService.get(req.params?.id || ""),
+      })
+    })
+  }
+
+  getAll() {
+    this.getDecorator("", async (req: Request, res: Response) => {
+      res.send({
+        response: await UserService.get(),
+      })
+    })
+  }
+
+  public Init(path: string) {
+    this.path = path
+    this.get()
+    this.getAll()
+    this.post()
+  }
 }
 
 export default UserController

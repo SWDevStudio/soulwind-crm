@@ -23,6 +23,7 @@ class UserService {
       return resp[0]
     }
     resp = await UserModel.find()
+    console.log(resp)
     return resp
   }
 }

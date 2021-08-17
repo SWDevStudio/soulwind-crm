@@ -9,7 +9,7 @@ connect(
   }
 ).then()
 // Возможно стоит подключать их сразу в классе WebManager или вынести его сюда и импортировать в heandler
-UserController("/user")
+new UserController().Init("/user")
 
 module.exports = {
   path: "/api",
