@@ -1,30 +1,24 @@
+import { Request, Response } from "express"
 import UserModel from "./dto/user.model"
 import { UserDto, UserRegisterDto } from "~/server/User/dto/user.dto"
 
 // import { Response } from "express"
 
 class UserService {
-  // readonly res: Response
-  // constructor(res: Response) {
-  //   this.res = res
-  // }
-
-  async create(data: UserRegisterDto): Promise<boolean> {
+  async createUser(req: Request, res: Response): Promise<void> {
     // Проверить есть ли пользователь с такой почтой в чате
-    console.log(data)
-    await UserModel.create(data)
-    return true
+    const status = await UserModel.create(req.body)
+    if (status) {
+      res.send({
+        response: status,
+      })
+    }
   }
 
-  async get(id?: string): Promise<UserDto[]> {
-    let resp: any
-    if (id) {
-      resp = await UserModel.find({ _id: id })
-      return resp[0]
-    }
-    resp = await UserModel.find()
-    console.log(resp)
-    return resp
+  async getUser(req: any, res: any): Promise<void> {
+    res.send({
+      response: await UserModel.find(),
+    })
   }
 }
 

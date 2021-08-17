@@ -1,17 +1,28 @@
-import { connect } from "mongoose"
-import WebManager from "./WebManager"
+import * as core from "express-serve-static-core"
+import express from "express"
+import basicAuth from "express-basic-auth"
+import bodyParser from "body-parser"
+import { ConnectDataBase } from "./utils/ConnectDataBase"
+import GroupController from "./Group/group.controller"
 import UserController from "./User/user.controller"
-connect(
-  "mongodb+srv://KotaroSW:KotaroSW2015@cluster0.pes58.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-).then()
-// Возможно стоит подключать их сразу в классе WebManager или вынести его сюда и импортировать в heandler
-new UserController().Init("/user")
+import { ServerData } from "./Data/PATHS"
+
+const start = () => {
+  // Подключаемся к бд
+  ConnectDataBase()
+  // Создаем express
+  const app: core.Express = express()
+  // Добавляем прослушку body
+  app.use(bodyParser.json())
+
+  // Добавляем роуты которые слушает express
+  app.use(ServerData.PATHS.GROUP, GroupController)
+  app.use(ServerData.PATHS.USER, UserController)
+
+  return app
+}
 
 module.exports = {
   path: "/api",
-  handler: WebManager.Init(),
+  handler: start(),
 }
