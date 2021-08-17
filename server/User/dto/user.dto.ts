@@ -2,7 +2,7 @@ import { Document } from "mongoose"
 
 export interface UserDto extends Document {
   email: string
-  accessGroupId?: number | null
+  role?: string | null
 }
 
 export interface UserRegisterDto extends UserDto {
