@@ -1,9 +1,9 @@
 import { Request, Response } from "express"
 import jwt from "jsonwebtoken"
+import bcrypt from "bcrypt"
 import { ServerData } from "../Data/SECRET_KEY"
 import UserModel from "./dto/user.model"
 import { UserDto, UserRegisterDto } from "~/server/User/dto/user.dto"
-
 const generateToken = (id: string, role: string) => {
   const payload = {
     id,
@@ -13,8 +13,25 @@ const generateToken = (id: string, role: string) => {
 }
 class UserService {
   async createUser(req: Request, res: Response): Promise<void> {
+    const { email, password } = req.body
+    if (!email || !password) {
+      res
+        .status(400)
+        .json({ message: "Не хватает обязательных полей email или password" })
+    }
     // Проверить есть ли пользователь с такой почтой в чате
-    const status = await UserModel.create(req.body)
+    const user = await UserModel.findOne({
+      email: req.body.email,
+    })
+    if (user) {
+      res
+        .status(400)
+        .json({ message: "Пользователь с такой почтой уже существует" })
+    }
+    const status = await UserModel.create({
+      email,
+      password: bcrypt.hashSync(password, 7),
+    })
     if (status) {
       res.send({
         response: status,
@@ -28,7 +45,8 @@ class UserService {
     if (!user) {
       return res.status(400).json({ message: "Пользователь не найден" })
     }
-    const validPassword = password === user.password
+
+    const validPassword = bcrypt.compareSync(password, user.password)
     if (!validPassword) {
       return res.status(400).json({ message: "Пароли не совпадают" })
     }
