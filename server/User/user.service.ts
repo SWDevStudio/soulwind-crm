@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
+import { validationResult } from "express-validator"
 import { ServerData } from "../Data/SECRET_KEY"
 import UserModel from "./dto/user.model"
 import { UserDto, UserRegisterDto } from "~/server/User/dto/user.dto"
@@ -40,20 +41,28 @@ class UserService {
   }
 
   async login(req: Request, res: Response) {
-    const { email, password } = req.body
-    const user = await UserModel.findOne({ email })
-    if (!user) {
-      return res.status(400).json({ message: "Пользователь не найден" })
-    }
+    try {
+      // TODO сделать чеки и добавить утилиты для проверки.
+      if (!validationResult(req).isEmpty()) {
+        return res.status(400).json(validationResult(req))
+      }
+      const { email, password } = req.body
+      const user = await UserModel.findOne({ email })
+      if (!user) {
+        return res.status(400).json({ message: "Пользователь не найден" })
+      }
 
-    const validPassword = bcrypt.compareSync(password, user.password)
-    if (!validPassword) {
-      return res.status(400).json({ message: "Пароли не совпадают" })
+      const validPassword = bcrypt.compareSync(password, user.password)
+      if (!validPassword) {
+        return res.status(400).json({ message: "Пароли не совпадают" })
+      }
+      const token = generateToken(user._id, user.role)
+      res.send({
+        token,
+      })
+    } catch (message) {
+      return res.status(400).json({ message })
     }
-    const token = generateToken(user._id, user.role)
-    res.send({
-      token,
-    })
   }
 
   async getUser(req: any, res: any): Promise<void> {

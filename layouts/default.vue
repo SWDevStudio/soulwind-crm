@@ -87,6 +87,12 @@ export default {
       title: "Vuetify.js",
     }
   },
-  created() {},
+  async created() {
+    const res = await this.$axios.post("/api/user/login", {
+      email: "swdevstudio@gma1il.com",
+      password: "qwer1232323",
+    })
+    console.log(res)
+  },
 }
 </script>
