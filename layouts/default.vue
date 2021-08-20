@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
   data() {
     return {
@@ -88,7 +89,7 @@ export default {
     }
   },
   async created() {
-    const res = await this.$axios.post("/api/user/login", {
+    const res = await axios.post("/api/user/login", {
       email: "swdevstudio@gma1il.com",
       password: "qwer1232323",
     })
