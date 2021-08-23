@@ -66,9 +66,28 @@ class UserService {
   }
 
   async getUser(req: any, res: any): Promise<void> {
-    res.send({
-      response: await UserModel.find(),
+    const users: UserRegisterDto[] = await UserModel.find({
+      _id: req.params.id,
     })
+
+    res.send(
+      users.map((i) => ({
+        _id: i._id,
+        email: i.email,
+        role: i.role,
+      }))[0]
+    )
+  }
+
+  async getUsers(req: any, res: any): Promise<void> {
+    const users: UserRegisterDto[] = await UserModel.find()
+    res.send(
+      users.map((i) => ({
+        _id: i._id,
+        email: i.email,
+        role: i.role,
+      }))
+    )
   }
 }
 

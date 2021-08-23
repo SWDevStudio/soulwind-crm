@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import jwt from "jsonwebtoken"
 import { ServerData } from "../Data/SECRET_KEY"
-
 export default function AuthorizeMiddleware(
   req: Request,
   res: Response,
@@ -16,7 +15,8 @@ export default function AuthorizeMiddleware(
     if (!token) {
       return res.status(403).json({ message: "Пользователь не авторизован" })
     }
-    req.body._user = jwt.verify(token, ServerData.SECRET_KEY)
+    const decode = jwt.verify(token, ServerData.SECRET_KEY)
+    req.body._user = decode
     next()
   } catch (e) {
     return res.status(400).json({ message: e })

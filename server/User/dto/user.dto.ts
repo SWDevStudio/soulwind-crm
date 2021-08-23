@@ -1,10 +1,10 @@
 import { Document } from "mongoose"
-import { Roles } from "~/types/Roles"
 import { JwtPayload } from "jsonwebtoken"
+import { Roles } from "~/types/Roles"
 
 export interface UserDto extends Document {
   email: string
-  role?: Roles
+  role: Roles
 }
 
 export interface UserTokenInfo extends JwtPayload {

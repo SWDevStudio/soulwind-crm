@@ -9,6 +9,12 @@ UserController.get(
   "",
   AuthorizeMiddleware,
   RolesMiddleware(["ADMIN", "USER"]),
+  UserService.getUsers
+)
+UserController.get(
+  "/:id",
+  AuthorizeMiddleware,
+  RolesMiddleware(["ADMIN", "USER"]),
   UserService.getUser
 )
 UserController.post("", UserService.createUser)

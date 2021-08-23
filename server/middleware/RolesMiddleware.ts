@@ -9,12 +9,15 @@ export default function RolesMiddleware(roles: Roles[]): any {
       next()
     }
     const token: string = req.headers?.token as string
+    if (!token) {
+      return res.status(403).json({ message: "Пользователь не авторизован" })
+    }
     const user: UserTokenInfo = jwt.verify(
       token,
       ServerData.SECRET_KEY
     ) as UserTokenInfo
     if (!roles.find((role) => role === user.role)) {
-      return res.status(400).json({ message: "Недостаточно прав" })
+      return res.status(403).json({ message: "Недостаточно прав" })
     }
     next()
   }
