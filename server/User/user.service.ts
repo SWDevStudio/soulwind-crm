@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { validationResult } from "express-validator"
+// import _ from "lodash"
 import { ServerData } from "../Data/SECRET_KEY"
 import UserModel from "./dto/user.model"
 import { UserDto, UserRegisterDto } from "~/server/User/dto/user.dto"
@@ -68,26 +69,13 @@ class UserService {
   async getUser(req: any, res: any): Promise<void> {
     const users: UserRegisterDto[] = await UserModel.find({
       _id: req.params.id,
-    })
-
-    res.send(
-      users.map((i) => ({
-        _id: i._id,
-        email: i.email,
-        role: i.role,
-      }))[0]
-    )
+    }).select("-password")
+    res.send(users[0])
   }
 
   async getUsers(req: any, res: any): Promise<void> {
-    const users: UserRegisterDto[] = await UserModel.find()
-    res.send(
-      users.map((i) => ({
-        _id: i._id,
-        email: i.email,
-        role: i.role,
-      }))
-    )
+    const users: UserRegisterDto[] = await UserModel.find().select("-password")
+    res.send(users)
   }
 }
 
