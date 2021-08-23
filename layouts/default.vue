@@ -89,11 +89,11 @@ export default {
     }
   },
   async created() {
-    const res = await axios.post("/api/user/login", {
-      email: "swdevstudio@gma1il.com",
-      password: "qwer1232323",
-    })
-    console.log(res)
+    // const res = await axios.post("/api/user/login", {
+    //   email: "swdevstudio@gma1il.com",
+    //   password: "qwer1232323",
+    // })
+    // console.log(res)
   },
 }
 </script>

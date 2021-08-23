@@ -66,7 +66,6 @@ class UserService {
   }
 
   async getUser(req: any, res: any): Promise<void> {
-    console.log(req.user, "user")
     res.send({
       response: await UserModel.find(),
     })
