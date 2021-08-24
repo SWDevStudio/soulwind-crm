@@ -1,11 +1,12 @@
 import * as core from "express-serve-static-core"
 import express from "express"
-import basicAuth from "express-basic-auth"
+// import basicAuth from "express-basic-auth"
 import bodyParser from "body-parser"
 import { ConnectDataBase } from "./utils/ConnectDataBase"
 import GroupController from "./Group/group.controller"
 import UserController from "./User/user.controller"
 import { ServerData } from "./Data/PATHS"
+import CharacterController from "./Character/character.controller"
 
 const start = () => {
   // Подключаемся к бд
@@ -18,7 +19,7 @@ const start = () => {
   // Добавляем роуты которые слушает express
   app.use(ServerData.PATHS.GROUP, GroupController)
   app.use(ServerData.PATHS.USER, UserController)
-
+  app.use(ServerData.PATHS.CHARACTER, CharacterController)
   return app
 }
 
