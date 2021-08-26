@@ -28,6 +28,7 @@ class UserService {
     if (!user) {
       return res.status(400).json({ message: "Пользователь не найден" })
     }
+
     const validPassword = password === user.password
     if (!validPassword) {
       return res.status(400).json({ message: "Пароли не совпадают" })
