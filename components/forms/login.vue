@@ -16,6 +16,9 @@
       type="password"
       required
     />
+    <p v-if="serverErrorResponse" class="error--text text-sm-caption">
+      {{ serverErrorResponse }}
+    </p>
     <v-btn
       color="teal accent-3"
       outlined
@@ -35,6 +38,7 @@ export default {
   name: "login",
   data: () => ({
     valid: true,
+    serverErrorResponse: "",
     emailRules: [
       (value) => !!value || "Email is required",
       (value) => /.+@.+\..+/.test(value) || "Email must be valid",
@@ -48,11 +52,14 @@ export default {
   methods: {
     async sendForm() {
       if (this.$refs.form.validate()) {
-        console.log(
-          await this.$axios
-            .post("/api/user/login", this.form)
-            .catch((e) => e.response)
-        )
+        const response = await this.$axios
+          .post("/api/user/login", this.form)
+          .catch((e) => e.response)
+        if (response.status === 200) {
+          alert(response.data.token)
+        } else {
+          this.serverErrorResponse = response.data.message
+        }
       }
     },
   },
