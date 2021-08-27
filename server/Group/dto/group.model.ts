@@ -1,9 +1,9 @@
 import { Schema, model } from "mongoose"
 import * as mongoose from "mongoose"
-import { GroupModel } from "~/server/Group/dto/group.dto"
+import { GroupDtoModel } from "~/server/Group/dto/group.dto"
 
-const schema = new Schema<GroupModel>({
+const schema = new Schema<GroupDtoModel>({
   name: { type: String, required: true },
 })
 
-export default mongoose.models.Group || model<GroupModel>("Group", schema)
+export default mongoose.models.Group || model<GroupDtoModel>("Group", schema)
