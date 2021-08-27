@@ -1,10 +1,7 @@
-import * as core from "express-serve-static-core"
 import { Router } from "express"
+import GroupService from "./group.service"
 const GroupController = Router()
-GroupController.get("", (req, res) => {
-  res.send({ res: "hello world" })
-})
-GroupController.post("", (req, res) => {
-  res.send({ res: "hello world post" })
-})
+GroupController.get("", GroupService.get)
+GroupController.post("/create", GroupService.create)
+
 export default GroupController

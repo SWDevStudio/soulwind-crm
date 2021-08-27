@@ -17,7 +17,7 @@ CharacterController.post(
   CharacterService.createCharacter
 )
 CharacterController.patch(
-  "/patch",
+  "/patch/:id",
   AuthorizeMiddleware,
   RolesMiddleware(["ADMIN"]),
   CharacterService.patchCharacter
