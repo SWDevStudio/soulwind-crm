@@ -42,13 +42,15 @@ class GroupService {
     try {
       const id: string = req.params.id as string
       const status = await GroupModel.findByIdAndDelete(id)
+
       if (!status) {
-        ServiceHelper.defaultErrorResponse(
+        return ServiceHelper.defaultErrorResponse(
           res,
           "Данного пользователя нет в базе"
         )
       }
-      res.json(status)
+
+      return res.json(status)
     } catch (e) {
       ServiceHelper.defaultErrorResponse(res, e)
     }
