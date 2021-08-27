@@ -5,19 +5,19 @@ import RolesMiddleware from "../middleware/RolesMiddleware"
 import UserService from "./user.service"
 const UserController = Router()
 
-UserController.get(
-  "",
-  AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN", "USER"]),
-  UserService.getUsers
-)
+UserController.get("", AuthorizeMiddleware, UserService.getUsers)
 UserController.get(
   "/:id",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN", "USER"]),
+
   UserService.getUser
 )
-UserController.post("", UserService.createUser)
+UserController.post(
+  "",
+  AuthorizeMiddleware,
+  RolesMiddleware(["ADMIN"]),
+  UserService.createUser
+)
 UserController.post(
   "/login",
   [check("email", "email is required field").notEmpty()],
