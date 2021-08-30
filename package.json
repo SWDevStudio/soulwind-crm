@@ -34,6 +34,8 @@
     "nuxt-property-decorator": "^2.9.1",
     "sass": "^1.37.5",
     "sass-loader": "10.1.1",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6",
     "vuetify": "^2.5.5"
   },
   "devDependencies": {
