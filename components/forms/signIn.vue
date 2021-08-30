@@ -24,6 +24,9 @@
       type="password"
       required
     />
+    <p v-if="notCorrectPass" class="error--text text-sm-caption">
+      {{ notCorrectPass }}
+    </p>
     <v-btn
       color="teal accent-3"
       outlined
@@ -31,6 +34,7 @@
       block
       class="mt-3 mb-2"
       :disabled="!valid"
+      @click="comparePass"
     >
       Зарегистрироваться
     </v-btn>
@@ -42,6 +46,7 @@ export default {
   name: "signIn",
   data: () => ({
     valid: true,
+    notCorrectPass: "",
     emailRules: [
       (value) => !!value || "Email is required",
       (value) => /.+@.+\..+/.test(value) || "Email must be valid",
@@ -54,6 +59,15 @@ export default {
       repeatPass: "",
     },
   }),
+  methods: {
+    comparePass() {
+      if (this.form.password === this.form.repeatPass) {
+        console.log("the password is correct")
+      } else {
+        this.notCorrectPass = "Пароли не совпадают"
+      }
+    },
+  },
 }
 </script>
 
