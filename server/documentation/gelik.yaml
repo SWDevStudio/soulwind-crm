@@ -1,0 +1,7 @@
+paths:
+  /gelik:
+    get:
+      tags: [user]
+      responses:
+        '200':
+          description: OK
