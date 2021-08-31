@@ -1,7 +1,6 @@
 parameters:
-  username:
-    name: username
-    description: Username to use for login.
-    in: formData
-    required: true
-    type: string
+  loginResponse:
+    type: "object"
+    properties:
+      token:
+        type: "string"

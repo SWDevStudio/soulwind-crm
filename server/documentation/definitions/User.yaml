@@ -1,0 +1,36 @@
+definitions:
+  UserRegisterDTO:
+    type: "object"
+    required:
+      - "password"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+      roles:
+        type: "string"
+        enum:
+          - "USER"
+          - "ADMIN"
+      password:
+        type: "string"
+    xml:
+      name: "UserRegisterDTO"
+  UserDTO:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"
+      roles:
+        type: "string"
+        enum:
+          - "USER"
+          - "ADMIN"
+      __v:
+        type: "integer"
+        format: "int32"
+    xml:
+      name: "UserDTO"
