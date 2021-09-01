@@ -15,6 +15,7 @@ const generateToken = (id: string, role: string) => {
 }
 class UserService {
   async createUser(req: Request, res: Response): Promise<void> {
+    // TODO добавить try cacth
     const { email, password } = req.body
     if (!email || !password) {
       res
@@ -34,11 +35,7 @@ class UserService {
       email,
       password: bcrypt.hashSync(password, 7),
     })
-    if (status) {
-      res.send({
-        response: status,
-      })
-    }
+    res.send(!!status)
   }
 
   async login(req: Request, res: Response) {

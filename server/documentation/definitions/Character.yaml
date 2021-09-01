@@ -1,0 +1,113 @@
+definitions:
+  CharacterDTO:
+    type: "object"
+    required:
+      - "lastName"
+    properties:
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      class:
+        type: "string"
+        enum:
+          - "Варвар"
+          - "Лучница"
+          - "Сорка"
+          - "Мистик"
+          - "Валькирия"
+          - "Воин"
+          - "Волшебник"
+          - "Волшебница"
+          - "Ронин"
+          - "Маэва"
+          - "Ниндзя"
+          - "Куноичи"
+          - "Темный рыцарь"
+          - "Страйкер"
+          - "Фурия"
+          - "Лан"
+          - "Лучник"
+          - "Шай"
+          - "Страж"
+          - "Хасашин"
+          - "Нова"
+          - "Мудрец"
+          - "Корсар"
+      ap:
+        type: "integer"
+      awakeningAp:
+        type: "integer"
+      dp:
+        type: "integer"
+      partyId:
+        type: "integer"
+      alchemy:
+          type: "array"
+          items:
+            type: "string"
+            enum:
+              - "string"
+      note:
+        type: "string"
+      pvpRank:
+        type: "string"
+    xml:
+      name: "CharacterDTO"
+  CharacterDTOResponse:
+    type: "object"
+    properties:
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      class:
+        type: "string"
+        enum:
+          - "Варвар"
+          - "Лучница"
+          - "Сорка"
+          - "Мистик"
+          - "Валькирия"
+          - "Воин"
+          - "Волшебник"
+          - "Волшебница"
+          - "Ронин"
+          - "Маэва"
+          - "Ниндзя"
+          - "Куноичи"
+          - "Темный рыцарь"
+          - "Страйкер"
+          - "Фурия"
+          - "Лан"
+          - "Лучник"
+          - "Шай"
+          - "Страж"
+          - "Хасашин"
+          - "Нова"
+          - "Мудрец"
+          - "Корсар"
+      ap:
+        type: "integer"
+      awakeningAp:
+        type: "integer"
+      dp:
+        type: "integer"
+      partyId:
+        type: "integer"
+      alchemy:
+        type: "array"
+        items:
+          type: "string"
+          enum:
+            - "string"
+      note:
+        type: "string"
+      pvpRank:
+        type: "string"
+      _id:
+        type: "string"
+      __v:
+        type: "integer"
+    xml:
+      name: "CharacterDTOResponse"

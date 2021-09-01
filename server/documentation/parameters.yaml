@@ -1,0 +1,18 @@
+parameters:
+  loginResponse:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+  token:
+    name: "token"
+    in: "header"
+    description: "Токен авторизации"
+    required: "true"
+    type: "string"
+  createCharacter:
+    name: "body"
+    in: "body"
+    required: "true"
+    schema:
+      $ref: "#/definitions/CharacterDTO"

@@ -1,5 +1,5 @@
 # wow
-
+Документацию для API можно посмотреть по адресу http://hostname/api/docs
 ## Build Setup
 
 ```bash
