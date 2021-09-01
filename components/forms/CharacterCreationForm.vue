@@ -4,11 +4,21 @@
     max-width="1200"
     overlay-color="teal accent-4"
     overlay-opacity="0.1"
-    @click:outside="closeModal"
+    persistent
+    @keydown.esc="closeModal"
   >
     <v-card>
-      <v-card-title class="font-weight-regular teal--text text--accent-3">
-        Создание персонажа
+      <v-card-title
+        class="
+          font-weight-regular
+          teal--text
+          text--accent-3
+          d-flex
+          justify-space-between
+        "
+      >
+        {{ editMode ? "Редактирование" : "Создание" }} персонажа
+        <v-icon color="teal accent-3" @click="closeModal">mdi-close</v-icon>
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
@@ -35,28 +45,28 @@
           <v-row>
             <v-col cols="3">
               <v-text-field
-                v-model="form.level"
+                v-model.number="form.level"
                 label="Уровень"
                 color="teal accent-3"
               ></v-text-field>
             </v-col>
             <v-col cols="3">
               <v-text-field
-                v-model="form.ap"
+                v-model.number="form.ap"
                 label="Атака"
                 color="teal accent-3"
               ></v-text-field>
             </v-col>
             <v-col cols="3">
               <v-text-field
-                v-model="form.awakeningAp"
+                v-model.number="form.awakeningAp"
                 label="Атака проб. оружием"
                 color="teal accent-3"
               ></v-text-field>
             </v-col>
             <v-col cols="3">
               <v-text-field
-                v-model="form.dp"
+                v-model.number="form.dp"
                 label="Защита"
                 color="teal accent-3"
               ></v-text-field>
@@ -99,8 +109,8 @@
                 large
                 class="mt-3 mb-4"
                 :disabled="!valid"
-                @click="createdCharacter"
-                >Добавить персонажа
+                @click="editMode ? editCharacter() : createdCharacter()"
+                >{{ editMode ? "Редактировать" : "Добавить персонажа" }}
               </v-btn>
             </v-col>
           </v-row>
@@ -122,6 +132,7 @@ export default {
   },
   data: () => ({
     valid: true,
+    editMode: false,
     CHARACTER_CLASS,
     groupItem: ["Bar", "Fizz"],
     rules: [(value) => !!value || "Заполни меня"],
@@ -137,18 +148,49 @@ export default {
       note: "",
       pvpRank: "",
       level: "",
+      _id: null,
     },
   }),
   methods: {
     closeModal() {
+      this.clearForm()
+      this.editMode = false
       this.$emit("input", false)
     },
-    createdCharacter() {
-      this.clearForm()
+    async createdCharacter() {
+      const res = await this.$axios
+        .post("/api/character", this.form, {
+          headers: {
+            token:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjAyNjA1YjAyMjE2NGFiY2NlMjk1MiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTYzMDUxMTQyNCwiZXhwIjoxNjMwNTk3ODI0fQ.TEaOBRCd7FK2klmpdtXWGRauknZmvAl4JZ0sAaADVEo",
+          },
+        })
+        .catch((error) => error.response)
+
+      this.closeModal()
+    },
+    async editCharacter() {
+      const res = await this.$axios
+        .patch("/api/character/" + this.form._id, this.form, {
+          headers: {
+            token:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjAyNjA1YjAyMjE2NGFiY2NlMjk1MiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTYzMDUxMTQyNCwiZXhwIjoxNjMwNTk3ODI0fQ.TEaOBRCd7FK2klmpdtXWGRauknZmvAl4JZ0sAaADVEo",
+          },
+        })
+        .catch((error) => error.response)
       this.closeModal()
     },
     clearForm() {
       this.$refs.form.reset()
+    },
+    startEdit(character) {
+      if (character) {
+        this.editMode = true
+        this.form = {
+          ...this.form,
+          ...character,
+        }
+      }
     },
   },
 }

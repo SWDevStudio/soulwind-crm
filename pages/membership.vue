@@ -40,9 +40,13 @@
         :search="form.search"
         disable-pagination
         hide-default-footer
-      ></v-data-table>
+      >
+        <template v-slot:item.actions="{ item }">
+          <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+        </template>
+      </v-data-table>
     </v-card>
-    <character-creation-form v-model="modal" />
+    <character-creation-form ref="characterForm" v-model="modal" />
   </v-row>
 </template>
 
@@ -67,31 +71,41 @@ export default {
       { text: "Атака П.", value: "awakeningAp" },
       { text: "Защита", value: "dp" },
       { text: "pvp skill", value: "pvpRank" },
+      { text: "Actions", value: "actions", sortable: false },
     ],
-    characters: [
-      {
-        firstName: "string",
-        lastName: "string",
-        class: "Варвар",
-        ap: 0,
-        awakeningAp: 0,
-        dp: 0,
-        partyId: 0,
-        alchemy: ["string"],
-        note: "string",
-        pvpRank: "string",
-        _id: "string",
-        __v: 0,
-      },
-    ],
+    characters: [],
   }),
-  async created() {
-    await this.$axios.get("/api/character", {
-      headers: {
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjAyNjA1YjAyMjE2NGFiY2NlMjk1MiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTYzMDUxMTQyNCwiZXhwIjoxNjMwNTk3ODI0fQ.TEaOBRCd7FK2klmpdtXWGRauknZmvAl4JZ0sAaADVEo",
-      },
-    })
+  watch: {
+    modal(val) {
+      if (!val) {
+        this.loadCharacters()
+      }
+    },
+  },
+  created() {
+    this.loadCharacters()
+  },
+  methods: {
+    async loadCharacters() {
+      const res = await this.$axios
+        .get("/api/character", {
+          headers: {
+            token:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjAyNjA1YjAyMjE2NGFiY2NlMjk1MiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTYzMDUxMTQyNCwiZXhwIjoxNjMwNTk3ODI0fQ.TEaOBRCd7FK2klmpdtXWGRauknZmvAl4JZ0sAaADVEo",
+          },
+        })
+        .catch((e) => e.response)
+      if (res.status === 200) {
+        this.characters = res.data
+      }
+    },
+    editItem(item) {
+      console.log(item, "123")
+      this.editedIndex = this.characters.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.$refs.characterForm.startEdit(item)
+      this.modal = true
+    },
   },
 }
 </script>
