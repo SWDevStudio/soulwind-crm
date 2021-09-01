@@ -13,10 +13,7 @@ const UserController = Router()
  *    description: Возвращает всех существующих пользователей
  *    tags: [User]
  *    parameters:
- *      - name: "token"
- *        in: "header"
- *        required: true
- *        type: string
+ *      - $ref: "#/parameters/token"
  *    responses:
  *      '200':
  *        schema:
@@ -39,6 +36,7 @@ UserController.get("", AuthorizeMiddleware, UserService.getUsers)
  *      in: "path"
  *      required: true
  *      type: string
+ *    - $ref: "#/parameters/token"
  *   responses:
  *      '200':
  *        schema:

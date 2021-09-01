@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import CharacterModel from "./dto/character.model"
 import {
   CharacterDto,
-  CharacterDtoMongoose,
+  CharacterDTOResponse,
 } from "~/server/Character/dto/character.dto"
 
 class CharacterService {
@@ -18,14 +18,14 @@ class CharacterService {
     try {
       // TODO сделать проверку полей
       const data = req.body as CharacterDto
-      const character: CharacterDtoMongoose = await CharacterModel.findOne({
+      const character: CharacterDTOResponse = await CharacterModel.findOne({
         lastName: data.lastName,
       })
       if (character) {
-        return res.json(character._id)
+        return res.json(character)
       }
-      const status = await CharacterModel.create(data)
-      res.json(status._id)
+      const newCharacter = await CharacterModel.create(data)
+      res.json(newCharacter)
     } catch (e) {
       res.status(400).json({ message: e })
     }
@@ -34,7 +34,7 @@ class CharacterService {
   async patchCharacter(req: Request, res: Response) {
     try {
       // TODO сделать проверку полей
-      const data = req.body as CharacterDtoMongoose
+      const data = req.body as CharacterDTOResponse
 
       const resp = await CharacterModel.findByIdAndUpdate(req.params.id, data)
       res.json(resp)

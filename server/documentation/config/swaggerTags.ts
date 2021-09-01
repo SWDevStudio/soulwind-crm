@@ -6,4 +6,9 @@ export const tagsForSwagger: swaggerJSDoc.Tag[] = [
     description: "Управление пользователями",
     externalDocs: { description: "Узнать больше", url: "google.com" },
   },
+  {
+    name: "Character",
+    description: "Управление персонажами",
+    externalDocs: { description: "Узнать больше", url: "google.com" },
+  },
 ]

@@ -16,4 +16,4 @@ export interface CharacterDto {
   pvpRank?: Ranks
 }
 
-export interface CharacterDtoMongoose extends CharacterDto, Document {}
+export interface CharacterDTOResponse extends CharacterDto, Document {}
