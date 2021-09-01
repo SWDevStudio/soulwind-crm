@@ -13,6 +13,7 @@ const schema = new Schema<CharacterDto>({
   alchemy: { type: Array },
   note: { type: String },
   pvpRank: { type: String },
+  level: { type: Number },
 })
 
 export default mongoose.models.Character ||

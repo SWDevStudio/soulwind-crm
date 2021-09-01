@@ -14,6 +14,7 @@ export interface CharacterDto {
   alchemy?: Alchemy[]
   note?: string
   pvpRank?: Ranks
+  level?: number
 }
 
 export interface CharacterDTOResponse extends CharacterDto, Document {}
