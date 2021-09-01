@@ -47,20 +47,30 @@
         </v-row>
         <v-row>
           <v-col cols="6">
-            <v-select
+            <v-autocomplete
               v-model="form.class"
               label="Класс"
               color="teal accent-3"
               :items="CHARACTER_CLASS"
-            ></v-select>
+            ></v-autocomplete>
           </v-col>
           <v-col cols="6">
-            <v-select
+            <v-autocomplete
               v-model="form.partyId"
               label="Группа"
               color="teal accent-3"
               :items="groupItem"
-            ></v-select>
+            ></v-autocomplete>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-textarea
+              v-model="form.note"
+              label="Заметка"
+              color="teal accent-3"
+              rows="1"
+            ></v-textarea>
           </v-col>
         </v-row>
         <v-row>
@@ -72,6 +82,7 @@
               large
               class="mt-3 mb-4"
               :disabled="!valid"
+              @click="createdCharacter"
               >Добавить персонажа
             </v-btn>
           </v-col>
@@ -85,7 +96,7 @@
 import { CHARACTER_CLASS } from "~/server/Data/CHARACTER_CLASS"
 
 export default {
-  name: "characterCreationForm",
+  name: "CharacterCreationForm",
   props: {
     value: {
       type: Boolean,
@@ -112,6 +123,13 @@ export default {
   methods: {
     closeModal() {
       this.$emit("input", false)
+    },
+    createdCharacter() {
+      this.clearForm()
+      this.closeModal()
+    },
+    clearForm() {
+      this.$refs.form.reset()
     },
   },
 }
