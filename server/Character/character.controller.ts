@@ -74,5 +74,31 @@ CharacterController.patch(
   RolesMiddleware(["ADMIN"]),
   CharacterService.patchCharacter
 )
+/**
+ * @swagger
+ *  /character/{id}:
+ *  delete:
+ *    tags: [Character]
+ *    description: Удаляет персонажа (Метод еще не реализован)
+ *    parameters:
+ *       - $ref: "#/parameters/token"
+ *       - name: "id"
+ *         in: "path"
+ *         description: "id пользователя"
+ *         required: "true"
+ *         type: "string"
+ *    responses:
+ *      '200':
+ *        description: Возвращает boolean
+ *      '400':
+ *        schema:
+ *         $ref: "#/definitions/ErrorResponse"
+ */
+CharacterController.delete(
+  "/:id",
+  AuthorizeMiddleware,
+  RolesMiddleware(["ADMIN"]),
+  (req, res) => res.json("Метод еще не реализован")
+)
 
 export default CharacterController
