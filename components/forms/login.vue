@@ -13,8 +13,10 @@
       label="password"
       :rules="passwordRules"
       color="teal accent-3"
-      type="password"
       required
+      :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+      :type="show ? 'text' : 'password'"
+      @click:append="show = !show"
     />
     <p v-if="serverErrorResponse" class="error--text text-sm-caption">
       {{ serverErrorResponse }}
@@ -35,9 +37,10 @@
 
 <script>
 export default {
-  name: "login",
+  name: "Login",
   data: () => ({
     valid: true,
+    show: false,
     serverErrorResponse: "",
     emailRules: [
       (value) => !!value || "Email is required",

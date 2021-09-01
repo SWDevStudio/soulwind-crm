@@ -13,16 +13,20 @@
       label="password"
       :rules="passwordRules"
       color="teal accent-3"
-      type="password"
       required
+      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+      :type="show1 ? 'text' : 'password'"
+      @click:append="show1 = !show1"
     />
     <v-text-field
       v-model="form.repeatPass"
       label="repeat the password"
       :rules="repeatPasswordRules"
       color="teal accent-3"
-      type="password"
       required
+      :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+      :type="show2 ? 'text' : 'password'"
+      @click:append="show2 = !show2"
     />
     <p v-if="notCorrectPass" class="error--text text-sm-caption">
       {{ notCorrectPass }}
@@ -43,9 +47,11 @@
 
 <script>
 export default {
-  name: "signIn",
+  name: "SignIn",
   data: () => ({
     valid: true,
+    show1: false,
+    show2: false,
     notCorrectPass: "",
     emailRules: [
       (value) => !!value || "Email is required",
