@@ -3,8 +3,8 @@ import * as mongoose from "mongoose"
 import { CharacterDto } from "~/server/Character/dto/character.dto"
 
 const schema = new Schema<CharacterDto>({
-  firstName: { type: String, required: true },
-  lastName: { type: String },
+  firstName: { type: String },
+  lastName: { type: String, required: true },
   class: { type: String },
   ap: { type: Number },
   awakeningAp: { type: Number },
