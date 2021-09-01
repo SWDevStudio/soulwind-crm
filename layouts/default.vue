@@ -27,7 +27,9 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title
+        v-text="items.find((item) => item.to === $route.path).title"
+      />
       <v-spacer />
     </v-app-bar>
     <v-main>
@@ -39,7 +41,7 @@
 </template>
 
 <script>
-import axios from "axios"
+import { SIDEBAR_MENU } from "~/data/SIDEBAR_MENU"
 
 export default {
   data() {
@@ -47,23 +49,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
-        {
-          icon: "mdi-apps",
-          title: "Welcome",
-          to: "/",
-        },
-        {
-          icon: "mdi-chart-bubble",
-          title: "Inspire",
-          to: "/inspire",
-        },
-        {
-          icon: "mdi-chart-bubble",
-          title: "Modal",
-          to: "/modal",
-        },
-      ],
+      items: SIDEBAR_MENU,
       miniVariant: false,
       right: true,
       rightDrawer: false,
