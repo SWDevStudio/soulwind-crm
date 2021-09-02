@@ -9,7 +9,9 @@
               label="Группа"
               :color="UI.actionColor.color"
               clearable
-              :items="groupItem"
+              :items="groups"
+              item-value="_id"
+              item-text="name"
             ></v-autocomplete>
           </v-col>
           <v-col cols="3">
@@ -36,13 +38,15 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="characters"
+        :items="sortCharacters"
         :search="form.search"
         disable-pagination
         hide-default-footer
       >
         <template v-slot:item.actions="{ item }">
           <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+          <!-- TODO Сделать по примеру в groups.vue 7 строка-->
+          <v-icon small class="mr-2"> mdi-card-bulleted-off-outline </v-icon>
         </template>
       </v-data-table>
     </v-card>
@@ -70,6 +74,17 @@ export default {
     headers: HEADER_CHARACTER,
     characters: [],
   }),
+  computed: {
+    groups() {
+      return this.$store.state.global.groups
+    },
+    sortCharacters() {
+      if (!this.form.partyId) return this.characters
+      return this.characters.filter(
+        (item) => item.partyId === this.form.partyId
+      )
+    },
+  },
   // TODO данный метод обновления таблицы не оптимален (в запоросе приходит нужный измененный объект)
   watch: {
     modal(val) {
@@ -91,11 +106,11 @@ export default {
         })
         .catch((e) => e.response)
       if (res?.status === 200) {
-        this.characters = res.data
+        this.characters = res.data.filter((i) => i.status === "ACTIVE")
+        // this.characters = res.data
       }
     },
     editItem(item) {
-      console.log(item, "123")
       this.editedIndex = this.characters.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.$refs.characterForm.startEdit(item)

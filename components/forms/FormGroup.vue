@@ -80,6 +80,7 @@ export default class FormGroup extends Vue {
         this.serverErrorResponse = res.data.message
       })
       if (res) {
+        this.Form.reset()
         this.closeModal()
       }
     }

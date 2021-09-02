@@ -19,7 +19,8 @@ export default {
   serverMiddleware: ["~/server/index.ts"],
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
-
+  // TODO найти способ пофиксить ошибки использования SSR
+  ssr: false,
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],
 

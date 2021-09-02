@@ -83,7 +83,9 @@
                 v-model="form.partyId"
                 label="Группа"
                 :color="UI.actionColor.color"
-                :items="groupItem"
+                :items="groups"
+                item-text="name"
+                item-value="_id"
               ></v-autocomplete>
             </v-col>
           </v-row>
@@ -119,7 +121,7 @@
 
 <script lang="ts">
 import Component from "nuxt-class-component"
-import { Prop, Ref } from "nuxt-property-decorator"
+import { Prop, Ref, State } from "nuxt-property-decorator"
 import Vue from "vue"
 import { CHARACTER_CLASS } from "~/server/Data/CHARACTER_CLASS"
 import { UI } from "~/data/UI"
@@ -128,6 +130,7 @@ import {
   CharacterDto,
   CharacterDTOResponse,
 } from "~/server/Character/dto/character.dto"
+import { GroupDtoModel } from "~/server/Group/dto/group.dto"
 @Component({
   name: "CharacterCreationForm",
 })
@@ -135,11 +138,13 @@ export default class CharacterCreationForm extends Vue {
   @Ref("form") VForm!: any
 
   @Prop() value!: boolean
+
+  @State((state) => state.global.groups) groups!: GroupDtoModel[]
+
   UI = UI
   valid: boolean = true
   editMode: boolean = false
   CHARACTER_CLASS = CHARACTER_CLASS
-  groupItem = ["Bar", "Fizz"]
   rules = [(value: string) => !!value || "Заполни меня"]
   editId: null | string = null
   form: CharacterDto = {
@@ -154,6 +159,7 @@ export default class CharacterCreationForm extends Vue {
     note: undefined,
     pvpRank: undefined,
     level: undefined,
+    status: "ACTIVE",
   }
 
   closeModal(): void {
