@@ -7,7 +7,7 @@
             <v-autocomplete
               v-model="form.partyId"
               label="Группа"
-              color="teal accent-3"
+              :color="UI.actionColor.color"
               clearable
               :items="groupItem"
             ></v-autocomplete>
@@ -15,7 +15,7 @@
           <v-col cols="3">
             <v-text-field
               v-model="form.search"
-              color="teal accent-3"
+              :color="UI.actionColor.color"
               label="Поиск"
               prepend-inner-icon="mdi-magnify"
               clearable
@@ -26,7 +26,7 @@
               fab
               outlined
               class="ml-auto"
-              color="teal accent-3"
+              :color="UI.actionColor.color"
               @click="modal = !modal"
             >
               <v-icon dark> mdi-plus</v-icon>
@@ -53,12 +53,14 @@
 <script>
 import CharacterCreationForm from "~/components/forms/CharacterCreationForm"
 import { getToken } from "~/utils/Token"
+import { UI } from "~/data/UI"
 
 export default {
   name: "Modal",
   components: { CharacterCreationForm },
   data: () => ({
     modal: false,
+    UI,
     groupItem: ["Bar", "Fizz"],
     form: {
       search: "",

@@ -9,16 +9,13 @@
   >
     <v-card>
       <v-card-title
-        class="
-          font-weight-regular
-          teal--text
-          text--accent-3
-          d-flex
-          justify-space-between
-        "
+        class="font-weight-regular d-flex justify-space-between"
+        :class="UI.actionColor.textClass"
       >
         {{ editMode ? "Редактирование" : "Создание" }} персонажа
-        <v-icon color="teal accent-3" @click="closeModal">mdi-close</v-icon>
+        <v-icon :color="UI.actionColor.color" @click="closeModal"
+          >mdi-close
+        </v-icon>
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
@@ -28,7 +25,7 @@
                 v-model="form.firstName"
                 label="Имя персонажа"
                 :rules="rules"
-                color="teal accent-3"
+                :color="UI.actionColor.color"
                 required
               ></v-text-field>
             </v-col>
@@ -37,7 +34,7 @@
                 v-model="form.lastName"
                 label="Фамилия персонажа"
                 :rules="rules"
-                color="teal accent-3"
+                :color="UI.actionColor.color"
                 required
               ></v-text-field>
             </v-col>
@@ -47,28 +44,28 @@
               <v-text-field
                 v-model.number="form.level"
                 label="Уровень"
-                color="teal accent-3"
+                :color="UI.actionColor.color"
               ></v-text-field>
             </v-col>
             <v-col cols="3">
               <v-text-field
                 v-model.number="form.ap"
                 label="Атака"
-                color="teal accent-3"
+                :color="UI.actionColor.color"
               ></v-text-field>
             </v-col>
             <v-col cols="3">
               <v-text-field
                 v-model.number="form.awakeningAp"
                 label="Атака проб. оружием"
-                color="teal accent-3"
+                :color="UI.actionColor.color"
               ></v-text-field>
             </v-col>
             <v-col cols="3">
               <v-text-field
                 v-model.number="form.dp"
                 label="Защита"
-                color="teal accent-3"
+                :color="UI.actionColor.color"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -77,7 +74,7 @@
               <v-autocomplete
                 v-model="form.class"
                 label="Класс"
-                color="teal accent-3"
+                :color="UI.actionColor.color"
                 :items="CHARACTER_CLASS"
               ></v-autocomplete>
             </v-col>
@@ -85,7 +82,7 @@
               <v-autocomplete
                 v-model="form.partyId"
                 label="Группа"
-                color="teal accent-3"
+                :color="UI.actionColor.color"
                 :items="groupItem"
               ></v-autocomplete>
             </v-col>
@@ -95,7 +92,7 @@
               <v-textarea
                 v-model="form.note"
                 label="Заметка"
-                color="teal accent-3"
+                :color="UI.actionColor.color"
                 rows="1"
               ></v-textarea>
             </v-col>
@@ -103,7 +100,7 @@
           <v-row>
             <v-col cols="12">
               <v-btn
-                color="teal accent-3"
+                :color="UI.actionColor.color"
                 block
                 outlined
                 large
@@ -122,6 +119,7 @@
 
 <script>
 import { CHARACTER_CLASS } from "~/server/Data/CHARACTER_CLASS"
+import { UI } from "~/data/UI"
 
 export default {
   name: "CharacterCreationForm",
@@ -131,6 +129,7 @@ export default {
     },
   },
   data: () => ({
+    UI,
     valid: true,
     editMode: false,
     CHARACTER_CLASS,
