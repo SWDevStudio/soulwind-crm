@@ -98,7 +98,7 @@ export default {
           },
         })
         .catch((e) => e.response)
-      if (res.status === 200) {
+      if (res?.status === 200) {
         this.characters = res.data
       }
     },

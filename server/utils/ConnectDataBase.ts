@@ -10,6 +10,7 @@ export function ConnectDataBase(
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: true,
     }
   ).then()
 }

@@ -33,7 +33,7 @@
       <v-spacer />
     </v-app-bar>
     <v-main>
-      <v-container class="d-flex" style="height: 100% !important">
+      <v-container class="d-flex mr-4 ml-4" style="height: 100% !important">
         <Nuxt />
       </v-container>
     </v-main>

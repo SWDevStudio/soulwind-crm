@@ -117,81 +117,88 @@
   </v-dialog>
 </template>
 
-<script>
+<script lang="ts">
+import Component from "nuxt-class-component"
+import { Prop, Ref } from "nuxt-property-decorator"
+import Vue from "vue"
 import { CHARACTER_CLASS } from "~/server/Data/CHARACTER_CLASS"
 import { UI } from "~/data/UI"
-
-export default {
+import { getToken } from "~/utils/Token"
+import {
+  CharacterDto,
+  CharacterDTOResponse,
+} from "~/server/Character/dto/character.dto"
+@Component({
   name: "CharacterCreationForm",
-  props: {
-    value: {
-      type: Boolean,
-    },
-  },
-  data: () => ({
-    UI,
-    valid: true,
-    editMode: false,
-    CHARACTER_CLASS,
-    groupItem: ["Bar", "Fizz"],
-    rules: [(value) => !!value || "Заполни меня"],
-    form: {
-      firstName: "",
-      lastName: "",
-      class: "",
-      ap: "",
-      awakeningAp: "",
-      dp: "",
-      partyId: "",
-      alchemy: "",
-      note: "",
-      pvpRank: "",
-      level: "",
-      _id: null,
-    },
-  }),
-  methods: {
-    closeModal() {
-      this.clearForm()
-      this.editMode = false
-      this.$emit("input", false)
-    },
-    async createdCharacter() {
-      const res = await this.$axios
-        .post("/api/character", this.form, {
-          headers: {
-            token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjAyNjA1YjAyMjE2NGFiY2NlMjk1MiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTYzMDUxMTQyNCwiZXhwIjoxNjMwNTk3ODI0fQ.TEaOBRCd7FK2klmpdtXWGRauknZmvAl4JZ0sAaADVEo",
-          },
-        })
-        .catch((error) => error.response)
+})
+export default class CharacterCreationForm extends Vue {
+  @Ref("form") VForm!: any
 
-      this.closeModal()
-    },
-    async editCharacter() {
-      const res = await this.$axios
-        .patch("/api/character/" + this.form._id, this.form, {
-          headers: {
-            token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjAyNjA1YjAyMjE2NGFiY2NlMjk1MiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTYzMDUxMTQyNCwiZXhwIjoxNjMwNTk3ODI0fQ.TEaOBRCd7FK2klmpdtXWGRauknZmvAl4JZ0sAaADVEo",
-          },
-        })
-        .catch((error) => error.response)
-      this.closeModal()
-    },
-    clearForm() {
-      this.$refs.form.reset()
-    },
-    startEdit(character) {
-      if (character) {
-        this.editMode = true
-        this.form = {
-          ...this.form,
-          ...character,
-        }
+  @Prop() value!: boolean
+  UI = UI
+  valid: boolean = true
+  editMode: boolean = false
+  CHARACTER_CLASS = CHARACTER_CLASS
+  groupItem = ["Bar", "Fizz"]
+  rules = [(value: string) => !!value || "Заполни меня"]
+  editId: null | string = null
+  form: CharacterDto = {
+    firstName: undefined,
+    lastName: "",
+    class: undefined,
+    ap: undefined,
+    awakeningAp: undefined,
+    dp: undefined,
+    partyId: undefined,
+    alchemy: undefined,
+    note: undefined,
+    pvpRank: undefined,
+    level: undefined,
+  }
+
+  closeModal(): void {
+    this.clearForm()
+    this.editMode = false
+    this.$emit("input", false)
+  }
+
+  async createdCharacter(): Promise<void> {
+    const res = await this.$axios
+      .post("/api/character", this.form, {
+        headers: {
+          token: getToken(),
+        },
+      })
+      .catch((error) => error.response)
+
+    this.closeModal()
+  }
+
+  async editCharacter(): Promise<void> {
+    const res = await this.$axios
+      .patch("/api/character/" + this.editId, this.form, {
+        headers: {
+          token: getToken(),
+        },
+      })
+      .catch((error) => error.response)
+    this.closeModal()
+  }
+
+  clearForm(): void {
+    this.VForm.reset()
+  }
+
+  startEdit(character: CharacterDTOResponse) {
+    if (character) {
+      this.editId = character._id
+      this.editMode = true
+      this.form = {
+        ...this.form,
+        ...character,
       }
-    },
-  },
+    }
+  }
 }
 </script>
 

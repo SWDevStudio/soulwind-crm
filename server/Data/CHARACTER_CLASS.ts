@@ -1,4 +1,6 @@
-export const CHARACTER_CLASS = [
+import { CharacterClass } from "~/types/CharacterClass"
+
+export const CHARACTER_CLASS: CharacterClass[] = [
   "Варвар",
   "Лучница",
   "Сорка",
