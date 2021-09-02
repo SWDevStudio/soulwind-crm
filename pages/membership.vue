@@ -54,6 +54,7 @@
 import CharacterCreationForm from "~/components/forms/CharacterCreationForm"
 import { getToken } from "~/utils/Token"
 import { UI } from "~/data/UI"
+import { HEADER_CHARACTER } from "~/data/headers/HEADER_CHARACTER"
 
 export default {
   name: "Modal",
@@ -66,16 +67,7 @@ export default {
       search: "",
       partyId: "",
     },
-    headers: [
-      { text: "Фамилия", value: "lastName" },
-      { text: "Класс", value: "class" },
-      { text: "Уровень", value: "level" },
-      { text: "Атака", value: "ap" },
-      { text: "Атака П.", value: "awakeningAp" },
-      { text: "Защита", value: "dp" },
-      { text: "pvp skill", value: "pvpRank" },
-      { text: "Actions", value: "actions", sortable: false },
-    ],
+    headers: HEADER_CHARACTER,
     characters: [],
   }),
   // TODO данный метод обновления таблицы не оптимален (в запоросе приходит нужный измененный объект)

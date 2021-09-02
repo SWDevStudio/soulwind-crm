@@ -27,13 +27,19 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title
-        v-text="items.find((item) => item.to === $route.path).title"
-      />
+      <v-toolbar-title style="width: 100%">
+        <div class="d-flex justify-space-between" style="cursor: pointer">
+          <span>{{ pageTitle }}</span>
+          <span @click="removeToken">log out</span>
+        </div>
+      </v-toolbar-title>
       <v-spacer />
     </v-app-bar>
     <v-main>
-      <v-container class="d-flex mr-4 ml-4" style="height: 100% !important">
+      <v-container
+        class="d-flex ml-3 mr-3"
+        style="height: 100%; width: auto; max-width: none"
+      >
         <Nuxt />
       </v-container>
     </v-main>
@@ -42,6 +48,7 @@
 
 <script>
 import { SIDEBAR_MENU } from "~/data/SIDEBAR_MENU"
+import { removeToken } from "~/utils/Token"
 
 export default {
   data() {
@@ -56,12 +63,20 @@ export default {
       title: "Vuetify.js",
     }
   },
-  async created() {
-    // const res = await axios.post("/api/user/login", {
-    //   email: "swdevstudio@gma1il.com",
-    //   password: "qwer1232323",
-    // })
-    // console.log(res)
+  computed: {
+    pageTitle() {
+      return (
+        this.items.find((item) => item.to === this.$route.path)?.title || ""
+      )
+    },
+  },
+  created() {
+    if (process.client) {
+      this.$store.dispatch("global/loadGlobalData")
+    }
+  },
+  methods: {
+    removeToken,
   },
 }
 </script>

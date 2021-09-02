@@ -4,11 +4,16 @@ import { PAGES } from "~/data/PAGES"
 export function setToken(token: string): void {
   Cookies.set("token", token)
 }
-export function getToken(): string | undefined {
+export function getToken(): string | void {
   const token = Cookies.get("token")
   if (token) {
     return token
-  } else if (process.client && window) {
-    window.location.replace(PAGES.authentication)
+  } else {
+    window && window.$nuxt.$router.push(PAGES.authentication)
   }
+}
+export function removeToken(): void {
+  Cookies.remove("token")
+  window.$nuxt.$router.push(PAGES.authentication)
+  // window.location.replace(PAGES.authentication)
 }
