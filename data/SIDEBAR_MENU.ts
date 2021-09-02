@@ -1,8 +1,10 @@
+import { PAGES } from "~/data/PAGES"
+
 export const SIDEBAR_MENU = [
   {
     icon: "mdi-apps",
     title: "Welcome",
-    to: "/",
+    to: PAGES.root,
   },
   {
     icon: "mdi-chart-bubble",
@@ -12,6 +14,6 @@ export const SIDEBAR_MENU = [
   {
     icon: "mdi-chart-bubble",
     title: "Membership",
-    to: "/membership",
+    to: PAGES.membership,
   },
 ]

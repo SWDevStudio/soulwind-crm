@@ -36,6 +36,9 @@
 </template>
 
 <script>
+import { setToken } from "~/utils/Token"
+import { PAGES } from "~/data/PAGES"
+
 export default {
   name: "Login",
   data: () => ({
@@ -59,7 +62,8 @@ export default {
           .post("/api/user/login", this.form)
           .catch((e) => e.response)
         if (response.status === 200) {
-          alert(response.data.token)
+          setToken(response.data?.token)
+          await this.$router.push(PAGES.root)
         } else {
           this.serverErrorResponse = response.data.message
         }

@@ -52,6 +52,7 @@
 
 <script>
 import CharacterCreationForm from "~/components/forms/CharacterCreationForm"
+import { getToken } from "~/utils/Token"
 
 export default {
   name: "Modal",
@@ -91,8 +92,7 @@ export default {
       const res = await this.$axios
         .get("/api/character", {
           headers: {
-            token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjAyNjA1YjAyMjE2NGFiY2NlMjk1MiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTYzMDUxMTQyNCwiZXhwIjoxNjMwNTk3ODI0fQ.TEaOBRCd7FK2klmpdtXWGRauknZmvAl4JZ0sAaADVEo",
+            token: getToken(),
           },
         })
         .catch((e) => e.response)

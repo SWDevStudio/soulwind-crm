@@ -46,6 +46,9 @@
 </template>
 
 <script>
+import { setToken } from "~/utils/Token"
+import { PAGES } from "~/data/PAGES"
+
 export default {
   name: "SignIn",
   data: () => ({
@@ -66,9 +69,22 @@ export default {
     },
   }),
   methods: {
-    comparePass() {
+    async comparePass() {
       if (this.form.password === this.form.repeatPass) {
         console.log("the password is correct")
+        const registerResponse = await this.$axios
+          .post("/api/user/register", {
+            email: this.form.email,
+            password: this.form.password,
+          })
+          .catch((e) => e.response)
+        if (registerResponse.status === 200) {
+          const loginResponse = await this.$axios
+            .post("/api/user/login", this.form)
+            .catch((e) => e.response)
+          setToken(loginResponse.data?.token)
+          await this.$router.push(PAGES.root)
+        }
       } else {
         this.notCorrectPass = "Пароли не совпадают"
       }
