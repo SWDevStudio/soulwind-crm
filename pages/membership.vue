@@ -43,14 +43,23 @@
         disable-pagination
         hide-default-footer
       >
-        <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-          <!-- TODO Сделать по примеру в groups.vue 7 строка-->
-          <v-icon small class="mr-2"> mdi-card-bulleted-off-outline </v-icon>
+        <template #item.actions="{ item }">
+          <v-icon small class="mr-2" @click="editCharacter(item)"
+            >mdi-pencil</v-icon
+          >
+          <v-icon small @click="startDismiss(item)"
+            >mdi-card-bulleted-off-outline
+          </v-icon>
         </template>
       </v-data-table>
     </v-card>
     <character-creation-form ref="characterForm" v-model="modal" />
+    <v-dialog v-model="modalRemoveCharacter" max-width="600" persistent>
+      <form-dismiss-character
+        ref="dismissForm"
+        v-model="modalRemoveCharacter"
+      />
+    </v-dialog>
   </v-row>
 </template>
 
@@ -62,12 +71,15 @@ import { HEADER_CHARACTER } from "~/data/headers/HEADER_CHARACTER"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import CharacterCreationForm from "~/components/forms/CharacterCreationForm.vue"
+import FormDismissCharacter from "~/components/forms/FormDismissCharacter.vue"
 @Component({
   name: "membership",
-  components: { CharacterCreationForm },
+  components: { FormDismissCharacter, CharacterCreationForm },
 })
 export default class Membership extends CharacterStoreMixin {
   modal: boolean = false
+  modalRemoveCharacter: boolean = false
+
   UI = UI
   form = {
     search: "",
@@ -94,16 +106,17 @@ export default class Membership extends CharacterStoreMixin {
     }
   }
 
-  editedIndex: any = null
-  editedItem: any = null
   @Ref("characterForm") characterForm!: CharacterCreationForm
-  editItem(item: CharacterDTOResponse): void {
-    // TODO @Fox что это?
-    this.editedIndex = this.getActiveCharacters.indexOf(item)
-    this.editedItem = Object.assign({}, item)
-    // END
+  editCharacter(item: CharacterDTOResponse): void {
     this.characterForm.startEdit(item)
     this.modal = true
+  }
+
+  @Ref("dismissForm") dismissForm!: FormDismissCharacter
+
+  startDismiss(item: CharacterDTOResponse): void {
+    this.dismissForm.startEdit(item)
+    this.modalRemoveCharacter = true
   }
 }
 </script>

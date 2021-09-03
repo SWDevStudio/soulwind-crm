@@ -9,6 +9,7 @@ import { Ref } from "nuxt-property-decorator"
 import { AxiosResponse } from "axios"
 import { VForm } from "~/structs/vuetify/VForm"
 import { ErrorResponse } from "~/structs/ErrorResponse"
+import { UI } from "~/data/UI"
 
 @Component({
   name: "MixinModal",

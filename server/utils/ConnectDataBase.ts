@@ -6,7 +6,7 @@ export function ConnectDataBase(
   db: string = "myFirstDatabase"
 ) {
   connect(
-    `mongodb+srv://${login}:${passwd}@cluster0.pes58.mongodb.net/${db}?retryWrites=true&w=majority`,
+    `mongodb+srv://KotaroSW:${passwd}@cluster0.pes58.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
