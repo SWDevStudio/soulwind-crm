@@ -27,7 +27,7 @@
       </v-card-title>
       <v-card-text>
         <v-expansion-panels>
-          <v-expansion-panel v-for="(group, key) in groups" :key="key">
+          <v-expansion-panel v-for="(group, key) in storeGroups" :key="key">
             <v-expansion-panel-header>
               {{ group.name }}
             </v-expansion-panel-header>
@@ -47,22 +47,22 @@
 </template>
 
 <script lang="ts">
-import { Action, Component, State, Vue, Watch } from "nuxt-property-decorator"
+import { Component, mixins, Watch } from "nuxt-property-decorator"
 import { HEADER_CHARACTER } from "~/data/headers/HEADER_CHARACTER"
 import { UI } from "~/data/UI"
 import FormGroup from "~/components/forms/FormGroup.vue"
-import GroupApi from "~/api/GroupApi"
-import { GroupDtoModel } from "~/server/Group/dto/group.dto"
-import CharacterApi from "~/api/CharacterApi"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
+import GlobalStoreMixin from "~/mixins/GlobalStoreMixin.vue"
+import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 
 @Component({
   name: "Groups",
   components: { FormGroup },
 })
-export default class Groups extends Vue {
-  @State((state) => state.global.groups) groups!: GroupDtoModel[]
-  @Action("global/updateGroups") actionUpdateGroup!: () => Promise<void>
+export default class Groups extends mixins<any>(
+  GlobalStoreMixin,
+  CharacterStoreMixin
+) {
   HEADER_CHARACTER = HEADER_CHARACTER
   UI = UI
   modalCreateGroup: boolean = false
@@ -72,19 +72,9 @@ export default class Groups extends Vue {
     this.actionUpdateGroup()
   }
 
-  async created() {
-    // TODO решить проблему того что на SSR у нас нет токена
-    if (process.client) {
-      const res = await CharacterApi.loadCharacters(() => {})
-      if (res) {
-        this.characters = res.filter((i) => i.status === "ACTIVE")
-      }
-    }
-  }
-
   findAllMember(id: string): CharacterDTOResponse[] {
     const members: CharacterDTOResponse[] = []
-    this.characters.forEach((character) =>
+    this.getActiveCharacters.forEach((character) =>
       character.partyId === id ? members.push(character) : null
     )
     return members

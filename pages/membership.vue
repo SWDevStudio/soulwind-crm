@@ -54,69 +54,55 @@
   </v-row>
 </template>
 
-<script>
+<script lang="ts">
+import Component from "nuxt-class-component"
+import Vue from "vue"
+import { State, Watch } from "nuxt-property-decorator"
 import CharacterCreationForm from "~/components/forms/CharacterCreationForm"
 import { getToken } from "~/utils/Token"
 import { UI } from "~/data/UI"
 import { HEADER_CHARACTER } from "~/data/headers/HEADER_CHARACTER"
-
-export default {
-  name: "Modal",
+import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
+@Component({
+  name: "membership",
   components: { CharacterCreationForm },
-  data: () => ({
-    modal: false,
-    UI,
-    groupItem: ["Bar", "Fizz"],
-    form: {
-      search: "",
-      partyId: "",
-    },
-    headers: HEADER_CHARACTER,
-    characters: [],
-  }),
-  computed: {
-    groups() {
-      return this.$store.state.global.groups
-    },
-    sortCharacters() {
-      if (!this.form.partyId) return this.characters
-      return this.characters.filter(
-        (item) => item.partyId === this.form.partyId
-      )
-    },
-  },
-  // TODO данный метод обновления таблицы не оптимален (в запоросе приходит нужный измененный объект)
-  watch: {
-    modal(val) {
-      if (!val) {
-        this.loadCharacters()
-      }
-    },
-  },
-  created() {
-    this.loadCharacters()
-  },
-  methods: {
-    async loadCharacters() {
-      const res = await this.$axios
-        .get("/api/character", {
-          headers: {
-            token: getToken(),
-          },
-        })
-        .catch((e) => e.response)
-      if (res?.status === 200) {
-        this.characters = res.data.filter((i) => i.status === "ACTIVE")
-        // this.characters = res.data
-      }
-    },
-    editItem(item) {
-      this.editedIndex = this.characters.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.$refs.characterForm.startEdit(item)
-      this.modal = true
-    },
-  },
+})
+export default class Membership extends CharacterStoreMixin {
+  modal: boolean = false
+  UI = UI
+  form = {
+    search: "",
+    partyId: "",
+  }
+
+  headers = HEADER_CHARACTER
+
+  get groups() {
+    return this.$store.state.global.groups
+  }
+
+  get sortCharacters() {
+    if (!this.form.partyId) return this.getActiveCharacters
+    return this.getActiveCharacters.filter(
+      (item) => item.partyId === this.form.partyId
+    )
+  }
+
+  @Watch("modal")
+  modalWatch(val) {
+    if (!val) {
+      this.storeUpdateCharacters()
+    }
+  }
+
+  editItem(item): void {
+    // TODO @Fox что это?
+    this.editedIndex = this.getActiveCharacters.indexOf(item)
+    this.editedItem = Object.assign({}, item)
+    // END
+    this.$refs.characterForm.startEdit(item)
+    this.modal = true
+  }
 }
 </script>
 

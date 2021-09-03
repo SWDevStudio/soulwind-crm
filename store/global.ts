@@ -1,29 +1,35 @@
+import { Module, Mutation, VuexModule, Action } from "vuex-module-decorators"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
 import GroupApi from "~/api/GroupApi"
-import { GlobalStructState } from "~/structs/store/global.struct"
 
-export const state = (): GlobalStructState => ({
-  groups: [],
+@Module({
+  name: "global",
+  namespaced: true,
+  stateFactory: true,
 })
-export const getters = {}
-export const mutations = {
-  setGroups(state: any, value: GroupDtoModel[]) {
-    state.groups = value || []
-  },
-}
-export const actions = {
-  async loadGlobalData(ctx: any) {
+export default class Global extends VuexModule {
+  groups: GroupDtoModel[] = []
+
+  @Mutation
+  setGroups(value: GroupDtoModel[]) {
+    this.groups = value || []
+  }
+
+  @Action
+  async loadGlobalData() {
     const res = await GroupApi.loadGroups((res) => {
       console.error(res.data.message, "vuex global/loadGlobalData")
     })
     if (res) {
-      ctx.commit("setGroups", res)
+      this.setGroups(res)
     }
-  },
-  async updateGroups(ctx: any) {
+  }
+
+  @Action
+  async updateGroups() {
     const res = await GroupApi.loadGroups((res) => {
       console.error(res.data.message, "vuex global/updateGroups")
     })
-    if (res) ctx.commit("setGroups", res)
-  },
+    if (res) this.setGroups(res)
+  }
 }

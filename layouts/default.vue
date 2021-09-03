@@ -46,37 +46,34 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
+import { Component } from "nuxt-property-decorator"
 import { SIDEBAR_MENU } from "~/data/SIDEBAR_MENU"
 import { removeToken } from "~/utils/Token"
+import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 
-export default {
-  data() {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: SIDEBAR_MENU,
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: "Vuetify.js",
-    }
-  },
-  computed: {
-    pageTitle() {
-      return (
-        this.items.find((item) => item.to === this.$route.path)?.title || ""
-      )
-    },
-  },
+@Component({
+  name: "default",
+})
+export default class Default extends CharacterStoreMixin {
+  clipped: boolean = false
+  drawer: boolean = false
+  fixed: boolean = false
+  items = SIDEBAR_MENU
+  miniVariant: boolean = false
+  right: boolean = true
+  rightDrawer: boolean = false
+  title: string = "Vuetify.js"
+
+  get pageTitle(): string {
+    return this.items.find((item) => item.to === this.$route.path)?.title || ""
+  }
+
   created() {
-    if (process.client) {
-      this.$store.dispatch("global/loadGlobalData")
-    }
-  },
-  methods: {
-    removeToken,
-  },
+    this.$store.dispatch("global/loadGlobalData")
+    this.storeUpdateCharacters()
+  }
+
+  removeToken = removeToken
 }
 </script>
