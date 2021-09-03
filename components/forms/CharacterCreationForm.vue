@@ -18,7 +18,7 @@
         </v-icon>
       </v-card-title>
       <v-card-text>
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="form" v-model="valid" lazy-validation @submit="sendForm">
           <v-row>
             <v-col cols="6">
               <v-text-field
@@ -102,13 +102,14 @@
           <v-row>
             <v-col cols="12">
               <v-btn
+                type="submit"
                 :color="UI.actionColor.color"
                 block
                 outlined
                 large
                 class="mt-3 mb-4"
                 :disabled="!valid"
-                @click="editMode ? editCharacter() : createdCharacter()"
+                @click="sendForm"
                 >{{ editMode ? "Редактировать" : "Добавить персонажа" }}
               </v-btn>
             </v-col>
@@ -131,6 +132,7 @@ import {
   CharacterDTOResponse,
 } from "~/server/Character/dto/character.dto"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
+
 @Component({
   name: "CharacterCreationForm",
 })
@@ -166,6 +168,11 @@ export default class CharacterCreationForm extends Vue {
     this.clearForm()
     this.editMode = false
     this.$emit("input", false)
+  }
+
+  sendForm(event: Event): void {
+    event.preventDefault()
+    this.editMode ? this.editCharacter() : this.createdCharacter()
   }
 
   async createdCharacter(): Promise<void> {

@@ -56,13 +56,12 @@
 
 <script lang="ts">
 import Component from "nuxt-class-component"
-import Vue from "vue"
-import { State, Watch } from "nuxt-property-decorator"
-import CharacterCreationForm from "~/components/forms/CharacterCreationForm"
-import { getToken } from "~/utils/Token"
+import { Ref, State, Watch } from "nuxt-property-decorator"
 import { UI } from "~/data/UI"
 import { HEADER_CHARACTER } from "~/data/headers/HEADER_CHARACTER"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
+import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
+import CharacterCreationForm from "~/components/forms/CharacterCreationForm.vue"
 @Component({
   name: "membership",
   components: { CharacterCreationForm },
@@ -89,18 +88,21 @@ export default class Membership extends CharacterStoreMixin {
   }
 
   @Watch("modal")
-  modalWatch(val) {
+  modalWatch(val: boolean) {
     if (!val) {
       this.storeUpdateCharacters()
     }
   }
 
-  editItem(item): void {
+  editedIndex: any = null
+  editedItem: any = null
+  @Ref("characterForm") characterForm!: CharacterCreationForm
+  editItem(item: CharacterDTOResponse): void {
     // TODO @Fox что это?
     this.editedIndex = this.getActiveCharacters.indexOf(item)
     this.editedItem = Object.assign({}, item)
     // END
-    this.$refs.characterForm.startEdit(item)
+    this.characterForm.startEdit(item)
     this.modal = true
   }
 }

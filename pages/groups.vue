@@ -59,10 +59,10 @@ import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
   name: "Groups",
   components: { FormGroup },
 })
-export default class Groups extends mixins<any>(
+export default class Groups extends mixins<
   GlobalStoreMixin,
   CharacterStoreMixin
-) {
+>(GlobalStoreMixin, CharacterStoreMixin) {
   HEADER_CHARACTER = HEADER_CHARACTER
   UI = UI
   modalCreateGroup: boolean = false
