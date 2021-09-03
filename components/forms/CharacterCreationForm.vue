@@ -7,7 +7,7 @@
     persistent
     @keydown.esc="closeModal"
   >
-    <v-card>
+    <v-card @keydown.enter="sendForm">
       <v-card-title
         class="font-weight-regular d-flex justify-space-between"
         :class="UI.actionColor.textClass"
@@ -27,7 +27,7 @@
                 :rules="rules"
                 :color="UI.actionColor.color"
                 required
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="6">
               <v-text-field
@@ -36,7 +36,7 @@
                 :rules="rules"
                 :color="UI.actionColor.color"
                 required
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
           <v-row>
@@ -45,28 +45,28 @@
                 v-model.number="form.level"
                 label="Уровень"
                 :color="UI.actionColor.color"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="3">
               <v-text-field
                 v-model.number="form.ap"
                 label="Атака"
                 :color="UI.actionColor.color"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="3">
               <v-text-field
                 v-model.number="form.awakeningAp"
                 label="Атака проб. оружием"
                 :color="UI.actionColor.color"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="3">
               <v-text-field
                 v-model.number="form.dp"
                 label="Защита"
                 :color="UI.actionColor.color"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
           <v-row>
@@ -76,7 +76,7 @@
                 label="Класс"
                 :color="UI.actionColor.color"
                 :items="CHARACTER_CLASS"
-              ></v-autocomplete>
+              />
             </v-col>
             <v-col cols="6">
               <v-autocomplete
@@ -86,7 +86,7 @@
                 :items="groups"
                 item-text="name"
                 item-value="_id"
-              ></v-autocomplete>
+              />
             </v-col>
           </v-row>
           <v-row>
@@ -96,13 +96,12 @@
                 label="Заметка"
                 :color="UI.actionColor.color"
                 rows="1"
-              ></v-textarea>
+              />
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12">
               <v-btn
-                type="submit"
                 :color="UI.actionColor.color"
                 block
                 outlined
@@ -172,6 +171,7 @@ export default class CharacterCreationForm extends Vue {
 
   sendForm(event: Event): void {
     event.preventDefault()
+    console.log(event)
     this.editMode ? this.editCharacter() : this.createdCharacter()
   }
 

@@ -50,35 +50,22 @@
 
 <script lang="ts">
 import Component from "nuxt-class-component"
-import Vue from "vue"
-import { Ref } from "nuxt-property-decorator"
-import { UI } from "~/data/UI"
-import { GroupDto, GroupDtoModel } from "~/server/Group/dto/group.dto"
+import { GroupDto } from "~/server/Group/dto/group.dto"
 import GroupApi from "~/api/GroupApi"
+import MixinModal from "~/mixins/MixinModal.vue"
 
 @Component({
   name: "FormGroup",
 })
-export default class FormGroup extends Vue {
-  UI = UI
+export default class FormGroup extends MixinModal {
   form: GroupDto = {
     name: "",
-  }
-
-  serverErrorResponse: string = ""
-
-  @Ref("form") Form!: any
-
-  closeModal() {
-    this.$emit("input", false)
   }
 
   async createGroup(event: Event): Promise<void> {
     event.preventDefault()
     if (this.Form.validate()) {
-      const res = await GroupApi.create(this.form, (res) => {
-        this.serverErrorResponse = res.data.message
-      })
+      const res = await GroupApi.create(this.form, this.showError)
       if (res) {
         this.Form.reset()
         this.closeModal()
