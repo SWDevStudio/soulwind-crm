@@ -26,7 +26,18 @@
             />
           </v-col>
         </v-row>
-        <v-row class="">
+        <v-row v-if="recovery">
+          <v-col>
+            <v-btn
+              block
+              :color="UI.actionColor.color"
+              outlined
+              @click="sendForm('ACTIVE')"
+              >Восстановить в гильдии</v-btn
+            >
+          </v-col>
+        </v-row>
+        <v-row v-else class="">
           <v-col>
             <v-btn
               block
@@ -69,10 +80,13 @@ export default class FormDismissCharacter extends mixins(
 ) {
   editId: string | null = null
   note: string = ""
-
-  public startEdit(item: CharacterDTOResponse): void {
+  recovery: boolean = false
+  public startEdit(item: CharacterDTOResponse, recovery?: string): void {
     this.editId = item._id
     this.note = item.note || ""
+    if (recovery === "recovery") {
+      this.recovery = true
+    }
   }
 
   async sendForm(status: UserStatus): Promise<void> {

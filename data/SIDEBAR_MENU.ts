@@ -7,6 +7,16 @@ export const SIDEBAR_MENU = [
     to: PAGES.membership,
   },
   {
+    icon: "mdi-close",
+    title: "Черный список",
+    to: PAGES.blackList,
+  },
+  {
+    icon: "mdi-close",
+    title: "Исключенные",
+    to: PAGES.dropout,
+  },
+  {
     icon: "mdi-account-multiple",
     title: "Группы",
     to: PAGES.groups,

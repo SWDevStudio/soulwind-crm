@@ -3,4 +3,6 @@ export const PAGES = {
   authentication: "/authentication",
   membership: "/membership",
   groups: "/groups",
+  blackList: "/black-list",
+  dropout: "/dropout",
 }

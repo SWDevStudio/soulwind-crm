@@ -6,6 +6,7 @@ export const HEADER_CHARACTER: DataTableHeader[] = [
   { text: "Атака", value: "ap" },
   { text: "Атака П.", value: "awakeningAp" },
   { text: "Защита", value: "dp" },
+  { text: "Группа", value: "partyId" },
   { text: "pvp skill", value: "pvpRank" },
   { text: "Actions", value: "actions", sortable: false },
 ]
