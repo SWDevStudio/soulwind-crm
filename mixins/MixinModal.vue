@@ -18,7 +18,7 @@ export default class MixinModal extends Vue {
   UI = UI
   serverErrorResponse: string = ""
 
-  @Ref("form") Form!: VForm
+  @Ref("form") VForm!: VForm
 
   closeModal() {
     this.$emit("input", false)

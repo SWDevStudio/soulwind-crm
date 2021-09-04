@@ -47,16 +47,16 @@
           <v-icon small class="mr-2" @click="editCharacter(item)"
             >mdi-pencil</v-icon
           >
-          <v-icon small @click="startDismiss(item)"
+          <v-icon small @click="startDismiss(item)" ref="dismissForm"
             >mdi-card-bulleted-off-outline
           </v-icon>
         </template>
       </v-data-table>
     </v-card>
     <character-creation-form ref="characterForm" v-model="modal" />
-    <v-dialog v-model="modalRemoveCharacter" max-width="600" persistent>
+    <v-dialog v-model="modalRemoveCharacter" max-width="600" persistent eager>
       <form-dismiss-character
-        ref="dismissForm"
+        ref="dismissedForm"
         v-model="modalRemoveCharacter"
       />
     </v-dialog>
@@ -79,7 +79,6 @@ import FormDismissCharacter from "~/components/forms/FormDismissCharacter.vue"
 export default class Membership extends CharacterStoreMixin {
   modal: boolean = false
   modalRemoveCharacter: boolean = false
-
   UI = UI
   form = {
     search: "",
@@ -112,11 +111,16 @@ export default class Membership extends CharacterStoreMixin {
     this.modal = true
   }
 
-  @Ref("dismissForm") dismissForm!: FormDismissCharacter
-
+  @Ref("dismissedForm") readonly dismissForm!: FormDismissCharacter
   startDismiss(item: CharacterDTOResponse): void {
-    this.dismissForm.startEdit(item)
     this.modalRemoveCharacter = true
+    this.dismissForm.startEdit(item)
+    // data?.editId = item._id
+    // data?.form.note = item.note
+
+    // this.dismissForm?.startEdit(item)
+
+    // this.dismissForm.startEdit(item)
   }
 }
 </script>

@@ -16,41 +16,80 @@
       </v-icon>
     </v-card-title>
     <v-card-text>
-      <v-row>
-        <v-col>
-          <v-text-field label="Причина" :color="UI.actionColor.color" />
-        </v-col>
-      </v-row>
-      <v-row class="">
-        <v-col>
-          <v-btn block :color="UI.actionColor.color" outlined>Изгнать</v-btn>
-        </v-col>
-        <v-col>
-          <v-btn block :color="UI.actionColor.color" outlined>Забанить</v-btn>
-        </v-col>
-      </v-row>
+      <v-form ref="form">
+        <v-row>
+          <v-col>
+            <v-text-field
+              v-model="note"
+              label="Причина"
+              :color="UI.actionColor.color"
+            />
+          </v-col>
+        </v-row>
+        <v-row class="">
+          <v-col>
+            <v-btn
+              block
+              :color="UI.actionColor.color"
+              outlined
+              @click="sendForm('DISMISSED')"
+              >Изгнать</v-btn
+            >
+          </v-col>
+          <v-col>
+            <v-btn
+              block
+              :color="UI.actionColor.color"
+              outlined
+              @click="sendForm('BLACK_LIST')"
+              >Забанить</v-btn
+            >
+          </v-col>
+        </v-row>
+      </v-form>
     </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts">
 import Component from "nuxt-class-component"
+import { mixins } from "nuxt-property-decorator"
 import MixinModal from "~/mixins/MixinModal.vue"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
+import { UserStatus } from "~/types/UserStatus"
+import CharacterApi from "~/api/CharacterApi"
+import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 
 @Component({
   name: "FormDismissCharacter",
 })
-export default class FormDismissCharacter extends MixinModal {
+export default class FormDismissCharacter extends mixins(
+  MixinModal,
+  CharacterStoreMixin
+) {
   editId: string | null = null
-  form = {
-    status: "DISMISS",
-    note: "",
+  note: string = ""
+
+  public startEdit(item: CharacterDTOResponse): void {
+    this.editId = item._id
+    this.note = item.note || ""
   }
 
-  startEdit(item: CharacterDTOResponse): void {
-    this.editId = item._id
-    // this.form.note = item.note
+  async sendForm(status: UserStatus): Promise<void> {
+    if (this.editId) {
+      const res = await CharacterApi.pathCharacter(
+        this.editId,
+        {
+          status,
+          note: this.note,
+        },
+        () => {}
+      )
+      if (res) {
+        await this.storeUpdateCharacters()
+        this.closeModal()
+      }
+    }
   }
 }
 </script>

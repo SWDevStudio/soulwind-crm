@@ -64,10 +64,10 @@ export default class FormGroup extends MixinModal {
 
   async createGroup(event: Event): Promise<void> {
     event.preventDefault()
-    if (this.Form.validate()) {
+    if (this.VForm.validate()) {
       const res = await GroupApi.create(this.form, this.showError)
       if (res) {
-        this.Form.reset()
+        this.VForm.reset()
         this.closeModal()
       }
     }
