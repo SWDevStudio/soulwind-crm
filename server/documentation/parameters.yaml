@@ -4,6 +4,18 @@ parameters:
     properties:
       token:
         type: "string"
+  participants:
+    type: "object"
+    properties:
+      characterId:
+        type: "string"
+        description: "Id персонажа"
+      status:
+        type: "string"
+        enum:
+          - "Присутствовал"
+          - "Отсутствовал"
+          - "Отпросился"
   token:
     name: "token"
     in: "header"

@@ -11,4 +11,9 @@ export const tagsForSwagger: swaggerJSDoc.Tag[] = [
     description: "Управление персонажами",
     externalDocs: { description: "Узнать больше", url: "google.com" },
   },
+  {
+    name: "Guild Events",
+    description: "Управление событиями гильдии",
+    externalDocs: { description: "Узнать больше", url: "google.com" },
+  },
 ]

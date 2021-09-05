@@ -1,0 +1,22 @@
+definitions:
+  GuildEventsDTOResponse:
+    type: "object"
+    properties:
+      date:
+        type: "number"
+      eventType:
+        type: "string"
+        enum:
+          - "Осада"
+          - "Собрание"
+          - "Тренировка"
+      participants:
+        type: "array"
+        items:
+          $ref: "#/parameters/participants"
+      _id:
+        type: "string"
+      __v:
+        type: "integer"
+    xml:
+      name: "CharacterDTOResponse"
