@@ -39,7 +39,9 @@ class GroupService {
   async delete(req: Request, res: Response) {
     try {
       const id: string = req.params.id as string
-      const status = await GroupModel.findByIdAndDelete(id)
+      const status = await GroupModel.findOneAndDelete({
+        _id: id,
+      })
 
       if (!status) {
         return ServiceHelper.defaultErrorResponse(

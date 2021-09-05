@@ -36,7 +36,10 @@ class CharacterService {
       // TODO сделать проверку полей
       const data = req.body as CharacterDTOResponse
 
-      const resp = await CharacterModel.findByIdAndUpdate(req.params.id, data)
+      const resp = await CharacterModel.findOneAndUpdate(
+        { _id: req.params.id },
+        data
+      )
       res.json(resp)
     } catch (e) {
       res.status(400).json({ message: e })
