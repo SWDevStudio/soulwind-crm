@@ -11,7 +11,7 @@ class CharacterApi extends NetworkManager {
     callbackError: FunctionErrorResponse
   ): Promise<CharacterDTOResponse[]> {
     const res: AxiosResponse<CharacterDTOResponse[] | ErrorResponse> =
-      await this.$axios.get("/api/character")
+      await this.$axios.get("/api/character").catch((e) => this.defaultCatch(e))
     if (res.status === 200) {
       return res.data as CharacterDTOResponse[]
     } else {

@@ -48,7 +48,10 @@
 
 <script lang="ts">
 import { Component, mixins, Watch } from "nuxt-property-decorator"
-import { HEADER_CHARACTER } from "~/data/headers/HEADER_CHARACTER"
+import {
+  HEADER_CHARACTER,
+  HEADER_GROUPS,
+} from "~/data/headers/HEADER_CHARACTER"
 import { UI } from "~/data/UI"
 import FormGroup from "~/components/forms/FormGroup.vue"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
@@ -63,7 +66,7 @@ export default class Groups extends mixins<
   GlobalStoreMixin,
   CharacterStoreMixin
 >(GlobalStoreMixin, CharacterStoreMixin) {
-  HEADER_CHARACTER = HEADER_CHARACTER
+  HEADER_CHARACTER = HEADER_GROUPS
   UI = UI
   modalCreateGroup: boolean = false
   characters: CharacterDTOResponse[] = []

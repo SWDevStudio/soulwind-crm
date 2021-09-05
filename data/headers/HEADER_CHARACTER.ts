@@ -10,3 +10,12 @@ export const HEADER_CHARACTER: DataTableHeader[] = [
   { text: "pvp skill", value: "pvpRank" },
   { text: "Actions", value: "actions", sortable: false },
 ]
+export const HEADER_GROUPS: DataTableHeader[] = [
+  { text: "Фамилия", value: "lastName" },
+  { text: "Класс", value: "class" },
+  { text: "Уровень", value: "level" },
+  { text: "Ранг в пати", value: "" },
+  { text: "pvp skill", value: "pvpRank" },
+  { text: "Алхимия", value: "alchemy" },
+  { text: "Actions", value: "actions", sortable: false },
+]

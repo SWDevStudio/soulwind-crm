@@ -22,8 +22,8 @@
           <v-row>
             <v-col cols="6">
               <v-text-field
-                v-model="form.firstName"
-                label="Имя персонажа"
+                v-model="form.lastName"
+                label="Фамилия персонажа"
                 :rules="rules"
                 :color="UI.actionColor.color"
                 required
@@ -31,11 +31,9 @@
             </v-col>
             <v-col cols="6">
               <v-text-field
-                v-model="form.lastName"
-                label="Фамилия персонажа"
-                :rules="rules"
+                v-model="form.firstName"
+                label="Имя персонажа"
                 :color="UI.actionColor.color"
-                required
               />
             </v-col>
           </v-row>
