@@ -1,0 +1,179 @@
+<template>
+  <v-row justify="center" class="mt-2 pb-2">
+    <v-card width="100%">
+      <v-card-title>
+        <v-row>
+          <v-col cols="auto">
+            <v-menu
+              v-model="controller"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="dateRangeText"
+                  label="Date range"
+                  prepend-inner-icon="mdi-calendar"
+                  :color="UI.actionColor.color"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker
+                v-model="dates"
+                :color="UI.actionColor.color"
+                no-title
+                range
+                locale="RU"
+                first-day-of-week="1"
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col cols="4">
+            <v-text-field
+              v-model="search"
+              :color="UI.actionColor.color"
+              label="Поиск"
+              prepend-inner-icon="mdi-magnify"
+              clearable
+            ></v-text-field>
+          </v-col>
+          <v-col cols="6" class="d-flex">
+            <v-btn
+              class="ml-auto mt-2"
+              :color="UI.actionColor.color"
+              outlined
+              large
+            >
+              Добавить событие
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-card-title>
+      <v-card-text>
+        <v-data-table
+          :headers="headers"
+          :items="items"
+          disable-pagination
+          hide-default-footer
+        >
+          <template v-slot="item">
+            <td>{{ item.value.lastName }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </template>
+        </v-data-table>
+      </v-card-text>
+    </v-card>
+  </v-row>
+</template>
+
+<script lang="ts">
+import Component from "nuxt-class-component"
+import Vue from "vue"
+import { Prop, Watch } from "nuxt-property-decorator"
+import moment from "moment/moment"
+import { UI } from "~/data/UI"
+import {
+  GuildEventDtoResponse,
+  Participants,
+} from "~/server/GuildEvent/dto/guildEvent.dto"
+import GuildEventApi from "~/api/GuildEventApi"
+
+@Component({
+  name: "GuildEvent",
+})
+export default class GuildEvent extends Vue {
+  // data
+  form: object = {
+    name: "",
+  }
+
+  dates = [
+    moment().startOf("month").format("YYYY-MM-DD"),
+    moment().endOf("month").format("YYYY-MM-DD"),
+  ]
+
+  get headers() {
+    const cols = this.events.map((event) => {
+      return {
+        text: moment(event.date * 1000).format("YYYY-MM-DD"),
+        value: event._id,
+      }
+    })
+    return [{ text: "Фамилия", value: "lastName" }, ...cols]
+  }
+
+  get items() {
+    // Получить массив из всех пользователей во всех событиях
+    const charactersId: string[] = []
+
+    // Создать объект для каждого персонажа со значениями всех событий eventId: status
+    this.events.forEach((event: GuildEventDtoResponse) => {
+      event.participants.forEach((i: Participants) => {
+        if (!charactersId.includes(i.characterId)) {
+          charactersId.push(i.characterId)
+        }
+      })
+    })
+
+    return charactersId.map((charactersId) => {
+      const characterEventInfo = {
+        lastName: charactersId,
+      }
+
+      this.events.forEach((event: GuildEventDtoResponse) => {
+        const checkCharacter: Participants | undefined =
+          event.participants.find((i) => i.characterId === charactersId)
+        if (checkCharacter) {
+          characterEventInfo[event._id] = checkCharacter.status
+        }
+      })
+
+      return characterEventInfo
+    })
+  }
+
+  UI = UI
+
+  controller: boolean = false
+  search: string = ""
+
+  firstName: string = "Kotaro"
+  lastName: string = "Ritoru"
+
+  // computed
+  get fullName(): string {
+    return this.firstName + this.lastName
+  }
+
+  get dateRangeText(): string {
+    return this.dates.join("  ~  ")
+  }
+
+  // watch
+  @Watch("form.name")
+  startWork(val: string, oldVal: string): void {}
+
+  // props
+  @Prop() propNam?: string
+
+  // methods
+  startMethod(): void {}
+
+  // жизненные хуки
+  events: GuildEventDtoResponse[] = []
+
+  async created(): Promise<void> {
+    this.events = await GuildEventApi.loadEvents(
+      { from: this.dates[0], to: this.dates[1] },
+      () => {}
+    )
+  }
+}
+</script>

@@ -9,7 +9,7 @@ export function getToken(): string | void {
   if (token) {
     return token
   } else {
-    window && window.$nuxt.$router.push(PAGES.authentication)
+    window && window?.$nuxt.$router.push(PAGES.authentication)
   }
 }
 export function removeToken(): void {
