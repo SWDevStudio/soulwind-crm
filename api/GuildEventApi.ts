@@ -16,9 +16,9 @@ class GuildEventApi extends NetworkManager {
         .get("/api/guild-event", { params: date })
         .catch((error) => this.defaultCatch(error))
     if (response.status === 200) {
-      return response.data
+      return response.data as GuildEventDtoResponse[]
     } else {
-      errorCallback(response)
+      errorCallback(response as AxiosResponse<ErrorResponse>)
       return []
     }
   }

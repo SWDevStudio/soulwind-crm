@@ -5,7 +5,7 @@
 <script lang="ts">
 import Component from "nuxt-class-component"
 import Vue from "vue"
-import { Action, Getter } from "nuxt-property-decorator"
+import { Action, Getter, State } from "nuxt-property-decorator"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 
 @Component({
@@ -14,6 +14,9 @@ import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 export default class CharacterStoreMixin extends Vue {
   @Action("characters/updateCharacter")
   storeUpdateCharacters!: () => Promise<void>
+
+  @State((state) => state.characters.characters)
+  getAllCharacters!: CharacterDTOResponse[]
 
   @Getter("characters/activeCharacters")
   getActiveCharacters!: CharacterDTOResponse[]

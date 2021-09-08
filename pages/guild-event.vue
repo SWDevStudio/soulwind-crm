@@ -48,6 +48,7 @@
               :color="UI.actionColor.color"
               outlined
               large
+              @click="modalCreateEvent = !modalCreateEvent"
             >
               Добавить событие
             </v-btn>
@@ -61,21 +62,24 @@
           disable-pagination
           hide-default-footer
         >
-          <template v-slot="item">
-            <td>{{ item.value.lastName }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
+          <template v-slot:item.lastName="{ item }"
+            >{{
+              getAllCharacters.find(
+                (character) => item.lastName === character._id
+              ).lastName
+            }}
           </template>
         </v-data-table>
       </v-card-text>
     </v-card>
+    <v-dialog v-model="modalCreateEvent" max-width="1200" persistent eager>
+      <form-guild-event ref="eventForm" v-model="modalCreateEvent" />
+    </v-dialog>
   </v-row>
 </template>
 
 <script lang="ts">
-import Component from "nuxt-class-component"
-import Vue from "vue"
+import Component, { mixins } from "nuxt-class-component"
 import { Prop, Watch } from "nuxt-property-decorator"
 import moment from "moment/moment"
 import { UI } from "~/data/UI"
@@ -84,15 +88,20 @@ import {
   Participants,
 } from "~/server/GuildEvent/dto/guildEvent.dto"
 import GuildEventApi from "~/api/GuildEventApi"
+import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
+import FormGuildEvent from "~/components/forms/FormGuildEvent.vue"
 
 @Component({
   name: "GuildEvent",
+  components: { FormGuildEvent },
 })
-export default class GuildEvent extends Vue {
+export default class GuildEvent extends mixins(CharacterStoreMixin) {
   // data
   form: object = {
     name: "",
   }
+
+  modalCreateEvent: boolean = false
 
   dates = [
     moment().startOf("month").format("YYYY-MM-DD"),
@@ -102,7 +111,7 @@ export default class GuildEvent extends Vue {
   get headers() {
     const cols = this.events.map((event) => {
       return {
-        text: moment(event.date * 1000).format("YYYY-MM-DD"),
+        text: moment(event.date * 1000).format("DD.MM"),
         value: event._id,
       }
     })
@@ -123,7 +132,7 @@ export default class GuildEvent extends Vue {
     })
 
     return charactersId.map((charactersId) => {
-      const characterEventInfo = {
+      const characterEventInfo: any = {
         lastName: charactersId,
       }
 
