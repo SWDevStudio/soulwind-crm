@@ -1,9 +1,5 @@
 <template>
-  <v-card
-    overlay-color="teal accent-4"
-    overlay-opacity="0.1"
-    @keydown.esc="closeModal"
-  >
+  <v-card @keydown.esc="closeModal">
     <v-card-title :class="UI.actionColor.textClass">
       Изгнать или добавить в черный список
       <v-icon

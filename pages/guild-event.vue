@@ -12,7 +12,7 @@
               offset-y
               min-width="auto"
             >
-              <template v-slot:activator="{ on, attrs }">
+              <template #activator="{ on, attrs }">
                 <v-text-field
                   v-model="dateRangeText"
                   label="Date range"
@@ -62,7 +62,7 @@
           disable-pagination
           hide-default-footer
         >
-          <template v-slot:item.lastName="{ item }"
+          <template #item.lastName="{ item }"
             >{{
               getAllCharacters.find(
                 (character) => item.lastName === character._id
@@ -72,7 +72,14 @@
         </v-data-table>
       </v-card-text>
     </v-card>
-    <v-dialog v-model="modalCreateEvent" max-width="1200" persistent eager>
+    <v-dialog
+      v-model="modalCreateEvent"
+      max-width="1200"
+      overlay-color="teal accent-4"
+      overlay-opacity="0.1"
+      persistent
+      eager
+    >
       <form-guild-event ref="eventForm" v-model="modalCreateEvent" />
     </v-dialog>
   </v-row>
