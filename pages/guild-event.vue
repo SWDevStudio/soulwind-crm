@@ -72,7 +72,14 @@
         </v-data-table>
       </v-card-text>
     </v-card>
-    <v-dialog v-model="modalCreateEvent" max-width="1200" persistent eager>
+    <v-dialog
+      v-model="modalCreateEvent"
+      max-width="1200"
+      overlay-color="teal accent-4"
+      overlay-opacity="0.1"
+      persistent
+      eager
+    >
       <form-guild-event ref="eventForm" v-model="modalCreateEvent" />
     </v-dialog>
   </v-row>
