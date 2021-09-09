@@ -23,9 +23,6 @@ export default {
   ssr: false,
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],
-  server: {
-    port: process.env.PORT || 3000, // default: 3000
-  },
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
