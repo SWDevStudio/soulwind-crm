@@ -1,6 +1,11 @@
 <template>
   <v-card overlay-color="teal accent-4" overlay-opacity="0.1">
-    <v-card-title>
+    <v-card-actions class="justify-end pt-3">
+      <v-icon :color="UI.actionColor.color" @click="closeModal"
+        >mdi-close
+      </v-icon>
+    </v-card-actions>
+    <v-card-title class="pt-0">
       <v-row>
         <v-col>
           <v-menu
@@ -43,6 +48,15 @@
             required
           />
         </v-col>
+        <v-col>
+          <v-text-field
+            v-model="search"
+            :color="UI.actionColor.color"
+            label="Поиск"
+            prepend-inner-icon="mdi-magnify"
+            clearable
+          />
+        </v-col>
       </v-row>
     </v-card-title>
     <v-card-text>
@@ -55,12 +69,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(character, key) in getActiveCharacters" :key="key">
+            <tr v-for="(character, key) in filteredCharacters" :key="key">
               <td>{{ character.lastName }}</td>
               <td>
                 <v-radio-group
-                  :value="test"
                   row
+                  :value="findStatus(character._id)"
                   @change="addParticipants($event, character)"
                 >
                   <v-radio
@@ -77,7 +91,9 @@
           </tbody>
         </template>
       </v-simple-table>
-      <v-btn block :color="UI.actionColor.color" outlined> Добавить</v-btn>
+      <v-btn block :color="UI.actionColor.color" outlined @click="sendForm">
+        Добавить</v-btn
+      >
     </v-card-text>
   </v-card>
 </template>
@@ -94,6 +110,7 @@ import {
   GuildEventDto,
   Participants,
 } from "~/server/GuildEvent/dto/guildEvent.dto"
+import GuildEventApi from "~/api/GuildEventApi"
 
 @Component({
   name: "FormGuildEvent",
@@ -105,7 +122,8 @@ export default class FormGuildEvent extends mixins(
   controller: boolean = false
   GUILD_EVENTS = GUILD_EVENTS
   EVENT_STATUS = EVENT_STATUS
-  test: string = "Осада"
+  editMode: boolean = false
+  search: string = ""
   form: GuildEventDto = {
     date: moment().unix(),
     eventType: "Осада",
@@ -125,6 +143,46 @@ export default class FormGuildEvent extends mixins(
         characterId: char._id,
         status: val,
       })
+    }
+  }
+
+  closeModal() {
+    this.$emit("input", false)
+    this.form = {
+      date: moment().unix(),
+      eventType: "Осада",
+      participants: [],
+    }
+  }
+
+  findStatus(id: string): string {
+    // const res = this.form.participants.find(
+    //   (item) => character._id === item.characterId
+    // )
+    // if (res) {
+    //   return res.status
+    // }
+    // return ''
+    return (
+      this.form.participants.find((item) => id === item.characterId)?.status ||
+      ""
+    )
+  }
+
+  get filteredCharacters(): CharacterDTOResponse[] {
+    return this.getActiveCharacters.filter((character) =>
+      character.lastName.toLowerCase().includes(this.search.toLowerCase())
+    )
+  }
+
+  async sendForm() {
+    const resp = await GuildEventApi.createEvent(this.form, (response) => {
+      this.serverErrorResponse = response.data.message
+      console.log("Бекендеры пидарасы")
+    })
+    if (resp) {
+      this.closeModal()
+      alert("Событие успешно создано")
     }
   }
 }

@@ -11,6 +11,7 @@
               transition="scale-transition"
               offset-y
               min-width="auto"
+              @input="loadEvents"
             >
               <template #activator="{ on, attrs }">
                 <v-text-field
@@ -160,36 +161,40 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
   controller: boolean = false
   search: string = ""
 
-  firstName: string = "Kotaro"
-  lastName: string = "Ritoru"
-
   // computed
-  get fullName(): string {
-    return this.firstName + this.lastName
-  }
+  // get fullName(): string {}
 
   get dateRangeText(): string {
     return this.dates.join("  ~  ")
   }
 
   // watch
-  @Watch("form.name")
-  startWork(val: string, oldVal: string): void {}
+  // @Watch("form.name")
+  // startWork(val: string, oldVal: string): void {}
 
   // props
   @Prop() propNam?: string
 
   // methods
-  startMethod(): void {}
+  // startMethod(): void {}
 
   // жизненные хуки
   events: GuildEventDtoResponse[] = []
 
-  async created(): Promise<void> {
-    this.events = await GuildEventApi.loadEvents(
+  async loadEvents() {
+    const response = await GuildEventApi.loadEvents(
       { from: this.dates[0], to: this.dates[1] },
       () => {}
     )
+    this.events = response.filter(
+      (item) =>
+        item.date >= moment(this.dates[0]).unix() &&
+        item.date <= moment(this.dates[1]).unix()
+    )
+  }
+
+  created(): void {
+    this.loadEvents()
   }
 }
 </script>
