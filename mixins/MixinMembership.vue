@@ -73,7 +73,7 @@ import { UI } from "~/data/UI"
 import { HEADER_CHARACTER } from "~/data/headers/HEADER_CHARACTER"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
-import CharacterCreationForm from "~/components/forms/CharacterCreationForm.vue"
+import CharacterCreationForm from "~/components/forms/FormCreationCharacter.vue"
 import FormDismissCharacter from "~/components/forms/FormDismissCharacter.vue"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
 @Component({

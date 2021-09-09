@@ -21,4 +21,9 @@ export const SIDEBAR_MENU = [
     title: "Группы",
     to: PAGES.groups,
   },
+  {
+    icon: "mdi-account",
+    title: "Ивенты",
+    to: PAGES.guildEvent,
+  },
 ]
