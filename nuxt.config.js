@@ -17,6 +17,9 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
   serverMiddleware: ["~/server/index.ts"],
+  server: {
+    host: "0.0.0.0",
+  },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
   // TODO найти способ пофиксить ошибки использования SSR
