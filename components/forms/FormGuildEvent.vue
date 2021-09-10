@@ -7,7 +7,7 @@
     </v-card-actions>
     <v-card-title class="pt-0">
       <v-row>
-        <v-col>
+        <v-col v-if="!editMode">
           <v-menu
             v-model="controller"
             :close-on-content-click="false"
@@ -37,6 +37,23 @@
               @change="(val) => (form.date = moment(val).unix())"
             />
           </v-menu>
+        </v-col>
+        <v-col v-if="editMode">
+          <v-autocomplete
+            v-model="selectDateEdit"
+            label="Дата"
+            :color="UI.actionColor.color"
+            :items="
+              guildEventsList.map((item) => ({
+                title: moment(item.date * 1000).format('YYYY-MM-DD'),
+                value: item.date,
+              }))
+            "
+            style="cursor: pointer"
+            required
+            item-text="title"
+            item-value="value"
+          />
         </v-col>
         <v-col>
           <v-autocomplete
@@ -74,6 +91,7 @@
               <td>
                 <v-radio-group
                   row
+                  dense
                   :value="findStatus(character._id)"
                   @change="addParticipants($event, character)"
                 >
@@ -92,8 +110,8 @@
         </template>
       </v-simple-table>
       <v-btn block :color="UI.actionColor.color" outlined @click="sendForm">
-        Добавить</v-btn
-      >
+        {{ editMode ? "Редактировать" : "Добавить" }}
+      </v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -101,6 +119,7 @@
 <script lang="ts">
 import Component, { mixins } from "nuxt-class-component"
 import moment from "moment/moment"
+import { Prop, Watch } from "nuxt-property-decorator"
 import MixinModal from "~/mixins/MixinModal.vue"
 import { GUILD_EVENTS } from "~/server/Data/GUILD_EVENTS"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
@@ -108,9 +127,12 @@ import { EVENT_STATUS, EventStatus } from "~/types/GuildEvents/EventStatus"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import {
   GuildEventDto,
+  GuildEventDtoResponse,
   Participants,
 } from "~/server/GuildEvent/dto/guildEvent.dto"
 import GuildEventApi from "~/api/GuildEventApi"
+import { AxiosResponse } from "axios"
+import { ErrorResponse } from "~/structs/ErrorResponse"
 
 @Component({
   name: "FormGuildEvent",
@@ -124,6 +146,7 @@ export default class FormGuildEvent extends mixins(
   EVENT_STATUS = EVENT_STATUS
   editMode: boolean = false
   search: string = ""
+  selectDateEdit: null | number = null
   form: GuildEventDto = {
     date: moment().unix(),
     eventType: "Осада",
@@ -131,6 +154,26 @@ export default class FormGuildEvent extends mixins(
   }
 
   moment = moment
+
+  @Prop() guildEventsList!: GuildEventDtoResponse[]
+
+  get filteredCharacters(): CharacterDTOResponse[] {
+    return this.getActiveCharacters.filter((character) =>
+      character.lastName.toLowerCase().includes(this.search.toLowerCase())
+    )
+  }
+
+  @Watch("selectDateEdit")
+  setForm(value: number) {
+    const event = this.guildEventsList.find((item) => value === item.date)
+    if (event) {
+      this.form = {
+        date: event.date,
+        eventType: event.eventType,
+        participants: event.participants,
+      }
+    }
+  }
 
   addParticipants(val: EventStatus, char: CharacterDTOResponse) {
     console.log(123123, val, char._id)
@@ -169,21 +212,23 @@ export default class FormGuildEvent extends mixins(
     )
   }
 
-  get filteredCharacters(): CharacterDTOResponse[] {
-    return this.getActiveCharacters.filter((character) =>
-      character.lastName.toLowerCase().includes(this.search.toLowerCase())
-    )
-  }
-
   async sendForm() {
-    const resp = await GuildEventApi.createEvent(this.form, (response) => {
+    const errorCallback = (response: AxiosResponse<ErrorResponse>) => {
       this.serverErrorResponse = response.data.message
       console.log("Бекендеры пидарасы")
-    })
+    }
+
+    const resp = this.editMode
+      ? await GuildEventApi.updateEvent(this.form, errorCallback)
+      : await GuildEventApi.createEvent(this.form, errorCallback)
     if (resp) {
       this.closeModal()
       alert("Событие успешно создано")
     }
+  }
+
+  startEdit() {
+    this.editMode = true
   }
 }
 </script>
