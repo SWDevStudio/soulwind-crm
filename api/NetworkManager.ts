@@ -5,6 +5,7 @@ export class NetworkManager {
   constructor() {
     if (process.client) {
       this.$axios = axios.create({
+        baseURL: "/",
         headers: {
           token: getToken() || "",
         },

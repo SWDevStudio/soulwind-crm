@@ -25,9 +25,6 @@ const start = () => {
   app.use(ServerData.PATHS.USER, UserController)
   app.use(ServerData.PATHS.CHARACTER, CharacterController)
   app.use(ServerData.PATHS.GUILD_EVENT, GuildEventController)
-  app.get("/fuck-test", (req, res) => {
-    res.json("hello world")
-  })
   return app
 }
 

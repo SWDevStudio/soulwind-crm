@@ -46,11 +46,12 @@
 </template>
 
 <script>
-import { setToken } from "~/utils/Token"
 import { PAGES } from "~/data/PAGES"
+import MixinToken from "~/mixins/MixinToken"
 
 export default {
   name: "SignIn",
+  mixins: [MixinToken],
   data: () => ({
     valid: true,
     show1: false,
@@ -82,7 +83,7 @@ export default {
           const loginResponse = await this.$axios
             .post("/api/user/login", this.form)
             .catch((e) => e.response)
-          setToken(loginResponse.data?.token)
+          this.setToken(loginResponse.data?.token)
           await this.$router.push(PAGES.root)
         }
       } else {

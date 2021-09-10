@@ -36,11 +36,12 @@
 </template>
 
 <script>
-import { setToken } from "~/utils/Token"
 import { PAGES } from "~/data/PAGES"
+import MixinToken from "~/mixins/MixinToken"
 
 export default {
   name: "Login",
+  mixins: [MixinToken],
   data: () => ({
     valid: true,
     show: false,
@@ -62,7 +63,7 @@ export default {
           .post("/api/user/login", this.form)
           .catch((e) => e.response)
         if (response.status === 200) {
-          setToken(response.data?.token)
+          this.setToken(response.data?.token)
           await this.$router.push(PAGES.root)
         } else {
           this.serverErrorResponse = response.data.message

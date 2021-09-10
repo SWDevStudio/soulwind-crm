@@ -22,13 +22,12 @@ class GroupApi extends NetworkManager {
     callbackError: FunctionErrorResponse
   ): Promise<GroupDtoModel[]> {
     const res: AxiosResponse<GroupDtoModel[] | ErrorResponse> =
-      await this.$axios.get("/api/group")
-
+      await this.$axios.get("/api/group").catch((e) => this.defaultCatch(e))
     if (res?.status === 200) {
       return res?.data as GroupDtoModel[]
     } else {
       callbackError(res as AxiosResponse<ErrorResponse>)
-      return []
+      return [] as GroupDtoModel[]
     }
   }
 }

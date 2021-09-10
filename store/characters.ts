@@ -1,4 +1,10 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators"
+import {
+  Action,
+  Module,
+  Mutation,
+  MutationAction,
+  VuexModule,
+} from "vuex-module-decorators"
 import CharacterApi from "~/api/CharacterApi"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 
@@ -15,7 +21,7 @@ export default class Characters extends VuexModule {
     this.characters = val || []
   }
 
-  @Action
+  @Action({ rawError: true })
   async updateCharacter() {
     const res = await CharacterApi.loadCharacters(() => {})
     if (res) this.setCharacter(res)

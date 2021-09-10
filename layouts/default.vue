@@ -47,15 +47,19 @@
 </template>
 
 <script lang="ts">
-import { Component } from "nuxt-property-decorator"
+import { Component, mixins } from "nuxt-property-decorator"
 import { SIDEBAR_MENU } from "~/data/SIDEBAR_MENU"
-import { removeToken } from "~/utils/Token"
+
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
+import MixinToken from "~/mixins/MixinToken"
 
 @Component({
   name: "default",
 })
-export default class Default extends CharacterStoreMixin {
+export default class Default extends mixins<CharacterStoreMixin, MixinToken>(
+  CharacterStoreMixin,
+  MixinToken
+) {
   clipped: boolean = false
   drawer: boolean = false
   fixed: boolean = false
@@ -71,9 +75,8 @@ export default class Default extends CharacterStoreMixin {
 
   created() {
     this.$store.dispatch("global/loadGlobalData")
+    // this.$store.dispatch("characters/updateCharacter")
     this.storeUpdateCharacters()
   }
-
-  removeToken = removeToken
 }
 </script>

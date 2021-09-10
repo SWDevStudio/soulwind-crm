@@ -44,7 +44,12 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseUrl: "/",
+    // process.env.NODE_ENV === "production"
+    //   ? "https://soulwind-crm.herokuapp.com"
+    //   : "localhost",
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
