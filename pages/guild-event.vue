@@ -43,18 +43,27 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="6" class="d-flex">
-            <v-btn
-              class="ml-auto mt-2"
-              :color="UI.actionColor.color"
-              outlined
-              large
-              @click="modalCreateEvent = !modalCreateEvent"
-            >
-              Добавить событие
-            </v-btn>
-          </v-col>
         </v-row>
+        <v-card-actions>
+          <v-btn
+            class="mt-2 mr-4"
+            :color="UI.actionColor.color"
+            outlined
+            large
+            @click="editEvent"
+          >
+            Изменить событие
+          </v-btn>
+          <v-btn
+            class="mt-2"
+            :color="UI.actionColor.color"
+            outlined
+            large
+            @click="modalCreateEvent = !modalCreateEvent"
+          >
+            Добавить событие
+          </v-btn>
+        </v-card-actions>
       </v-card-title>
       <v-card-text>
         <v-data-table
@@ -81,14 +90,18 @@
       persistent
       eager
     >
-      <form-guild-event ref="eventForm" v-model="modalCreateEvent" />
+      <form-guild-event
+        ref="eventForm"
+        v-model="modalCreateEvent"
+        :guild-events-list="events"
+      />
     </v-dialog>
   </v-row>
 </template>
 
 <script lang="ts">
 import Component, { mixins } from "nuxt-class-component"
-import { Prop, Watch } from "nuxt-property-decorator"
+import { Prop, Ref } from "nuxt-property-decorator"
 import moment from "moment/moment"
 import { UI } from "~/data/UI"
 import {
@@ -109,7 +122,11 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
     name: "",
   }
 
+  UI = UI
+
   modalCreateEvent: boolean = false
+  controller: boolean = false
+  search: string = ""
 
   dates = [
     moment().startOf("month").format("YYYY-MM-DD"),
@@ -156,11 +173,6 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
     })
   }
 
-  UI = UI
-
-  controller: boolean = false
-  search: string = ""
-
   // computed
   // get fullName(): string {}
 
@@ -168,12 +180,19 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
     return this.dates.join("  ~  ")
   }
 
+  // props
+  @Prop() propNam?: string
+
+  @Ref("eventForm") eventForm!: FormGuildEvent
+
+  editEvent(): void {
+    this.eventForm.startEdit()
+    this.modalCreateEvent = true
+  }
+
   // watch
   // @Watch("form.name")
   // startWork(val: string, oldVal: string): void {}
-
-  // props
-  @Prop() propNam?: string
 
   // methods
   // startMethod(): void {}
