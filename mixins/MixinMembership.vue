@@ -116,6 +116,7 @@ export default class MixinMembership extends CharacterStoreMixin {
   @Ref("characterForm") characterForm!: CharacterCreationForm
   editCharacter(item: CharacterDTOResponse): void {
     this.characterForm.startEdit(item)
+
     this.modal = true
   }
 
