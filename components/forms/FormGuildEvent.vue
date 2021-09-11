@@ -120,6 +120,7 @@
 import Component, { mixins } from "nuxt-class-component"
 import moment from "moment/moment"
 import { Prop, Watch } from "nuxt-property-decorator"
+import { AxiosResponse } from "axios"
 import MixinModal from "~/mixins/MixinModal.vue"
 import { GUILD_EVENTS } from "~/server/Data/GUILD_EVENTS"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
@@ -131,7 +132,6 @@ import {
   Participants,
 } from "~/server/GuildEvent/dto/guildEvent.dto"
 import GuildEventApi from "~/api/GuildEventApi"
-import { AxiosResponse } from "axios"
 import { ErrorResponse } from "~/structs/ErrorResponse"
 
 @Component({

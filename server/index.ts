@@ -14,6 +14,7 @@ import { swaggerOptions } from "./documentation/config/swaggerOption"
 const swagger = swaggerJSDoc(swaggerOptions)
 const start = () => {
   // Подключаемся к бд
+  // ConnectDataBase()
   ConnectDataBase()
   // Создаем express
   const app: core.Express = express()
