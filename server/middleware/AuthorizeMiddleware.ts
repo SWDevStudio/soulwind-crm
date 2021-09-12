@@ -16,9 +16,11 @@ export default function AuthorizeMiddleware(
     if (!token) {
       return res.status(403).json({ message: "Пользователь не авторизован" })
     }
+
     res.locals._user = jwt.verify(token, ServerData.SECRET_KEY)
+
     next()
   } catch (e) {
-    return res.status(400).json({ message: e })
+    return res.status(403).json({ message: "Ошибка авторизации" })
   }
 }

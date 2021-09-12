@@ -63,8 +63,12 @@ export default {
           .post("/api/user/login", this.form)
           .catch((e) => e.response)
         if (response.status === 200) {
+          console.log(response.data?.token, "token")
           this.setToken(response.data?.token)
-          await this.$router.push(PAGES.root)
+          console.log(this.getToken(), "get token")
+          // TODO Костыль который позволяет перезагрузить страницу и изменить headers в NetworkManager
+          window.location.replace(PAGES.root)
+          // await this.$router.push(PAGES.root)
         } else {
           this.serverErrorResponse = response.data.message
         }

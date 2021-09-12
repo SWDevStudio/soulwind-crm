@@ -9,7 +9,7 @@ import { getToken } from "~/utils/Token"
 export default class MixinToken extends Vue {
   // TODO нужно продумать и сделать так что бы SSR не выдавал ошибок
   setToken(token: string): void {
-    Cookies.set("token", token)
+    localStorage.setItem("token", token)
   }
 
   getToken(): string | void {
@@ -22,7 +22,7 @@ export default class MixinToken extends Vue {
   }
 
   removeToken(): void {
-    Cookies.remove("token")
+    localStorage.removeItem("token")
     this.$router.push(PAGES.authentication)
   }
 }
