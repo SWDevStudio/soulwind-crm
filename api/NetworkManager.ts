@@ -17,8 +17,7 @@ export class NetworkManager {
 
   defaultCatch(error: any) {
     const info = error.response as AxiosResponse
-
-    if (info.status === 403) {
+    if (info?.status === 403) {
       window.$nuxt.error({ statusCode: 403 })
     }
     return error.response

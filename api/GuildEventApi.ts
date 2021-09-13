@@ -44,12 +44,13 @@ class GuildEventApi extends NetworkManager {
   }
 
   async updateEvent(
+    id: string,
     eventDTO: GuildEventDto,
     errorCallback: FunctionErrorResponse
   ): Promise<GuildEventDtoResponse | void> {
     const response: AxiosResponse<GuildEventDtoResponse | ErrorResponse> =
       await this.$axios
-        .patch("/api/guild-event", eventDTO)
+        .patch("/api/guild-event/" + id, eventDTO)
         .catch((error) => this.defaultCatch(error))
     if (response.status === 200) {
       return response.data as GuildEventDtoResponse

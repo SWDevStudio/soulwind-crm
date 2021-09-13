@@ -94,6 +94,7 @@
         ref="eventForm"
         v-model="modalCreateEvent"
         :guild-events-list="events"
+        @updateData="updateEvent"
       />
     </v-dialog>
   </v-row>
@@ -141,6 +142,10 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
       }
     })
     return [{ text: "Фамилия", value: "lastName" }, ...cols]
+  }
+
+  updateEvent(arr: GuildEventDtoResponse[]) {
+    this.events = arr
   }
 
   get items() {

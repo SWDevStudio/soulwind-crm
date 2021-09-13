@@ -47,12 +47,13 @@
               guildEventsList.map((item) => ({
                 title: moment(item.date * 1000).format('YYYY-MM-DD'),
                 value: item.date,
+                _id: item._id,
               }))
             "
             style="cursor: pointer"
             required
             item-text="title"
-            item-value="value"
+            item-value="_id"
           />
         </v-col>
         <v-col>
@@ -109,7 +110,13 @@
           </tbody>
         </template>
       </v-simple-table>
-      <v-btn block :color="UI.actionColor.color" outlined @click="sendForm">
+      <v-btn
+        :color="UI.actionColor.color"
+        :disabled="editMode ? !selectDateEdit : false"
+        block
+        outlined
+        @click="sendForm"
+      >
         {{ editMode ? "Редактировать" : "Добавить" }}
       </v-btn>
     </v-card-text>
@@ -133,7 +140,6 @@ import {
 } from "~/server/GuildEvent/dto/guildEvent.dto"
 import GuildEventApi from "~/api/GuildEventApi"
 import { ErrorResponse } from "~/structs/ErrorResponse"
-
 @Component({
   name: "FormGuildEvent",
 })
@@ -146,7 +152,7 @@ export default class FormGuildEvent extends mixins(
   EVENT_STATUS = EVENT_STATUS
   editMode: boolean = false
   search: string = ""
-  selectDateEdit: null | number = null
+  selectDateEdit: any = null
   form: GuildEventDto = {
     date: moment().unix(),
     eventType: "Осада",
@@ -165,18 +171,17 @@ export default class FormGuildEvent extends mixins(
 
   @Watch("selectDateEdit")
   setForm(value: number) {
-    const event = this.guildEventsList.find((item) => value === item.date)
+    const event = this.guildEventsList.find((item) => value === item._id)
     if (event) {
       this.form = {
         date: event.date,
         eventType: event.eventType,
-        participants: event.participants,
+        participants: JSON.parse(JSON.stringify(event.participants)),
       }
     }
   }
 
   addParticipants(val: EventStatus, char: CharacterDTOResponse) {
-    console.log(123123, val, char._id)
     const findParticipant: Participants | undefined =
       this.form.participants.find((item) => char._id === item.characterId)
     if (findParticipant) {
@@ -191,6 +196,8 @@ export default class FormGuildEvent extends mixins(
 
   closeModal() {
     this.$emit("input", false)
+    this.editMode = false
+    this.selectDateEdit = null
     this.form = {
       date: moment().unix(),
       eventType: "Осада",
@@ -199,13 +206,6 @@ export default class FormGuildEvent extends mixins(
   }
 
   findStatus(id: string): string {
-    // const res = this.form.participants.find(
-    //   (item) => character._id === item.characterId
-    // )
-    // if (res) {
-    //   return res.status
-    // }
-    // return ''
     return (
       this.form.participants.find((item) => id === item.characterId)?.status ||
       ""
@@ -215,15 +215,17 @@ export default class FormGuildEvent extends mixins(
   async sendForm() {
     const errorCallback = (response: AxiosResponse<ErrorResponse>) => {
       this.serverErrorResponse = response.data.message
-      console.log("Бекендеры пидарасы")
     }
-
     const resp = this.editMode
-      ? await GuildEventApi.updateEvent(this.form, errorCallback)
+      ? await GuildEventApi.updateEvent(
+          this.selectDateEdit,
+          this.form,
+          errorCallback
+        )
       : await GuildEventApi.createEvent(this.form, errorCallback)
     if (resp) {
+      this.$emit("updateData", resp)
       this.closeModal()
-      alert("Событие успешно создано")
     }
   }
 

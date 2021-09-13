@@ -79,7 +79,8 @@ GuildEventController.post(
   "",
   AuthorizeMiddleware,
   RolesMiddleware(["ADMIN"]),
-  GuildEventService.createEvent
+  GuildEventService.createEvent,
+  GuildEventService.getEvents
 )
 
 /**
@@ -107,7 +108,8 @@ GuildEventController.patch(
   "/:id",
   AuthorizeMiddleware,
   RolesMiddleware(["ADMIN"]),
-  GuildEventService.updateEvent
+  GuildEventService.updateEvent,
+  GuildEventService.getEvents
 )
 
 export default GuildEventController

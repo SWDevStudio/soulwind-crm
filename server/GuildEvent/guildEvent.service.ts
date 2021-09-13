@@ -29,7 +29,8 @@ class GuildEventService {
 
   async createEvent(
     req: Request<{}, {}, GuildEventDto>,
-    res: Response<GuildEventDtoResponse | ErrorResponse>
+    res: Response<GuildEventDtoResponse | ErrorResponse>,
+    next: Function
   ) {
     try {
       const startDay = TimeHelper.startDay(req.body.date)
@@ -43,7 +44,8 @@ class GuildEventService {
           message: `Событие типа на этот день уже создано`,
         })
       }
-      res.json(await GuildEventModel.create(req.body))
+      await GuildEventModel.create(req.body)
+      next()
     } catch (e) {
       res.status(400).json({ message: e })
     }
@@ -51,7 +53,8 @@ class GuildEventService {
 
   async updateEvent(
     req: Request<{ id: string }, {}, GuildEventDto>,
-    res: Response<GuildEventDtoResponse[] | ErrorResponse>
+    res: Response<GuildEventDtoResponse[] | ErrorResponse>,
+    next: Function
   ) {
     try {
       await GuildEventModel.findOneAndUpdate(
@@ -60,7 +63,7 @@ class GuildEventService {
         },
         req.body
       )
-      res.redirect("/api/guild-event/" + req.params.id)
+      next()
     } catch (e) {
       res.status(400).json({ message: e })
     }
