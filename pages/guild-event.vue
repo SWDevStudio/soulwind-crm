@@ -185,8 +185,8 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
 
   @Ref("eventForm") eventForm!: FormGuildEvent
 
-  editEvent(item: GuildEventDtoResponse): void {
-    this.eventForm.startEdit(item)
+  editEvent(): void {
+    this.eventForm.startEdit()
     this.modalCreateEvent = true
   }
 
