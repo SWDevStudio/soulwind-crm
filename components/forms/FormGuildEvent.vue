@@ -77,7 +77,7 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <v-simple-table dense fixed-header class="mb-6">
+      <v-simple-table dense fixed-header class="mb-6 v-simple-table">
         <template #default>
           <thead>
             <tr>
@@ -120,6 +120,7 @@
 import Component, { mixins } from "nuxt-class-component"
 import moment from "moment/moment"
 import { Prop, Watch } from "nuxt-property-decorator"
+import { AxiosResponse } from "axios"
 import MixinModal from "~/mixins/MixinModal.vue"
 import { GUILD_EVENTS } from "~/server/Data/GUILD_EVENTS"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
@@ -131,7 +132,6 @@ import {
   Participants,
 } from "~/server/GuildEvent/dto/guildEvent.dto"
 import GuildEventApi from "~/api/GuildEventApi"
-import { AxiosResponse } from "axios"
 import { ErrorResponse } from "~/structs/ErrorResponse"
 
 @Component({
@@ -176,7 +176,6 @@ export default class FormGuildEvent extends mixins(
   }
 
   addParticipants(val: EventStatus, char: CharacterDTOResponse) {
-    console.log(123123, val, char._id)
     const findParticipant: Participants | undefined =
       this.form.participants.find((item) => char._id === item.characterId)
     if (findParticipant) {
@@ -232,3 +231,10 @@ export default class FormGuildEvent extends mixins(
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.v-simple-table {
+  max-height: 50vh;
+  overflow: auto;
+}
+</style>

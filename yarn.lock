@@ -1806,6 +1806,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/chartist@^0.11.1":
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@types/chartist/-/chartist-0.11.1.tgz#3825e6cee87f5f548e8631b2c25e3a7b597b2522"
+  integrity sha512-85eNd7rF+e5sLnpprgcDdeqARgNvczEXaBfnrkw0292TBCE4KF/2HmOPA6dIblyHUWV4OZ2kuQBH2R12F+VwYg==
+
 "@types/clean-css@*":
   version "4.2.5"
   resolved "https://registry.yarnpkg.com/@types/clean-css/-/clean-css-4.2.5.tgz#69ce62cc13557c90ca40460133f672dc52ceaf89"
@@ -3635,6 +3640,11 @@ chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
+
+chartist@^0.11.4:
+  version "0.11.4"
+  resolved "https://registry.yarnpkg.com/chartist/-/chartist-0.11.4.tgz#e96e1c573d8b67478920a3a6ae52359d9fc8d8b7"
+  integrity sha512-H4AimxaUD738/u9Mq8t27J4lh6STsLi4BQHt65nOtpLk3xyrBPaLiLMrHw7/WV9CmsjGA02WihjuL5qpSagLYw==
 
 "chokidar@>=3.0.0 <4.0.0", chokidar@^3.4.1, chokidar@^3.4.2, chokidar@^3.5.1, chokidar@^3.5.2:
   version "3.5.2"

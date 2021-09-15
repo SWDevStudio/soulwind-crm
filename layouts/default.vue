@@ -51,7 +51,7 @@ import { Component } from "nuxt-property-decorator"
 import { SIDEBAR_MENU } from "~/data/SIDEBAR_MENU"
 import { removeToken } from "~/utils/Token"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
-
+import "chartist/dist/chartist.min.css"
 @Component({
   name: "default",
 })
