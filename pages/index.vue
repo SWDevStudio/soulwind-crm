@@ -23,7 +23,21 @@
       <v-col lg="8" md="6" sm="12">
         <v-card>
           <v-card-title class="pl-8">Посещение осад</v-card-title>
-          <v-card-text class="d-flex justify-center"> </v-card-text>
+          <v-card-text class="d-flex justify-center">
+            <div class="chart-visit-event" style="height: 430px; width: 100%" />
+          </v-card-text>
+          <v-card-subtitle >
+            <v-row>
+              <v-col class="d-flex">
+                <div class="color-box color-box--active"/>
+                <p>Присутствовал</p>
+              </v-col>
+              <v-col class="d-flex">
+                <div class="color-box "/>
+                <p>Отпросился</p>
+              </v-col>
+            </v-row>
+          </v-card-subtitle>
         </v-card>
       </v-col>
 
@@ -43,8 +57,11 @@
 import Component, { mixins } from "nuxt-class-component"
 import Chartist from "chartist"
 import { Watch } from "nuxt-property-decorator"
+import moment from "moment"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import { CHARACTER_CLASSES } from "~/data/CHARACTER_CLASSES"
+import GuildEventApi from "~/api/GuildEventApi"
+import { GuildEventDtoResponse } from "~/server/GuildEvent/dto/guildEvent.dto"
 
 @Component({
   name: "index",
@@ -75,6 +92,8 @@ export default class Index extends mixins(CharacterStoreMixin) {
       notGS.length,
     ]
   }
+
+  guildEvents: GuildEventDtoResponse[] = []
 
   get chartGearScore() {
     return {
@@ -111,6 +130,28 @@ export default class Index extends mixins(CharacterStoreMixin) {
           ).length,
           className: "highLevel",
         },
+      ],
+    }
+  }
+
+  get chartVisitEvent() {
+    return {
+      labels: this.guildEvents.map((guildEvent) =>
+        moment(guildEvent.date * 1000).format("DD-MM")
+      ),
+      series: [
+        this.guildEvents.map(
+          (guildEvent) =>
+            guildEvent.participants.filter(
+              (item) => item.status === "Присутствовал"
+            ).length
+        ),
+        this.guildEvents.map(
+          (guildEvent) =>
+            guildEvent.participants.filter(
+              (item) => item.status === "Отпросился"
+            ).length
+        ),
       ],
     }
   }
@@ -224,10 +265,63 @@ export default class Index extends mixins(CharacterStoreMixin) {
     new Chartist.Bar(".chart-class", data, options)
   }
 
+  @Watch("chartVisitEvent", { deep: true })
+  chartVisitEventRender() {
+    const data = this.chartVisitEvent
+    console.log(data)
+    const options: any = {
+      // reverseData: true,
+      seriesBarDistance: 10,
+      axisY: {
+        offset: 60,
+        scaleMinSpace: 100,
+      },
+      axisX: {
+        labelInterpolationFnc(value: any) {
+          return value
+        },
+
+      },
+
+    }
+    const responsiveOptions: any = [
+      [
+        "screen and (min-width: 400px)",
+        {
+          horizontalBars: true,
+          reverseData: true,
+          axisX:{
+            scaleMinSpace: 100,
+          }
+        },
+      ],
+      [
+        "screen and (min-width: 1024px)",
+        {
+          horizontalBars: false,
+          reverseData: false,
+        },
+      ],
+    ]
+    // eslint-disable-next-line no-new
+    new Chartist.Bar(".chart-visit-event", data, options,responsiveOptions)
+  }
+
+  async created() {
+    this.guildEvents = await GuildEventApi.loadEvents(
+      {
+        from: moment().subtract("days", 13).format("YYYY-MM-DD"),
+        to: moment().format("YYYY-MM-DD"),
+      },
+      () => {}
+    )
+  }
+
   mounted() {
     this.chartGearScoreRender()
     this.chartLevelRender()
     this.chartClassRender()
+    this.chartVisitEventRender()
   }
 }
 </script>
@@ -271,8 +365,22 @@ export default class Index extends mixins(CharacterStoreMixin) {
 .ct-series-a .ct-bar {
   stroke: #26a69a;
 }
-
+.ct-series-b .ct-bar {
+  stroke: #004d40;
+}
 .ct-label {
   color: #e0f2f1;
+}
+
+.color-box{
+  width: 20px;
+  height: 20px;
+  background: #004d40;
+  margin-right: 10px;
+  margin-left: 50px;
+}
+.color-box--active{
+
+  background: #26a69a;
 }
 </style>
