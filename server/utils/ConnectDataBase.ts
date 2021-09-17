@@ -6,7 +6,7 @@ export function ConnectDataBase(
   db: string = "myFirstDatabase"
 ) {
   const uri =
-    process.env.NODE_ENV === "development"
+    process.env.NODE_ENV !== "development"
       ? `mongodb+srv://${login}:${passwd}@cluster0.v6u1x.mongodb.net/${db}?retryWrites=true&w=majority`
       : `mongodb+srv://${login}:${passwd}@cluster0.pes58.mongodb.net/${db}?retryWrites=true&w=majority`
   connect(uri, {
