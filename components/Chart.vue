@@ -15,19 +15,31 @@
 import Component from "nuxt-class-component"
 import Vue from "vue"
 import { Prop, Watch } from "nuxt-property-decorator"
-import Chartist from "chartist"
+import Chartist, {
+  IBarChartOptions,
+  IChartistData,
+  IResponsiveOptionTuple,
+} from "chartist"
 
+type ChartType = "Pie" | "Bar" | "Line"
+const chartTypes: ChartType[] = ["Pie", "Bar", "Line"]
 @Component({
   name: "Chart",
 })
 export default class Chart extends Vue {
   chartId!: string
-  @Prop() data!: object
-  @Prop() typeChart!: "Pie" | "Bar" | "Line"
+  @Prop() data!: IChartistData
+  @Prop({
+    validator: (type: ChartType): boolean => chartTypes.includes(type),
+  })
+  typeChart!: ChartType
 
   @Prop() title?: string
-  @Prop({ default: {} }) options?: object
-  @Prop({ default: () => ({}) }) responsiveOptions?: object
+  @Prop({ default: () => ({}) }) options?: IBarChartOptions
+  @Prop({ default: () => [] }) responsiveOptions?: Array<
+    IResponsiveOptionTuple<IBarChartOptions>
+  >
+
   chart: object | null = null
   constructor() {
     super()
@@ -35,7 +47,7 @@ export default class Chart extends Vue {
   }
 
   @Watch("data", { deep: true })
-  chartLevelRender() {
+  chartRender() {
     // eslint-disable-next-line no-new
     if (this.typeChart === "Pie")
       this.chart = new Chartist.Pie(
@@ -58,6 +70,10 @@ export default class Chart extends Vue {
         this.options,
         this.responsiveOptions
       )
+  }
+
+  mounted() {
+    this.chartRender()
   }
 
   createId(): string {
@@ -124,11 +140,12 @@ export default class Chart extends Vue {
 .color-box {
   width: 20px;
   height: 20px;
-  background: #004d40;
+  background: #26a69a;
   margin-right: 10px;
   margin-left: 50px;
+  border-radius: 20px;
 }
 .color-box--active {
-  background: #26a69a;
+  background: #004d40;
 }
 </style>

@@ -48,7 +48,6 @@
           title="Уровни"
           type-chart="Pie"
           :data="chartLevel"
-          :options="optionsChartLevel"
           :responsive-options="responsiveOptionsChartLevel"
         />
       </v-col>
@@ -59,16 +58,17 @@
 <script lang="ts">
 import Component, { mixins } from "nuxt-class-component"
 import moment from "moment"
-import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
-import { CHARACTER_CLASSES } from "~/data/CHARACTER_CLASSES"
-import GuildEventApi from "~/api/GuildEventApi"
-import { GuildEventDtoResponse } from "~/server/GuildEvent/dto/guildEvent.dto"
-import Chart from "~/components/Chart.vue"
 import {
   IBarChartOptions,
   IChartistData,
   IResponsiveOptionTuple,
 } from "chartist"
+import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
+import { CHARACTER_CLASSES } from "~/data/CHARACTER_CLASSES"
+import GuildEventApi from "~/api/GuildEventApi"
+import { GuildEventDtoResponse } from "~/server/GuildEvent/dto/guildEvent.dto"
+import Chart from "~/components/Chart.vue"
+import { EventStatus } from "~/types/GuildEvents/EventStatus"
 
 @Component({
   name: "index",
@@ -80,14 +80,11 @@ export default class Index extends mixins(CharacterStoreMixin) {
   get chartGearScore(): IChartistData {
     return {
       labels: ["до 510", "511-570", "571-590", "от 591", "ГС не указан"],
-      series: [...this.gearScore()],
+      series: this.gearScore(),
     }
   }
 
   optionsChartGearScore: IBarChartOptions = {
-    labelInterpolationFnc(value: any[]) {
-      return value
-    },
     donut: true,
     donutWidth: 100,
   }
@@ -147,12 +144,6 @@ export default class Index extends mixins(CharacterStoreMixin) {
     }
   }
 
-  optionsChartLevel: IBarChartOptions = {
-    labelInterpolationFnc(value: any[]) {
-      return value
-    },
-  }
-
   responsiveOptionsChartLevel: Array<IResponsiveOptionTuple<IBarChartOptions>> =
     [
       [
@@ -175,22 +166,19 @@ export default class Index extends mixins(CharacterStoreMixin) {
     ]
 
   get chartVisitEvent(): IChartistData {
+    const needStatus: EventStatus[] = ["Присутствовал", "Отпросился"]
     return {
       labels: this.guildEvents.map((guildEvent) =>
         moment(guildEvent.date * 1000).format("DD-MM")
       ),
       series: [
-        this.guildEvents.map(
-          (guildEvent) =>
-            guildEvent.participants.filter(
-              (item) => item.status === "Присутствовал"
-            ).length
-        ),
-        this.guildEvents.map(
-          (guildEvent) =>
-            guildEvent.participants.filter(
-              (item) => item.status === "Отпросился"
-            ).length
+        ...needStatus.map((statusType) =>
+          this.guildEvents.map(
+            (guildEvent) =>
+              guildEvent.participants.filter(
+                (item) => item.status === statusType
+              ).length
+          )
         ),
       ],
     }
@@ -235,16 +223,14 @@ export default class Index extends mixins(CharacterStoreMixin) {
   get chartClass(): IChartistData {
     return {
       labels: CHARACTER_CLASSES,
-      series: [
-        ...CHARACTER_CLASSES.map((charClass) => {
-          return {
-            value: this.getActiveCharacters.filter(
-              (character) => character?.class === charClass
-            ).length,
-            className: "ct-series-a",
-          }
-        }),
-      ],
+      series: CHARACTER_CLASSES.map((charClass) => {
+        return {
+          value: this.getActiveCharacters.filter(
+            (character) => character?.class === charClass
+          ).length,
+          className: "ct-series-a",
+        }
+      }),
     }
   }
 
