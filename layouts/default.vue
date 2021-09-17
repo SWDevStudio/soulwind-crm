@@ -49,7 +49,6 @@
 <script lang="ts">
 import { Component, mixins } from "nuxt-property-decorator"
 import { SIDEBAR_MENU } from "~/data/SIDEBAR_MENU"
-import { removeToken } from "~/utils/Token"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import MixinToken from "~/mixins/MixinToken"
 
