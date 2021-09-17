@@ -64,6 +64,11 @@ import { CHARACTER_CLASSES } from "~/data/CHARACTER_CLASSES"
 import GuildEventApi from "~/api/GuildEventApi"
 import { GuildEventDtoResponse } from "~/server/GuildEvent/dto/guildEvent.dto"
 import Chart from "~/components/Chart.vue"
+import {
+  IBarChartOptions,
+  IChartistData,
+  IResponsiveOptionTuple,
+} from "chartist"
 
 @Component({
   name: "index",
@@ -72,14 +77,14 @@ import Chart from "~/components/Chart.vue"
 export default class Index extends mixins(CharacterStoreMixin) {
   guildEvents: GuildEventDtoResponse[] = []
 
-  get chartGearScore() {
+  get chartGearScore(): IChartistData {
     return {
       labels: ["до 510", "511-570", "571-590", "от 591", "ГС не указан"],
       series: [...this.gearScore()],
     }
   }
 
-  optionsChartGearScore: any = {
+  optionsChartGearScore: IBarChartOptions = {
     labelInterpolationFnc(value: any[]) {
       return value
     },
@@ -87,7 +92,9 @@ export default class Index extends mixins(CharacterStoreMixin) {
     donutWidth: 100,
   }
 
-  responsiveOptionsChartGearScore: any = [
+  responsiveOptionsChartGearScore: Array<
+    IResponsiveOptionTuple<IBarChartOptions>
+  > = [
     [
       "screen and (min-width: 640px)",
       {
@@ -108,7 +115,7 @@ export default class Index extends mixins(CharacterStoreMixin) {
     ],
   ]
 
-  get chartLevel() {
+  get chartLevel(): IChartistData {
     return {
       labels: ["<61", "61", "62", "62>"],
       series: [
@@ -140,33 +147,34 @@ export default class Index extends mixins(CharacterStoreMixin) {
     }
   }
 
-  optionsChartLevel: any = {
+  optionsChartLevel: IBarChartOptions = {
     labelInterpolationFnc(value: any[]) {
       return value
     },
   }
 
-  responsiveOptionsChartLevel: any = [
+  responsiveOptionsChartLevel: Array<IResponsiveOptionTuple<IBarChartOptions>> =
     [
-      "screen and (min-width: 640px)",
-      {
-        chartPadding: 30,
-        labelOffset: 50,
-        labelInterpolationFnc(value: any) {
-          return value
+      [
+        "screen and (min-width: 640px)",
+        {
+          chartPadding: 30,
+          labelOffset: 50,
+          labelInterpolationFnc(value: any) {
+            return value
+          },
         },
-      },
-    ],
-    [
-      "screen and (min-width: 1024px)",
-      {
-        labelOffset: 50,
-        chartPadding: 20,
-      },
-    ],
-  ]
+      ],
+      [
+        "screen and (min-width: 1024px)",
+        {
+          labelOffset: 50,
+          chartPadding: 20,
+        },
+      ],
+    ]
 
-  get chartVisitEvent() {
+  get chartVisitEvent(): IChartistData {
     return {
       labels: this.guildEvents.map((guildEvent) =>
         moment(guildEvent.date * 1000).format("DD-MM")
@@ -188,7 +196,7 @@ export default class Index extends mixins(CharacterStoreMixin) {
     }
   }
 
-  optionsChartVisitEvent: any = {
+  optionsChartVisitEvent: IBarChartOptions = {
     // reverseData: true,
     seriesBarDistance: 10,
     axisY: {
@@ -202,7 +210,9 @@ export default class Index extends mixins(CharacterStoreMixin) {
     },
   }
 
-  responsiveOptionsChartVisitEvent: any = [
+  responsiveOptionsChartVisitEvent: Array<
+    IResponsiveOptionTuple<IBarChartOptions>
+  > = [
     [
       "screen and (min-width: 400px)",
       {
@@ -222,7 +232,7 @@ export default class Index extends mixins(CharacterStoreMixin) {
     ],
   ]
 
-  get chartClass() {
+  get chartClass(): IChartistData {
     return {
       labels: CHARACTER_CLASSES,
       series: [
@@ -238,7 +248,7 @@ export default class Index extends mixins(CharacterStoreMixin) {
     }
   }
 
-  optionsChartClass = {
+  optionsChartClass: IBarChartOptions = {
     distributeSeries: true,
     reverseData: true,
     horizontalBars: true,
