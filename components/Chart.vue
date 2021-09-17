@@ -18,6 +18,7 @@ import { Prop, Watch } from "nuxt-property-decorator"
 import Chartist, {
   IBarChartOptions,
   IChartistData,
+  IPieChartOptions,
   IResponsiveOptionTuple,
 } from "chartist"
 
@@ -35,8 +36,9 @@ export default class Chart extends Vue {
   typeChart!: ChartType
 
   @Prop() title?: string
-  @Prop({ default: () => ({}) }) options?: IBarChartOptions
-  @Prop({ default: () => [] }) responsiveOptions?: Array<
+  @Prop({ default: () => ({}) }) options!: object
+
+  @Prop({ default: () => [] }) responsiveOptions!: Array<
     IResponsiveOptionTuple<IBarChartOptions>
   >
 

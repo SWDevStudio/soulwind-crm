@@ -61,6 +61,7 @@ import moment from "moment"
 import {
   IBarChartOptions,
   IChartistData,
+  IPieChartOptions,
   IResponsiveOptionTuple,
 } from "chartist"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
@@ -84,13 +85,13 @@ export default class Index extends mixins(CharacterStoreMixin) {
     }
   }
 
-  optionsChartGearScore: IBarChartOptions = {
+  optionsChartGearScore: IPieChartOptions = {
     donut: true,
     donutWidth: 100,
   }
 
   responsiveOptionsChartGearScore: Array<
-    IResponsiveOptionTuple<IBarChartOptions>
+    IResponsiveOptionTuple<IPieChartOptions>
   > = [
     [
       "screen and (min-width: 640px)",
@@ -144,7 +145,7 @@ export default class Index extends mixins(CharacterStoreMixin) {
     }
   }
 
-  responsiveOptionsChartLevel: Array<IResponsiveOptionTuple<IBarChartOptions>> =
+  responsiveOptionsChartLevel: Array<IResponsiveOptionTuple<IPieChartOptions>> =
     [
       [
         "screen and (min-width: 640px)",
