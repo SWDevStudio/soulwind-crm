@@ -1,4 +1,5 @@
 import { Request, Response } from "express"
+import moment from "moment"
 import TimeHelper from "../utils/TimeHelper"
 import GuildEventModel from "./dto/guildEvent.model"
 import {
@@ -6,10 +7,21 @@ import {
   GuildEventDtoResponse,
 } from "~/server/GuildEvent/dto/guildEvent.dto"
 import { ErrorResponse } from "~/structs/ErrorResponse"
+
 class GuildEventService {
   async getEvents(req: Request, res: Response) {
     try {
-      res.json(await GuildEventModel.find())
+
+      const events: GuildEventDtoResponse[] = await GuildEventModel.find()
+      const from: any = req.query?.from || 1
+      const to: any = req.query.to || Infinity
+      res.json(
+        events
+          .filter(
+            (i) => i.date >= moment(from).unix() && i.date <= moment(to).unix()
+          )
+          .sort((a, b) => a.date - b.date)
+      )
     } catch (e) {
       res.status(400).json({ message: e })
     }
