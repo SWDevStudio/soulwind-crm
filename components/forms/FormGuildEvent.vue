@@ -78,7 +78,7 @@
       </v-row>
     </v-card-title>
     <v-card-text>
-      <v-simple-table dense fixed-header class="mb-6">
+      <v-simple-table dense fixed-header class="mb-6 v-simple-table">
         <template #default>
           <thead>
             <tr>
@@ -234,3 +234,10 @@ export default class FormGuildEvent extends mixins(
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.v-simple-table {
+  max-height: 50vh;
+  overflow: auto;
+}
+</style>

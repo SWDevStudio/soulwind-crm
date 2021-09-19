@@ -4,7 +4,7 @@
       v-model="form.email"
       label="e-mail"
       :rules="emailRules"
-      color="teal accent-3"
+      :color="UI.actionColor.color"
       type="email"
       required
     />
@@ -12,7 +12,7 @@
       v-model="form.password"
       label="password"
       :rules="passwordRules"
-      color="teal accent-3"
+      :color="UI.actionColor.color"
       required
       :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
       :type="show1 ? 'text' : 'password'"
@@ -22,7 +22,7 @@
       v-model="form.repeatPass"
       label="repeat the password"
       :rules="repeatPasswordRules"
-      color="teal accent-3"
+      :color="UI.actionColor.color"
       required
       :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
       :type="show2 ? 'text' : 'password'"
@@ -32,7 +32,7 @@
       {{ notCorrectPass }}
     </p>
     <v-btn
-      color="teal accent-3"
+      :color="UI.actionColor.color"
       outlined
       large
       block
@@ -48,11 +48,13 @@
 <script>
 import { PAGES } from "~/data/PAGES"
 import MixinToken from "~/mixins/MixinToken"
+import { UI } from "~/data/UI"
 
 export default {
   name: "SignIn",
   mixins: [MixinToken],
   data: () => ({
+    UI,
     valid: true,
     show1: false,
     show2: false,

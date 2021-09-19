@@ -4,7 +4,7 @@
       v-model="form.email"
       label="e-mail"
       :rules="emailRules"
-      color="teal accent-3"
+      :color="UI.actionColor.color"
       type="email"
       required
     />
@@ -12,7 +12,7 @@
       v-model="form.password"
       label="password"
       :rules="passwordRules"
-      color="teal accent-3"
+      :color="UI.actionColor.color"
       required
       :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
       :type="show ? 'text' : 'password'"
@@ -22,7 +22,7 @@
       {{ serverErrorResponse }}
     </p>
     <v-btn
-      color="teal accent-3"
+      :color="UI.actionColor.color"
       outlined
       large
       block
@@ -38,6 +38,7 @@
 <script>
 import { PAGES } from "~/data/PAGES"
 import MixinToken from "~/mixins/MixinToken"
+import { UI } from "~/data/UI"
 
 export default {
   name: "Login",
@@ -46,6 +47,7 @@ export default {
     valid: true,
     show: false,
     serverErrorResponse: "",
+    UI,
     emailRules: [
       (value) => !!value || "Email is required",
       (value) => /.+@.+\..+/.test(value) || "Email must be valid",

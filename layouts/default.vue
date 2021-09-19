@@ -49,10 +49,10 @@
 <script lang="ts">
 import { Component, mixins } from "nuxt-property-decorator"
 import { SIDEBAR_MENU } from "~/data/SIDEBAR_MENU"
-
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import MixinToken from "~/mixins/MixinToken"
 
+import "chartist/dist/chartist.min.css"
 @Component({
   name: "default",
 })

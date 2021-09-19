@@ -23,7 +23,8 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="7" class="d-flex">
+          <v-col>Кол-во в таблице: {{sortCharacters.length || 0}} </v-col>
+          <v-col  class="d-flex">
             <v-btn
               fab
               outlined
@@ -100,10 +101,10 @@ export default class MixinMembership extends CharacterStoreMixin {
   headers = HEADER_CHARACTER
 
   get sortCharacters() {
-    if (!this.form.partyId) return this[this.needCharacters]
-    return this[this.needCharacters].filter(
+    if (!this.form.partyId) return this[this.needCharacters] || []
+    return this[this.needCharacters]?.filter(
       (item) => item.partyId === this.form.partyId
-    )
+    ) || []
   }
 
   @Watch("modal")
