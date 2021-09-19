@@ -63,7 +63,7 @@ import Component from "nuxt-class-component"
 import { mixins } from "nuxt-property-decorator"
 import MixinModal from "~/mixins/MixinModal.vue"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
-import { UserStatus } from "~/types/UserStatus"
+import { CharacterStatus } from "~/types/Character/CharacterStatus"
 import CharacterApi from "~/api/CharacterApi"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 
@@ -85,7 +85,7 @@ export default class FormDismissCharacter extends mixins(
     }
   }
 
-  async sendForm(status: UserStatus): Promise<void> {
+  async sendForm(status: CharacterStatus): Promise<void> {
     if (this.editId) {
       const res = await CharacterApi.pathCharacter(
         this.editId,
