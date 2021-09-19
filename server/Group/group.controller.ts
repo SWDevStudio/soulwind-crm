@@ -1,6 +1,7 @@
 import { Router } from "express"
 import RolesMiddleware from "../middleware/RolesMiddleware"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
+import CharacterService from '../Character/character.service'
 import GroupService from "./group.service"
 const GroupController = Router()
 
@@ -9,7 +10,10 @@ GroupController.post(
   "/create",
   AuthorizeMiddleware,
   RolesMiddleware(["ADMIN"]),
-  GroupService.create
+  GroupService.create,
+  // Думаю сделать отдельный метод
+  CharacterService.addGroupForCharacter
+
 )
 GroupController.patch(
   "/patch/:id",
