@@ -4,7 +4,7 @@ import { GroupDtoModel } from "~/server/Group/dto/group.dto"
 
 const schema = new Schema<GroupDtoModel>({
   name: { type: String, required: true },
-  groupLeaderId: { type: String },
+  groupLeaderId: { type: String, default: null },
   deputyIds: { type: Array },
 })
 
