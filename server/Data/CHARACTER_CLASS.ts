@@ -1,4 +1,4 @@
-import { CharacterClass } from "~/types/CharacterClass"
+import { CharacterClass } from "~/types/Character/CharacterClass"
 
 export const CHARACTER_CLASS: CharacterClass[] = [
   "Варвар",

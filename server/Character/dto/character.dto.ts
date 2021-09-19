@@ -1,8 +1,9 @@
 import { Document } from "mongoose"
 import { Alchemy } from "~/types/Alchemy"
-import { CharacterClass } from "~/types/CharacterClass"
+import { CharacterClass } from "~/types/Character/CharacterClass"
 import { Ranks } from "~/types/Ranks"
-import { UserStatus } from "~/types/UserStatus"
+import { CharacterStatus } from "~/types/Character/CharacterStatus"
+import { CharacterRangParty } from "~/types/Character/CharacterRangParty"
 
 export interface CharacterDto {
   firstName?: string
@@ -16,7 +17,8 @@ export interface CharacterDto {
   note?: string
   pvpRank?: Ranks
   level?: number
-  status: UserStatus
+  status: CharacterStatus
+  rangParty: CharacterRangParty
 }
 
 export interface CharacterDTOResponse extends CharacterDto, Document {}
