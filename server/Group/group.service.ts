@@ -25,11 +25,10 @@ class GroupService {
       if (data.deputyIds && data.groupLeaderId) {
         req.body = {
           characterIds: [...data.deputyIds, data.groupLeaderId],
-          partyId: group._id
+          partyId: group._id,
         }
         next()
       }
-
     } catch (e) {
       res.status(400).json({ message: e })
     }
@@ -56,7 +55,7 @@ class GroupService {
       if (!status) {
         return ServiceHelper.defaultErrorResponse(
           res,
-          "Данного пользователя нет в базе"
+          "Данной группы не существует"
         )
       }
 

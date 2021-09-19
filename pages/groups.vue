@@ -48,10 +48,7 @@
 
 <script lang="ts">
 import { Component, mixins, Watch } from "nuxt-property-decorator"
-import {
-  HEADER_CHARACTER,
-  HEADER_GROUPS,
-} from "~/data/headers/HEADER_CHARACTER"
+import { HEADER_GROUPS } from "~/data/headers/HEADER_CHARACTER"
 import { UI } from "~/data/UI"
 import FormGroup from "~/components/forms/FormGroup.vue"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
@@ -66,15 +63,7 @@ export default class Groups extends mixins<
   GlobalStoreMixin,
   CharacterStoreMixin
 >(GlobalStoreMixin, CharacterStoreMixin) {
-  HEADER_CHARACTER = [
-    {
-      text: "Фамилия",
-      value: "lastName",
-    },
-    { text: "Класс", value: "class" },
-    { text: "Уровень", value: "level" },
-    { text: "Ранг в пати", value: "rangParty" },
-  ]
+  HEADER_CHARACTER = HEADER_GROUPS
 
   UI = UI
   modalCreateGroup: boolean = false
@@ -89,24 +78,7 @@ export default class Groups extends mixins<
     this.getActiveCharacters.forEach((character) =>
       character.partyId === id ? members.push(character) : null
     )
-    return members.map((i) => {
-      let rangParty: string = "Рядовой"
-      const needGroup = this.storeGroups.find(
-        (group) => group._id === i.partyId
-      )
-      if (needGroup?.deputyIds?.includes(i._id)) {
-        rangParty = "Заместитель"
-      }
-      if (needGroup?.groupLeaderId === i._id) {
-        rangParty = "Пати лидер"
-      }
-      return {
-        lastName: i.lastName,
-        class: i.class,
-        level: i.level,
-        rangParty,
-      }
-    })
+    return members
   }
 }
 </script>
