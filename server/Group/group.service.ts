@@ -12,14 +12,24 @@ class GroupService {
     }
   }
 
-  async create(req: Request, res: Response) {
+  async create(req: Request, res: Response, next: Function) {
     try {
       const data = req.body as GroupDto
-      const group = await GroupModel.findOne({ name: data.name })
+      let group = await GroupModel.findOne({ name: data.name })
       if (group) {
         return res.status(400).json({ message: "Данная группа уже существует" })
       }
-      res.json(await GroupModel.create(data))
+      // Проверить все ли пользователи свободны
+      group = await GroupModel.create(data)
+      // След функцией вызвать добавлением пользователей в группу как это сделать?
+      if (data.deputyIds && data.groupLeaderId) {
+        req.body = {
+          characterIds: [...data.deputyIds, data.groupLeaderId],
+          partyId: group._id
+        }
+        next()
+      }
+
     } catch (e) {
       res.status(400).json({ message: e })
     }

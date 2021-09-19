@@ -46,6 +46,7 @@ class GuildEventService {
   ) {
     try {
       const startDay = TimeHelper.startDay(req.body.date)
+      console.log(startDay)
       req.body.date = startDay
       const searchEvent = await GuildEventModel.findOne({
         date: startDay,

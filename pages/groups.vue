@@ -66,7 +66,16 @@ export default class Groups extends mixins<
   GlobalStoreMixin,
   CharacterStoreMixin
 >(GlobalStoreMixin, CharacterStoreMixin) {
-  HEADER_CHARACTER = HEADER_GROUPS
+  HEADER_CHARACTER = [
+    {
+      text: "Фамилия",
+      value: "lastName",
+    },
+    { text: "Класс", value: "class" },
+    { text: "Уровень", value: "level" },
+    { text: "Ранг в пати", value: "rangParty" },
+  ]
+
   UI = UI
   modalCreateGroup: boolean = false
   characters: CharacterDTOResponse[] = []
@@ -75,12 +84,29 @@ export default class Groups extends mixins<
     this.actionUpdateGroup()
   }
 
-  findAllMember(id: string): CharacterDTOResponse[] {
+  findAllMember(id: string) {
     const members: CharacterDTOResponse[] = []
     this.getActiveCharacters.forEach((character) =>
       character.partyId === id ? members.push(character) : null
     )
-    return members
+    return members.map((i) => {
+      let rangParty: string = "Рядовой"
+      const needGroup = this.storeGroups.find(
+        (group) => group._id === i.partyId
+      )
+      if (needGroup?.deputyIds?.includes(i._id)) {
+        rangParty = "Заместитель"
+      }
+      if (needGroup?.groupLeaderId === i._id) {
+        rangParty = "Пати лидер"
+      }
+      return {
+        lastName: i.lastName,
+        class: i.class,
+        level: i.level,
+        rangParty,
+      }
+    })
   }
 }
 </script>
