@@ -111,7 +111,6 @@
               <v-autocomplete
                 v-model="form.pvpRank"
                 label="PVP ранг"
-
                 :color="UI.actionColor.color"
                 :item-color="UI.actionColor.color"
                 :items="PVP_RANK"
@@ -155,7 +154,7 @@ import Component from "nuxt-class-component"
 import { Prop, Ref, State } from "nuxt-property-decorator"
 import Vue from "vue"
 import { CHARACTER_CLASS } from "~/server/Data/CHARACTER_CLASS"
-import {RANK_PARTY} from "~/data/RANK_PARTY";
+import { RANK_PARTY } from "~/data/RANK_PARTY"
 import { UI } from "~/data/UI"
 import { getToken } from "~/utils/Token"
 import {
@@ -163,7 +162,7 @@ import {
   CharacterDTOResponse,
 } from "~/server/Character/dto/character.dto"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
-import {PVP_RANK} from "~/data/PVP_RANK";
+import { PVP_RANK } from "~/data/PVP_RANK"
 
 @Component({
   name: "CharacterCreationForm",
