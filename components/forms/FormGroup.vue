@@ -30,7 +30,11 @@
         <v-select
           class="mt-2"
           :color="UI.actionColor.color"
-          :items="getActiveCharacters.filter((i) => !i.partyId).filter(i => !form.deputyIds.includes(i._id))"
+          :items="
+            getActiveCharacters
+              .filter((i) => !i.partyId)
+              .filter((i) => !form.deputyIds.includes(i._id))
+          "
           item-text="lastName"
           item-value="_id"
           label="Пати лидер"
@@ -38,7 +42,11 @@
         />
         <v-select
           class="mt-2"
-          :items="getActiveCharacters.filter((i) => !i.partyId).filter(i => i._id !== form.groupLeaderId)"
+          :items="
+            getActiveCharacters
+              .filter((i) => !i.partyId)
+              .filter((i) => i._id !== form.groupLeaderId)
+          "
           item-text="lastName"
           label="Заместители"
           item-value="_id"
@@ -72,8 +80,6 @@ import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 export default class FormGroup extends mixins(MixinModal, CharacterStoreMixin) {
   form: GroupDto = {
     name: "",
-    groupLeaderId: null,
-    deputyIds: []
   }
 
   async createGroup(event: Event): Promise<void> {
