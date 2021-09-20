@@ -35,7 +35,6 @@ class CharacterService {
     try {
       // TODO сделать проверку полей
       const data = req.body as CharacterDTOResponse
-
       const resp = await CharacterModel.findOneAndUpdate(
         { _id: req.params.id },
         data
