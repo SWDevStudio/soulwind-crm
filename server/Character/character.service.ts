@@ -35,7 +35,6 @@ class CharacterService {
     try {
       // TODO сделать проверку полей
       const data = req.body as CharacterDTOResponse
-
       const resp = await CharacterModel.findOneAndUpdate(
         { _id: req.params.id },
         data
@@ -46,19 +45,15 @@ class CharacterService {
     }
   }
 
-  async removeGroupForCharacter(req: Request, res: Response) {
-    const ids: string[] = req.body.characterIds
-    const partyId: string = ""
-    if (!Array.isArray(ids)) res.status(400).json({ message: "ids error" })
-    for (const i of ids) {
-      await CharacterModel.findOneAndUpdate(
-        { _id: i },
-        {
-          partyId,
-        }
-      ).catch((e) => res.status(400).json({ message: e }))
-    }
-    res.json({ status: true })
+  async removeGroupForCharacter(req: Request, res: Response, next: Function) {
+    const id: string = req.params.id as string
+    await CharacterModel.updateMany(
+      { partyId: id },
+      {
+        partyId: "",
+      }
+    )
+    next()
   }
 }
 

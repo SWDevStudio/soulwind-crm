@@ -10,8 +10,8 @@ import GuildEventController from "./GuildEvent/guildEvent.controller"
 import { ServerData } from "./Data/PATHS"
 import CharacterController from "./Character/character.controller"
 import { swaggerOptions } from "./documentation/config/swaggerOption"
+import isDev from "./utils/IsDev"
 
-const swagger = swaggerJSDoc(swaggerOptions)
 const start = () => {
   // Подключаемся к бд
   // ConnectDataBase()
@@ -20,7 +20,11 @@ const start = () => {
   const app: core.Express = express()
   // Добавляем прослушку body
   app.use(bodyParser.json())
-  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swagger))
+  if (isDev()) {
+    const swagger = swaggerJSDoc(swaggerOptions)
+    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swagger))
+  }
+
   // Добавляем роуты которые слушает express
   app.use(ServerData.PATHS.GROUP, GroupController)
   app.use(ServerData.PATHS.USER, UserController)

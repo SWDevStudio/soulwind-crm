@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { ServiceHelper } from "../service/ServiceHelper"
 import GroupModel from "./dto/group.model"
-import { GroupDto, GroupDtoModel } from "~/server/Group/dto/group.dto"
+import { GroupDto} from "~/server/Group/dto/group.dto"
 
 class GroupService {
   async get(req: Request, res: Response) {
@@ -21,14 +21,8 @@ class GroupService {
       }
       // Проверить все ли пользователи свободны
       group = await GroupModel.create(data)
+      res.json(group)
       // След функцией вызвать добавлением пользователей в группу как это сделать?
-      if (data.deputyIds && data.groupLeaderId) {
-        req.body = {
-          characterIds: [...data.deputyIds, data.groupLeaderId],
-          partyId: group._id,
-        }
-        next()
-      }
     } catch (e) {
       res.status(400).json({ message: e })
     }

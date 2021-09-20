@@ -1,8 +1,7 @@
 import { Document } from "mongoose"
 
 export interface GroupDto {
-  name: string
-  groupLeaderId: string | null;
-  deputyIds?: string[]
+  name: string;
 }
+
 export interface GroupDtoModel extends Document, GroupDto {}
