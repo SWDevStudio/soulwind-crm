@@ -38,6 +38,16 @@
                 disable-pagination
                 hide-default-footer
               ></v-data-table>
+              <v-row>
+                <v-btn
+                  text
+                  class="ml-auto"
+                  :color="UI.actionColor.color"
+                  @click="deleteGroup(group._id)"
+                >
+                  Удалить группу
+                </v-btn>
+              </v-row>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -54,6 +64,7 @@ import FormGroup from "~/components/forms/FormGroup.vue"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import GlobalStoreMixin from "~/mixins/GlobalStoreMixin.vue"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
+import GroupApi from "~/api/GroupApi"
 
 @Component({
   name: "Groups",
@@ -68,6 +79,7 @@ export default class Groups extends mixins<
   UI = UI
   modalCreateGroup: boolean = false
   characters: CharacterDTOResponse[] = []
+
   @Watch("modalCreateGroup")
   update() {
     this.actionUpdateGroup()
@@ -79,6 +91,13 @@ export default class Groups extends mixins<
       character.partyId === id ? members.push(character) : null
     )
     return members
+  }
+
+  async deleteGroup(groupId: string) {
+    const res = await GroupApi.deleteGroup(groupId,() => {})
+    if (res){
+     await this.actionUpdateGroup()
+    }
   }
 }
 </script>

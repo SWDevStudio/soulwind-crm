@@ -3,6 +3,7 @@ import { NetworkManager } from "~/api/NetworkManager"
 import { GroupDto, GroupDtoModel } from "~/server/Group/dto/group.dto"
 import { ErrorResponse, FunctionErrorResponse } from "~/structs/ErrorResponse"
 
+
 class GroupApi extends NetworkManager {
   async create(
     groupDTO: GroupDto,
@@ -28,6 +29,20 @@ class GroupApi extends NetworkManager {
     } else {
       callbackError(res as AxiosResponse<ErrorResponse>)
       return [] as GroupDtoModel[]
+    }
+  }
+
+  async deleteGroup(
+    groupId: string,
+    callbackError: FunctionErrorResponse
+  ): Promise<GroupDtoModel | undefined> {
+    const res: AxiosResponse<GroupDtoModel | ErrorResponse> = await this.$axios
+      .delete("/api/group/delete/" + groupId)
+      .catch((e) => this.defaultCatch(e))
+    if (res?.status === 200) {
+      return res?.data as GroupDtoModel
+    } else {
+      callbackError(res as AxiosResponse<ErrorResponse>)
     }
   }
 }
