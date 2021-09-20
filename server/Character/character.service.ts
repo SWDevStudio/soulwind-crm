@@ -46,16 +46,19 @@ class CharacterService {
     }
   }
 
-  async addGroupForCharacter(req: Request, res: Response) {
+  async removeGroupForCharacter(req: Request, res: Response) {
     const ids: string[] = req.body.characterIds
-    const partyId: string = req.body.partyId
-    if (!Array.isArray(ids)) res.status(400).json({message: 'ids error'})
+    const partyId: string = ""
+    if (!Array.isArray(ids)) res.status(400).json({ message: "ids error" })
     for (const i of ids) {
-      await CharacterModel.findOneAndUpdate({_id: i}, {
-        partyId
-      }).catch(e => res.status(400).json({message: e}))
+      await CharacterModel.findOneAndUpdate(
+        { _id: i },
+        {
+          partyId,
+        }
+      ).catch((e) => res.status(400).json({ message: e }))
     }
-    res.json({status: true})
+    res.json({ status: true })
   }
 }
 

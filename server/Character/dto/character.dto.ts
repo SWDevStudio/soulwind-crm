@@ -18,7 +18,7 @@ export interface CharacterDto {
   pvpRank?: Ranks
   level?: number
   status: CharacterStatus
-  rangParty: CharacterRangParty
+  rangParty?: CharacterRangParty
 }
 
 export interface CharacterDTOResponse extends CharacterDto, Document {}

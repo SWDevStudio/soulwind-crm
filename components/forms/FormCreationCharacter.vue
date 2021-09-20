@@ -159,6 +159,7 @@ export default class CharacterCreationForm extends Vue {
     pvpRank: undefined,
     level: undefined,
     status: "ACTIVE",
+    rangParty: undefined,
   }
 
   closeModal(): void {
