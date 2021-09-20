@@ -37,7 +37,13 @@
                 :items="findAllMember(group._id)"
                 disable-pagination
                 hide-default-footer
-              ></v-data-table>
+              >
+                <template #item.actions="{ item }">
+                  <v-icon ref="dismissForm" small @click="deleteCharacterInGroup(item._id)"
+                    >mdi-card-bulleted-off-outline
+                  </v-icon>
+                </template>
+              </v-data-table>
               <v-row>
                 <v-btn
                   text
@@ -65,6 +71,7 @@ import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import GlobalStoreMixin from "~/mixins/GlobalStoreMixin.vue"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import GroupApi from "~/api/GroupApi"
+import CharacterApi from "~/api/CharacterApi"
 
 @Component({
   name: "Groups",
@@ -85,7 +92,7 @@ export default class Groups extends mixins<
     this.actionUpdateGroup()
   }
 
-  findAllMember(id: string) {
+  findAllMember(id: string): CharacterDTOResponse[] {
     const members: CharacterDTOResponse[] = []
     this.getActiveCharacters.forEach((character) =>
       character.partyId === id ? members.push(character) : null
@@ -94,9 +101,17 @@ export default class Groups extends mixins<
   }
 
   async deleteGroup(groupId: string) {
-    const res = await GroupApi.deleteGroup(groupId,() => {})
-    if (res){
-     await this.actionUpdateGroup()
+    const res = await GroupApi.deleteGroup(groupId, () => {})
+    if (res) {
+      await this.actionUpdateGroup()
+    }
+  }
+
+  async deleteCharacterInGroup(id: string) {
+
+    const res = await CharacterApi.patchCharacter(id, { partyId: "" }, () => {})
+    if (res) {
+      await this.storeUpdateCharacters()
     }
   }
 }

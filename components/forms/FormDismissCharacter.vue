@@ -87,7 +87,7 @@ export default class FormDismissCharacter extends mixins(
 
   async sendForm(status: CharacterStatus): Promise<void> {
     if (this.editId) {
-      const res = await CharacterApi.pathCharacter(
+      const res = await CharacterApi.patchCharacter(
         this.editId,
         {
           status,

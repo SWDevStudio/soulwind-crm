@@ -27,32 +27,7 @@
           required
           :color="UI.actionColor.color"
         />
-        <v-select
-          class="mt-2"
-          :color="UI.actionColor.color"
-          :items="
-            getActiveCharacters
-              .filter((i) => !i.partyId)
-              .filter((i) => !form.deputyIds.includes(i._id))
-          "
-          item-text="lastName"
-          item-value="_id"
-          label="Пати лидер"
-          v-model="form.groupLeaderId"
-        />
-        <v-select
-          class="mt-2"
-          :items="
-            getActiveCharacters
-              .filter((i) => !i.partyId)
-              .filter((i) => i._id !== form.groupLeaderId)
-          "
-          item-text="lastName"
-          label="Заместители"
-          item-value="_id"
-          v-model="form.deputyIds"
-          multiple
-        />
+
         <v-btn
           :color="UI.actionColor.color"
           block
@@ -86,6 +61,7 @@ export default class FormGroup extends mixins(MixinModal, CharacterStoreMixin) {
     event.preventDefault()
     if (this.VForm.validate()) {
       const res = await GroupApi.create(this.form, this.showError)
+      console.log(res)
       if (res) {
         this.VForm.reset()
         this.closeModal()

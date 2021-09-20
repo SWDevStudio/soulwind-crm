@@ -1,7 +1,6 @@
 import { AxiosResponse } from "axios"
 import { NetworkManager } from "~/api/NetworkManager"
 import {
-  CharacterDto,
   CharacterDTOResponse,
 } from "~/server/Character/dto/character.dto"
 import { ErrorResponse, FunctionErrorResponse } from "~/structs/ErrorResponse"
@@ -20,7 +19,7 @@ class CharacterApi extends NetworkManager {
     return []
   }
 
-  async pathCharacter(
+  async patchCharacter(
     id: string,
     body: any,
     callbackError: FunctionErrorResponse
