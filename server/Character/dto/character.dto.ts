@@ -3,7 +3,7 @@ import { Alchemy } from "~/types/Alchemy"
 import { CharacterClass } from "~/types/Character/CharacterClass"
 import { Ranks } from "~/types/Ranks"
 import { CharacterStatus } from "~/types/Character/CharacterStatus"
-import { CharacterRangParty } from "~/types/Character/CharacterRangParty"
+import { CharacterRankParty } from "~/types/Character/CharacterRankParty"
 
 export interface CharacterDto {
   firstName?: string
@@ -18,7 +18,7 @@ export interface CharacterDto {
   pvpRank?: Ranks
   level?: number
   status: CharacterStatus
-  rangParty?: CharacterRangParty
+  rankParty?: CharacterRankParty
 }
 
 export interface CharacterDTOResponse extends CharacterDto, Document {}

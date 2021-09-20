@@ -15,7 +15,7 @@ const schema = new Schema<CharacterDto>({
   pvpRank: { type: String },
   level: { type: Number },
   status: { type: String, default: "ACTIVE" },
-  rangParty: { type: String, default: "Рядовой" },
+  rankParty: { type: String, default: "Рядовой" },
 })
 
 export default mongoose.models.Character ||

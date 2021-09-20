@@ -26,6 +26,7 @@
                 label="Фамилия персонажа"
                 :rules="rules"
                 :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
                 required
               />
             </v-col>
@@ -34,6 +35,7 @@
                 v-model="form.firstName"
                 label="Имя персонажа"
                 :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
               />
             </v-col>
           </v-row>
@@ -43,6 +45,7 @@
                 v-model.number="form.level"
                 label="Уровень"
                 :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
               />
             </v-col>
             <v-col cols="3">
@@ -50,6 +53,7 @@
                 v-model.number="form.ap"
                 label="Атака"
                 :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
               />
             </v-col>
             <v-col cols="3">
@@ -57,6 +61,7 @@
                 v-model.number="form.awakeningAp"
                 label="Атака проб. оружием"
                 :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
               />
             </v-col>
             <v-col cols="3">
@@ -64,6 +69,7 @@
                 v-model.number="form.dp"
                 label="Защита"
                 :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
               />
             </v-col>
           </v-row>
@@ -73,6 +79,7 @@
                 v-model="form.class"
                 label="Класс"
                 :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
                 :items="CHARACTER_CLASS"
               />
             </v-col>
@@ -80,8 +87,34 @@
               <v-autocomplete
                 v-model="form.partyId"
                 label="Группа"
+                clearable
                 :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
                 :items="groups"
+                item-text="name"
+                item-value="_id"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="6">
+              <v-autocomplete
+                v-model="form.rankParty"
+                label="Ранг в пати"
+                clearable
+                :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
+                :items="RANK_PARTY"
+              />
+            </v-col>
+            <v-col cols="6">
+              <v-autocomplete
+                v-model="form.pvpRank"
+                label="PVP ранг"
+
+                :color="UI.actionColor.color"
+                :item-color="UI.actionColor.color"
+                :items="PVP_RANK"
                 item-text="name"
                 item-value="_id"
               />
@@ -122,6 +155,7 @@ import Component from "nuxt-class-component"
 import { Prop, Ref, State } from "nuxt-property-decorator"
 import Vue from "vue"
 import { CHARACTER_CLASS } from "~/server/Data/CHARACTER_CLASS"
+import {RANK_PARTY} from "~/data/RANK_PARTY";
 import { UI } from "~/data/UI"
 import { getToken } from "~/utils/Token"
 import {
@@ -129,6 +163,7 @@ import {
   CharacterDTOResponse,
 } from "~/server/Character/dto/character.dto"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
+import {PVP_RANK} from "~/data/PVP_RANK";
 
 @Component({
   name: "CharacterCreationForm",
@@ -144,6 +179,8 @@ export default class CharacterCreationForm extends Vue {
   valid: boolean = true
   editMode: boolean = false
   CHARACTER_CLASS = CHARACTER_CLASS
+  RANK_PARTY = RANK_PARTY
+  PVP_RANK = PVP_RANK
   rules = [(value: string) => !!value || "Заполни меня"]
   editId: null | string = null
   form: CharacterDto = {
@@ -159,7 +196,7 @@ export default class CharacterCreationForm extends Vue {
     pvpRank: undefined,
     level: undefined,
     status: "ACTIVE",
-    rangParty: undefined,
+    rankParty: undefined,
   }
 
   closeModal(): void {
