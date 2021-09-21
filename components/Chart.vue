@@ -130,10 +130,10 @@ export default class Chart extends Vue {
 }
 
 .ct-series-a .ct-bar {
-  stroke: #26a69a;
+  stroke: #004d40;
 }
 .ct-series-b .ct-bar {
-  stroke: #004d40;
+  stroke: #26a69a;
 }
 .ct-label {
   color: #e0f2f1;
