@@ -206,15 +206,11 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
   events: GuildEventDtoResponse[] = []
 
   async loadEvents() {
-    const response = await GuildEventApi.loadEvents(
+    this.events = await GuildEventApi.loadEvents(
       { from: this.dates[0], to: this.dates[1] },
       () => {}
     )
-    this.events = response.filter(
-      (item) =>
-        item.date >= moment(this.dates[0]).unix() &&
-        item.date <= moment(this.dates[1]).unix()
-    )
+
   }
 
   created(): void {
