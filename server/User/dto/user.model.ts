@@ -6,6 +6,7 @@ const schema = new Schema<UserRegisterDto>({
   email: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, default: "USER" },
+  characterId: { type: String, required: true, default: null },
 })
 
 export default mongoose.models.User || model<UserRegisterDto>("User", schema)

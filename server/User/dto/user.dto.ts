@@ -4,7 +4,8 @@ import { Roles } from "~/types/Roles"
 
 export interface UserDto extends Document {
   email: string
-  role: Roles
+  role: Roles,
+  characterId: string | null;
 }
 
 export interface UserTokenInfo extends JwtPayload {
