@@ -6,6 +6,7 @@ export interface UserDto extends Document {
   email: string
   role: Roles,
   characterId: string | null;
+  activeUser: boolean;
 }
 
 export interface UserTokenInfo extends JwtPayload {

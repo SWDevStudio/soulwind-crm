@@ -4,8 +4,11 @@ import bcrypt from "bcrypt"
 import { validationResult } from "express-validator"
 // import _ from "lodash"
 import { ServerData } from "../Data/SECRET_KEY"
+import { ServiceHelper } from "../service/ServiceHelper"
+import CharacterModel from "../Character/dto/character.model"
 import UserModel from "./dto/user.model"
 import { UserDto, UserRegisterDto } from "~/server/User/dto/user.dto"
+
 const generateToken = (id: string, role: string) => {
   const payload = {
     id,
@@ -13,10 +16,11 @@ const generateToken = (id: string, role: string) => {
   }
   return jwt.sign(payload, ServerData.SECRET_KEY, { expiresIn: "24h" })
 }
+
 class UserService {
   async createUser(req: Request, res: Response): Promise<void> {
     // TODO добавить try cacth
-    const { email, password } = req.body
+    const { email, password, characterId } = req.body
     if (!email || !password) {
       res
         .status(400)
@@ -25,15 +29,24 @@ class UserService {
     // Проверить есть ли пользователь с такой почтой в чате
     const user = await UserModel.findOne({
       email: req.body.email,
-    })
+    }).catch((e) => ServiceHelper.defaultErrorResponse(res, e))
     if (user) {
       res
         .status(400)
         .json({ message: "Пользователь с такой почтой уже существует" })
     }
+    const character = await CharacterModel.findOne({
+      characterId,
+    }).catch((e) => ServiceHelper.defaultErrorResponse(res, e))
+    if (!character) ServiceHelper.ErrorResponse(
+      res,
+      400,
+      "Указанного пользователя не существует"
+    )
     const status = await UserModel.create({
       email,
       password: bcrypt.hashSync(password, 7),
+      characterId,
     })
     res.send(!!status)
   }
