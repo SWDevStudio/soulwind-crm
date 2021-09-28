@@ -25,7 +25,7 @@ const UserController = Router()
  *         $ref: "#/definitions/ErrorResponse"
  *
  */
-UserController.get("", AuthorizeMiddleware, UserService.getUsers)
+UserController.get("" , AuthorizeMiddleware, UserService.getUsers)
 /**
  * @swagger
  * /user/{id}:

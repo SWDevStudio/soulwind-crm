@@ -39,7 +39,10 @@
                 hide-default-footer
               >
                 <template #item.actions="{ item }">
-                  <v-icon ref="dismissForm" small @click="deleteCharacterInGroup(item._id)"
+                  <v-icon
+                    ref="dismissForm"
+                    small
+                    @click="deleteCharacterInGroup(item._id)"
                     >mdi-card-bulleted-off-outline
                   </v-icon>
                 </template>
@@ -47,7 +50,7 @@
               <v-row>
                 <v-btn
                   text
-                  class="ml-auto"
+                  class="ml-auto mt-4"
                   :color="UI.actionColor.color"
                   @click="deleteGroup(group._id)"
                 >
@@ -108,7 +111,6 @@ export default class Groups extends mixins<
   }
 
   async deleteCharacterInGroup(id: string) {
-
     const res = await CharacterApi.patchCharacter(id, { partyId: "" }, () => {})
     if (res) {
       await this.storeUpdateCharacters()

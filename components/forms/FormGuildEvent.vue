@@ -7,7 +7,7 @@
     </v-card-actions>
     <v-card-title class="pt-0">
       <v-row>
-        <v-col v-if="!editMode">
+        <v-col v-if="!editMode" cols="auto">
           <v-menu
             v-model="controller"
             :close-on-content-click="false"
@@ -38,7 +38,7 @@
             />
           </v-menu>
         </v-col>
-        <v-col v-if="editMode">
+        <v-col v-if="editMode" cols="auto">
           <v-autocomplete
             v-model="selectDateEdit"
             label="Дата"
@@ -56,7 +56,7 @@
             item-value="_id"
           />
         </v-col>
-        <v-col>
+        <v-col cols="auto">
           <v-autocomplete
             v-model="form.eventType"
             label="Event"
@@ -64,6 +64,17 @@
             :items="GUILD_EVENTS"
             style="cursor: pointer"
             required
+          />
+        </v-col>
+        <v-col cols="auto">
+          <v-select
+            v-model="selectedGroupId"
+            label="Группа"
+            :items="storeGroups"
+            :color="UI.actionColor.color"
+            item-text="name"
+            item-value="_id"
+            clearable
           />
         </v-col>
         <v-col>
@@ -140,12 +151,14 @@ import {
 } from "~/server/GuildEvent/dto/guildEvent.dto"
 import GuildEventApi from "~/api/GuildEventApi"
 import { ErrorResponse } from "~/structs/ErrorResponse"
+import GlobalStoreMixin from "~/mixins/GlobalStoreMixin.vue"
 @Component({
   name: "FormGuildEvent",
 })
 export default class FormGuildEvent extends mixins(
   MixinModal,
-  CharacterStoreMixin
+  CharacterStoreMixin,
+  GlobalStoreMixin
 ) {
   controller: boolean = false
   GUILD_EVENTS = GUILD_EVENTS
@@ -160,13 +173,20 @@ export default class FormGuildEvent extends mixins(
   }
 
   moment = moment
-
+  selectedGroupId: string = ""
   @Prop() guildEventsList!: GuildEventDtoResponse[]
 
   get filteredCharacters(): CharacterDTOResponse[] {
-    return this.getActiveCharacters.filter((character) =>
-      character.lastName.toLowerCase().includes(this.search.toLowerCase())
-    )
+    let resp: CharacterDTOResponse[] = this.getActiveCharacters
+    if (this.search)
+      resp = resp.filter((character) =>
+        character.lastName.toLowerCase().includes(this.search.toLowerCase())
+      )
+
+    if (this.selectedGroupId)
+      resp = resp.filter((i) => i.partyId === this.selectedGroupId)
+
+    return resp
   }
 
   @Watch("selectDateEdit")
