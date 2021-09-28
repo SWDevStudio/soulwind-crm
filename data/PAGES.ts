@@ -6,4 +6,5 @@ export const PAGES = {
   blackList: "/black-list",
   dropout: "/dropout",
   guildEvent: "/guild-event",
+  profile: "/profile",
 }

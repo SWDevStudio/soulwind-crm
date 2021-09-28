@@ -1,6 +1,7 @@
 <template>
   <v-card @keydown.enter="sendForm" @keydown.esc="closeModal">
     <v-card-title
+      v-if="!staticMode"
       class="font-weight-regular d-flex justify-space-between"
       :class="UI.actionColor.textClass"
     >
@@ -19,6 +20,7 @@
               :rules="rules"
               :color="UI.actionColor.color"
               :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
               required
             />
           </v-col>
@@ -28,6 +30,7 @@
               label="Имя персонажа"
               :color="UI.actionColor.color"
               :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
             />
           </v-col>
         </v-row>
@@ -38,6 +41,7 @@
               label="Уровень"
               :color="UI.actionColor.color"
               :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
             />
           </v-col>
           <v-col cols="3">
@@ -46,6 +50,7 @@
               label="Атака"
               :color="UI.actionColor.color"
               :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
             />
           </v-col>
           <v-col cols="3">
@@ -54,6 +59,7 @@
               label="Атака проб. оружием"
               :color="UI.actionColor.color"
               :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
             />
           </v-col>
           <v-col cols="3">
@@ -62,6 +68,7 @@
               label="Защита"
               :color="UI.actionColor.color"
               :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
             />
           </v-col>
         </v-row>
@@ -73,6 +80,7 @@
               :color="UI.actionColor.color"
               :item-color="UI.actionColor.color"
               :items="CHARACTER_CLASS"
+              :disabled="!itEdit"
             />
           </v-col>
           <v-col cols="6">
@@ -85,6 +93,7 @@
               :items="groups"
               item-text="name"
               item-value="_id"
+              :disabled="staticMode"
             />
           </v-col>
         </v-row>
@@ -97,6 +106,7 @@
               :color="UI.actionColor.color"
               :item-color="UI.actionColor.color"
               :items="RANK_PARTY"
+              :disabled="staticMode"
             />
           </v-col>
           <v-col cols="6">
@@ -108,10 +118,11 @@
               :items="PVP_RANK"
               item-text="name"
               item-value="_id"
+              :disabled="staticMode"
             />
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="!staticMode">
           <v-col>
             <v-textarea
               v-model="form.note"
@@ -124,6 +135,18 @@
         <v-row>
           <v-col cols="12">
             <v-btn
+              v-if="!itEdit"
+              :color="UI.actionColor.color"
+              block
+              outlined
+              large
+              class="mt-3 mb-4"
+              :disabled="!valid"
+              @click="itEdit = true"
+              >Редактировать
+            </v-btn>
+            <v-btn
+              v-else
               :color="UI.actionColor.color"
               block
               outlined
@@ -131,7 +154,7 @@
               class="mt-3 mb-4"
               :disabled="!valid"
               @click="sendForm"
-              >{{ editMode ? "Редактировать" : "Добавить персонажа" }}
+              >{{ staticMode ? 'Сохранить изменения' : editMode ? "Редактировать"  : 'Добавить персонажа'  }}
             </v-btn>
           </v-col>
         </v-row>
@@ -142,7 +165,7 @@
 
 <script lang="ts">
 import Component from "nuxt-class-component"
-import { Ref, State } from "nuxt-property-decorator"
+import { Prop, Ref, State } from "nuxt-property-decorator"
 import Vue from "vue"
 import { CHARACTER_CLASS } from "~/server/Data/CHARACTER_CLASS"
 import { RANK_PARTY } from "~/data/RANK_PARTY"
@@ -166,6 +189,8 @@ export default class CharacterCreationForm extends Vue {
   UI = UI
   valid: boolean = true
   editMode: boolean = false
+  itEdit: boolean = false
+  @Prop({ default: false }) staticMode!: boolean
   CHARACTER_CLASS = CHARACTER_CLASS
   RANK_PARTY = RANK_PARTY
   PVP_RANK = PVP_RANK
@@ -187,9 +212,21 @@ export default class CharacterCreationForm extends Vue {
     rankParty: undefined,
   }
 
+  created() {
+    if (this.staticMode) {
+      this.editMode = true
+    } else {
+      this.itEdit = true
+    }
+  }
+
   closeModal(): void {
-    this.clearForm()
-    this.editMode = false
+    if (!this.staticMode) {
+      this.clearForm()
+      this.editMode = false
+    }else {
+      this.itEdit = false
+    }
     this.$emit("input", false)
   }
 

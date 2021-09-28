@@ -4,7 +4,7 @@ export const SIDEBAR_MENU = [
   {
     icon: 'ph-user',
     title: "Профиль",
-    to: '',
+    to: PAGES.profile,
   },
   {
     icon: "ph-user-list",
