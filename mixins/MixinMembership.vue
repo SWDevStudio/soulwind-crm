@@ -23,8 +23,8 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col>Кол-во в таблице: {{sortCharacters.length || 0}} </v-col>
-          <v-col  class="d-flex">
+          <v-col>Кол-во в таблице: {{ sortCharacters.length || 0 }}</v-col>
+          <v-col class="d-flex">
             <v-btn
               fab
               outlined
@@ -46,8 +46,8 @@
       >
         <template #item.actions="{ item }">
           <v-icon small class="mr-2" @click="editCharacter(item)"
-            >mdi-pencil</v-icon
-          >
+            >mdi-pencil
+          </v-icon>
           <v-icon ref="dismissForm" small @click="startDismiss(item)"
             >mdi-card-bulleted-off-outline
           </v-icon>
@@ -57,7 +57,17 @@
         </template>
       </v-data-table>
     </v-card>
-    <character-creation-form ref="characterForm" v-model="modal" />
+    <v-dialog
+      v-model="modal"
+      max-width="1200"
+      overlay-color="teal accent-4"
+      overlay-opacity="0.1"
+      persistent
+      eager
+    >
+      <character-creation-form ref="characterForm" v-model="modal" />
+    </v-dialog>
+
     <v-dialog v-model="modalRemoveCharacter" max-width="600" persistent eager>
       <form-dismiss-character
         ref="dismissedForm"
@@ -77,6 +87,7 @@ import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import CharacterCreationForm from "~/components/forms/FormCreationCharacter.vue"
 import FormDismissCharacter from "~/components/forms/FormDismissCharacter.vue"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
+
 @Component({
   name: "MixinMembership",
   components: { FormDismissCharacter, CharacterCreationForm },
@@ -102,9 +113,11 @@ export default class MixinMembership extends CharacterStoreMixin {
 
   get sortCharacters() {
     if (!this.form.partyId) return this[this.needCharacters] || []
-    return this[this.needCharacters]?.filter(
-      (item) => item.partyId === this.form.partyId
-    ) || []
+    return (
+      this[this.needCharacters]?.filter(
+        (item) => item.partyId === this.form.partyId
+      ) || []
+    )
   }
 
   @Watch("modal")
@@ -115,6 +128,7 @@ export default class MixinMembership extends CharacterStoreMixin {
   }
 
   @Ref("characterForm") characterForm!: CharacterCreationForm
+
   editCharacter(item: CharacterDTOResponse): void {
     this.characterForm.startEdit(item)
 
@@ -122,6 +136,7 @@ export default class MixinMembership extends CharacterStoreMixin {
   }
 
   @Ref("dismissedForm") readonly dismissForm!: FormDismissCharacter
+
   startDismiss(item: CharacterDTOResponse): void {
     this.modalRemoveCharacter = true
     this.dismissForm.startEdit(item, this.modeDismissModal)

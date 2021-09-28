@@ -17,7 +17,8 @@
           exact
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <component :is="item.icon" v-if="item.icon.split('-')[0] === 'ph'"></component>
+            <v-icon v-else>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
@@ -26,7 +27,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"  />
       <v-toolbar-title style="width: 100%">
         <div class="d-flex justify-space-between" style="cursor: pointer">
           <span>{{ pageTitle }}</span>
@@ -52,13 +53,17 @@ import { SIDEBAR_MENU } from "~/data/SIDEBAR_MENU"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import MixinToken from "~/mixins/MixinToken"
 
+
 import "chartist/dist/chartist.min.css"
+import MixinIcon from "~/mixins/MixinIcon";
 @Component({
   name: "default",
+
 })
-export default class Default extends mixins<CharacterStoreMixin, MixinToken>(
+export default class Default extends mixins<CharacterStoreMixin, MixinToken, MixinIcon>(
   CharacterStoreMixin,
-  MixinToken
+  MixinToken,
+  MixinIcon
 ) {
   clipped: boolean = false
   drawer: boolean = false
