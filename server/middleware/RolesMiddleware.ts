@@ -8,6 +8,10 @@ export default function RolesMiddleware(roles: Roles[]): any {
     if (req.method === "OPTIONS") {
       next()
     }
+    // Проверки которые будем делать
+    // 1. Получаем группу пользователя
+    // 2. Смотрим на переменную котоая отвечает за доступ к определенному методу
+    // 3. Если удачно, то делаем все как было
     const token: string = req.headers?.token as string
     if (!token) {
       return res.status(403).json({ message: "Пользователь не авторизован" })

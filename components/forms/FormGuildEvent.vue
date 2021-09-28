@@ -74,6 +74,7 @@
             :color="UI.actionColor.color"
             item-text="name"
             item-value="_id"
+            clearable
           />
         </v-col>
         <v-col>
