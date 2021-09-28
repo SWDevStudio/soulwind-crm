@@ -24,7 +24,7 @@ const GuildEventController = Router()
 GuildEventController.get(
   "",
   AuthorizeMiddleware,
-  RolesMiddleware(["USER", "ADMIN"]),
+  RolesMiddleware("guildEvent.view"),
   GuildEventService.getEvents
 )
 /**
@@ -51,7 +51,7 @@ GuildEventController.get(
 GuildEventController.get(
   "/:id",
   AuthorizeMiddleware,
-  RolesMiddleware(["USER", "ADMIN"]),
+  RolesMiddleware("guildEvent.view"),
   GuildEventService.getEvent
 )
 /**
@@ -78,7 +78,7 @@ GuildEventController.get(
 GuildEventController.post(
   "",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
+  RolesMiddleware("guildEvent.create"),
   GuildEventService.createEvent,
   GuildEventService.getEvents
 )
@@ -107,7 +107,7 @@ GuildEventController.post(
 GuildEventController.patch(
   "/:id",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
+  RolesMiddleware("guildEvent.update"),
   GuildEventService.updateEvent,
   GuildEventService.getEvents
 )

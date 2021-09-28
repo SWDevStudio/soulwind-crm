@@ -9,20 +9,20 @@ GroupController.get("", AuthorizeMiddleware, GroupService.get)
 GroupController.post(
   "/create",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
+  RolesMiddleware("group.create"),
   GroupService.create
   // Думаю сделать отдельный метод
 )
 GroupController.patch(
   "/patch/:id",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
+  RolesMiddleware("group.update"),
   GroupService.update
 )
 GroupController.delete(
   "/delete/:id",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
+  RolesMiddleware("group.delete"),
   CharacterService.removeGroupForCharacter,
   GroupService.delete
 )

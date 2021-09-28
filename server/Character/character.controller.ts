@@ -25,7 +25,7 @@ const CharacterController = Router()
 CharacterController.get(
   "",
   AuthorizeMiddleware,
-  RolesMiddleware(["USER", "ADMIN"], "character.view"),
+  RolesMiddleware("character.view"),
   CharacterService.getCharacters
 )
 /**
@@ -48,7 +48,7 @@ CharacterController.get(
 CharacterController.post(
   "",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
+  RolesMiddleware("character.create"),
   CharacterService.createCharacter
 )
 /**
@@ -71,7 +71,7 @@ CharacterController.post(
 CharacterController.patch(
   "/:id",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
+  RolesMiddleware("character.update"),
   CharacterService.patchCharacter
 )
 /**
@@ -97,7 +97,7 @@ CharacterController.patch(
 CharacterController.delete(
   "/:id",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
+  RolesMiddleware("character.delete"),
   (req, res) => res.json("Метод еще не реализован")
 )
 
