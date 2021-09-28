@@ -9,10 +9,11 @@ import CharacterModel from "../Character/dto/character.model"
 import UserModel from "./dto/user.model"
 import { UserDto, UserRegisterDto } from "~/server/User/dto/user.dto"
 
-const generateToken = (id: string, role: string) => {
+const generateToken = (id: string, role: string, characterId: string) => {
   const payload = {
     id,
     role,
+    characterId,
   }
   return jwt.sign(payload, ServerData.SECRET_KEY, { expiresIn: "24h" })
 }
@@ -38,11 +39,12 @@ class UserService {
     const character = await CharacterModel.findOne({
       characterId,
     }).catch((e) => ServiceHelper.defaultErrorResponse(res, e))
-    if (!character) ServiceHelper.ErrorResponse(
-      res,
-      400,
-      "Указанного пользователя не существует"
-    )
+    if (!character)
+      ServiceHelper.ErrorResponse(
+        res,
+        400,
+        "Указанного пользователя не существует"
+      )
     const status = await UserModel.create({
       email,
       password: bcrypt.hashSync(password, 7),
@@ -67,7 +69,7 @@ class UserService {
       if (!validPassword) {
         return res.status(400).json({ message: "Пароли не совпадают" })
       }
-      const token = generateToken(user._id, user.role)
+      const token = generateToken(user._id, user.role, user.characterId)
       res.send({
         token,
       })

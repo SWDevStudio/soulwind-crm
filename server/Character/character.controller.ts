@@ -25,7 +25,7 @@ const CharacterController = Router()
 CharacterController.get(
   "",
   AuthorizeMiddleware,
-  RolesMiddleware(["USER", "ADMIN"]),
+  RolesMiddleware(["USER", "ADMIN"], "character.view"),
   CharacterService.getCharacters
 )
 /**
