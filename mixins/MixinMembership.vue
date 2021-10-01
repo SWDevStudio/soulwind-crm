@@ -45,12 +45,20 @@
         hide-default-footer
       >
         <template #item.actions="{ item }">
-          <v-icon small class="mr-2" @click="editCharacter(item)"
-            >mdi-pencil
-          </v-icon>
-          <v-icon ref="dismissForm" small @click="startDismiss(item)"
-            >mdi-card-bulleted-off-outline
-          </v-icon>
+          <ph-paint-brush
+            :size="16"
+            weight="bold"
+            class="v-icon mr-2"
+            style="cursor: pointer"
+            @click="editCharacter(item)"
+          />
+          <ph-x
+            :size="16"
+            weight="bold"
+            class="v-icon"
+            style="cursor: pointer"
+            @click="startDismiss(item)"
+          />
         </template>
         <template #item.partyId="{ item }">
           {{ findGroupName(item.partyId) }}
@@ -67,7 +75,6 @@
     >
       <character-creation-form ref="characterForm" v-model="modal" />
     </v-dialog>
-
     <v-dialog v-model="modalRemoveCharacter" max-width="600" persistent eager>
       <form-dismiss-character
         ref="dismissedForm"
@@ -78,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import Component from "nuxt-class-component"
+import Component, { mixins } from "nuxt-class-component"
 import { Ref, State, Watch } from "nuxt-property-decorator"
 import { UI } from "~/data/UI"
 import { HEADER_CHARACTER } from "~/data/headers/HEADER_CHARACTER"
@@ -87,12 +94,16 @@ import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import CharacterCreationForm from "~/components/forms/FormCreationCharacter.vue"
 import FormDismissCharacter from "~/components/forms/FormDismissCharacter.vue"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
+import MixinIcon from "~/mixins/MixinIcon"
 
 @Component({
   name: "MixinMembership",
   components: { FormDismissCharacter, CharacterCreationForm },
 })
-export default class MixinMembership extends CharacterStoreMixin {
+export default class MixinMembership extends mixins(
+  CharacterStoreMixin,
+  MixinIcon
+) {
   @State((state) => state.global.groups) groups!: GroupDtoModel[]
 
   modal: boolean = false
@@ -131,7 +142,6 @@ export default class MixinMembership extends CharacterStoreMixin {
 
   editCharacter(item: CharacterDTOResponse): void {
     this.characterForm.startEdit(item)
-
     this.modal = true
   }
 

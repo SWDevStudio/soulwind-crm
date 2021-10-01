@@ -8,6 +8,7 @@ import { PhHeart, PhCookie, PhPaintBrush, PhUser, PhUserList, PhProhibit, PhUser
   components: {
     PhHeart,
     PhCookie,
+    PhPaintBrush,
     PhUser,
     PhUserList,
     PhProhibit,
