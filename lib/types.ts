@@ -1,3 +1,4 @@
+// TODO переделать под кастомные икноки, отказаться от библиотеки
 type Weight = "thin" | "light" | "regular" | "bold" | "fill" | "duotone";
 type Size = string | number;
 
