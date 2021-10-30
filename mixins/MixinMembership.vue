@@ -100,7 +100,7 @@ import MixinIcon from "~/mixins/MixinIcon"
   name: "MixinMembership",
   components: { FormDismissCharacter, CharacterCreationForm },
 })
-export default class MixinMembership extends mixins(
+export default class MixinMembership extends mixins<CharacterStoreMixin, MixinIcon>(
   CharacterStoreMixin,
   MixinIcon
 ) {
@@ -124,8 +124,9 @@ export default class MixinMembership extends mixins(
 
   get sortCharacters() {
     if (!this.form.partyId) return this[this.needCharacters] || []
+    const arr: any[] = this[this.needCharacters] || []
     return (
-      this[this.needCharacters]?.filter(
+      arr?.filter(
         (item) => item.partyId === this.form.partyId
       ) || []
     )
