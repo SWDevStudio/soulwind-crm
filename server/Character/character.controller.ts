@@ -28,6 +28,8 @@ CharacterController.get(
   RolesMiddleware("character.view"),
   CharacterService.getCharacters
 )
+
+CharacterController.get("/general", CharacterService.getCharactersGenerals)
 /**
  * @swagger
  *  /character:

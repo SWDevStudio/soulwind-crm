@@ -19,6 +19,7 @@ export interface CharacterDto {
   level?: number
   status: CharacterStatus
   rankParty?: CharacterRankParty
+  userId: string | null
 }
 
 export interface CharacterDTOResponse extends CharacterDto, Document {}

@@ -14,7 +14,6 @@ import isDev from "./utils/IsDev"
 import PermissionController from "./Permission/permission.controller"
 const start = () => {
   // Подключаемся к бд
-  // ConnectDataBase()
   ConnectDataBase()
   // Создаем express
   const app: core.Express = express()

@@ -154,7 +154,13 @@
               class="mt-3 mb-4"
               :disabled="!valid"
               @click="sendForm"
-              >{{ staticMode ? 'Сохранить изменения' : editMode ? "Редактировать"  : 'Добавить персонажа'  }}
+              >{{
+                staticMode
+                  ? "Сохранить изменения"
+                  : editMode
+                  ? "Редактировать"
+                  : "Добавить персонажа"
+              }}
             </v-btn>
           </v-col>
         </v-row>
@@ -210,6 +216,7 @@ export default class CharacterCreationForm extends Vue {
     level: undefined,
     status: "ACTIVE",
     rankParty: undefined,
+    userId: null,
   }
 
   created() {
@@ -224,7 +231,7 @@ export default class CharacterCreationForm extends Vue {
     if (!this.staticMode) {
       this.clearForm()
       this.editMode = false
-    }else {
+    } else {
       this.itEdit = false
     }
     this.$emit("input", false)

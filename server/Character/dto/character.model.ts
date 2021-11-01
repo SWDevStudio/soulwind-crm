@@ -16,6 +16,7 @@ const schema = new Schema<CharacterDto>({
   level: { type: Number },
   status: { type: String, default: "ACTIVE" },
   rankParty: { type: String, default: "Рядовой" },
+  userId: { type: String, default: null },
 })
 
 export default mongoose.models.Character ||

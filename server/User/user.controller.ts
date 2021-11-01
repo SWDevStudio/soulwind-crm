@@ -2,7 +2,7 @@ import { Router } from "express"
 import { check } from "express-validator"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
-import UserService from "./user.service"
+import UserService from "./user.middleware"
 
 const UserController = Router()
 
@@ -25,7 +25,7 @@ const UserController = Router()
  *         $ref: "#/definitions/ErrorResponse"
  *
  */
-UserController.get("" , AuthorizeMiddleware, UserService.getUsers)
+UserController.get("", AuthorizeMiddleware, UserService.getUsers)
 /**
  * @swagger
  * /user/{id}:

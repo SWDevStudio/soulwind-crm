@@ -14,6 +14,14 @@ class CharacterService {
     }
   }
 
+  async getCharactersGenerals(req: Request, res: Response) {
+    try {
+      res.json(await CharacterModel.find())
+    } catch (e) {
+      res.status(400).json({ message: e })
+    }
+  }
+
   async createCharacter(req: Request, res: Response) {
     try {
       // TODO сделать проверку полей

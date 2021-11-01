@@ -28,6 +28,12 @@
       :type="show2 ? 'text' : 'password'"
       @click:append="show2 = !show2"
     />
+    <v-select
+      :items="characters"
+      label="select your character"
+      item-text="lastName"
+      item-value="_id"
+    />
     <p v-if="notCorrectPass" class="error--text text-sm-caption">
       {{ notCorrectPass }}
     </p>
@@ -49,6 +55,7 @@
 import { PAGES } from "~/data/PAGES"
 import MixinToken from "~/mixins/MixinToken"
 import { UI } from "~/data/UI"
+import CharacterApi from "~/api/CharacterApi"
 
 export default {
   name: "SignIn",
@@ -70,7 +77,12 @@ export default {
       password: "",
       repeatPass: "",
     },
+    characters: [],
   }),
+
+  async created() {
+    this.characters = await CharacterApi.loadGeneralInfo(() => {})
+  },
   methods: {
     async comparePass() {
       if (this.form.password === this.form.repeatPass) {

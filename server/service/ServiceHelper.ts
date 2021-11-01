@@ -1,11 +1,11 @@
 import { Response } from "express"
 
 export class ServiceHelper {
-  static defaultErrorResponse(res: Response, e: Error | string) {
-    res.status(400).json({ message: e })
+  static defaultErrorResponse(res: Response, message: Error | string) {
+    res.status(400).json({ message })
   }
 
-  static ErrorResponse(res: Response, status: number, message: any) {
-    res.status(status || 400).json({message})
+  static ErrorResponse(res: Response, message: any, status?: number) {
+    res.status(status || 400).json({ message })
   }
 }
