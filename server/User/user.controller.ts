@@ -1,10 +1,10 @@
 import { Response, Request, Router } from "express"
 import { check } from "express-validator"
+import expressAsyncHandler from "express-async-handler"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
 import ValidationFields from "../middleware/ValidationFields"
 import ErrorCatch from "../middleware/ErrorCatch"
-import expressAsyncHandler from "express-async-handler"
 import UserService from "./user.middleware"
 const UserController = Router()
 
@@ -107,7 +107,9 @@ UserController.post(
     check("email", "email is required field").notEmpty(),
     check("password", "password is required").notEmpty(),
   ],
-  UserService.login
+  ValidationFields,
+  expressAsyncHandler(UserService.login),
+  ErrorCatch
 )
 
 export default UserController

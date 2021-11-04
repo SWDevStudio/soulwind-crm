@@ -1,7 +1,11 @@
 import jwt from "jsonwebtoken"
 import { ServerData } from "../Data/SECRET_KEY"
 
-const GenerateToken = (id: string, role: string, characterId: string) => {
+const GenerateToken = (
+  id: string,
+  role: string,
+  characterId?: string | null
+) => {
   const payload = {
     id,
     role,

@@ -7,6 +7,7 @@ export interface UserDto {
   role: Roles
   characterId: string | null
   activeUser: boolean
+  password: string
 }
 export interface UserResponseDto extends Document, UserDto {}
 export interface UserTokenInfo extends JwtPayload {

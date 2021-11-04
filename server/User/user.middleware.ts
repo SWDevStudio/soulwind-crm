@@ -3,10 +3,10 @@ import bcrypt from "bcrypt"
 import { validationResult } from "express-validator"
 import createError from "http-errors"
 import CharacterService from "../Character/character.service"
+import GenerateToken from "../utils/GenerateToken"
 import UserModel from "./dto/user.model"
 import UserService from "./user.service"
-import { UserRegisterDto } from "~/server/User/dto/user.dto"
-import "../utils/GenerateToken"
+import { UserDto, UserResponseDto } from "~/server/User/dto/user.dto"
 
 class UserMiddleware {
   async createUser(req: Request, res: Response) {
@@ -23,39 +23,26 @@ class UserMiddleware {
 
   async login(req: Request, res: Response) {
     try {
-      // TODO сделать чеки и добавить утилиты для проверки.
-      if (!validationResult(req).isEmpty()) {
-        return res.status(400).json(validationResult(req))
-      }
       const { email, password } = req.body
-      const user = await UserModel.findOne({ email })
-      if (!user) {
-        return res.status(400).json({ message: "Пользователь не найден" })
-      }
-
-      const validPassword = bcrypt.compareSync(password, user.password)
-      if (!validPassword) {
-        return res.status(400).json({ message: "Пароли не совпадают" })
-      }
-      // @ts-ignore
-      const token = GenerateToken(user._id, user.role, user.characterId)
-      res.send({
-        token,
+      const user = await UserService.load({ email })
+      UserService.validPassword(password, user?.password)
+      res.json({
+        token: GenerateToken(user._id, user.role, user?.characterId),
       })
-    } catch (message) {
-      return res.status(400).json({ message })
+    } catch (e) {
+      throw createError(400, e)
     }
   }
 
   async getUser(req: any, res: any): Promise<void> {
-    const users: UserRegisterDto[] = await UserModel.find({
+    const users: UserResponseDto[] = await UserModel.find({
       _id: req.params.id,
     }).select("-password")
     res.send(users[0])
   }
 
   async getUsers(req: any, res: any): Promise<void> {
-    const users: UserRegisterDto[] = await UserModel.find().select("-password")
+    const users: UserResponseDto[] = await UserModel.find().select("-password")
     res.send(users)
   }
 }
