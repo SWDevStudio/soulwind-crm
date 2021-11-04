@@ -18,6 +18,6 @@ const schema = new Schema<CharacterDto>({
   rankParty: { type: String, default: "Рядовой" },
   userId: { type: String, default: null },
 })
-
-export default mongoose.models.Character ||
-  model<CharacterDto>("Character", schema)
+const CharacterModel: mongoose.Model<CharacterDto> =
+  mongoose.models.Character || model<CharacterDto>("Character", schema)
+export default CharacterModel

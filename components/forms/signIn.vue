@@ -29,6 +29,7 @@
       @click:append="show2 = !show2"
     />
     <v-select
+      v-model="form.characterId"
       :items="characters"
       label="select your character"
       item-text="lastName"
@@ -76,6 +77,7 @@ export default {
       email: "",
       password: "",
       repeatPass: "",
+      characterId: "",
     },
     characters: [],
   }),
@@ -91,6 +93,7 @@ export default {
           .post("/api/user/register", {
             email: this.form.email,
             password: this.form.password,
+            characterId: this.form.characterId,
           })
           .catch((e) => e.response)
         if (registerResponse.status === 200) {

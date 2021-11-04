@@ -1,7 +1,7 @@
 import { Router } from "express"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
-import CharacterService from "./character.service"
+import CharacterMiddleware from "./character.middleware"
 const CharacterController = Router()
 
 /**
@@ -26,10 +26,10 @@ CharacterController.get(
   "",
   AuthorizeMiddleware,
   RolesMiddleware("character.view"),
-  CharacterService.getCharacters
+  CharacterMiddleware.getCharacters
 )
 
-CharacterController.get("/general", CharacterService.getCharactersGenerals)
+CharacterController.get("/general", CharacterMiddleware.getCharactersGenerals)
 /**
  * @swagger
  *  /character:
@@ -51,7 +51,7 @@ CharacterController.post(
   "",
   AuthorizeMiddleware,
   RolesMiddleware("character.create"),
-  CharacterService.createCharacter
+  CharacterMiddleware.createCharacter
 )
 /**
  * @swagger
@@ -74,7 +74,7 @@ CharacterController.patch(
   "/:id",
   AuthorizeMiddleware,
   RolesMiddleware("character.update"),
-  CharacterService.patchCharacter
+  CharacterMiddleware.patchCharacter
 )
 /**
  * @swagger

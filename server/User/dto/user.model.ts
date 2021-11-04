@@ -9,5 +9,6 @@ const schema = new Schema<UserRegisterDto>({
   characterId: { type: String, required: true, default: null },
   activeUser: { type: Boolean, default: false },
 })
-const UserModel = mongoose.models.User || model<UserRegisterDto>("User", schema)
+const UserModel: mongoose.Model<UserRegisterDto> =
+  mongoose.models.User || model<UserRegisterDto>("User", schema)
 export default UserModel

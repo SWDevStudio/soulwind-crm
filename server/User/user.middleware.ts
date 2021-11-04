@@ -1,58 +1,24 @@
 import { Request, Response } from "express"
-import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { validationResult } from "express-validator"
-// import _ from "lodash"
-import { ServerData } from "../Data/SECRET_KEY"
-import { ServiceHelper } from "../service/ServiceHelper"
-import CharacterModel from "../Character/dto/character.model"
+import createError from "http-errors"
+import CharacterService from "../Character/character.service"
 import UserModel from "./dto/user.model"
+import UserService from "./user.service"
 import { UserRegisterDto } from "~/server/User/dto/user.dto"
-
-const generateToken = (id: string, role: string, characterId: string) => {
-  const payload = {
-    id,
-    role,
-    characterId,
-  }
-  return jwt.sign(payload, ServerData.SECRET_KEY, { expiresIn: "24h" })
-}
+import "../utils/GenerateToken"
 
 class UserMiddleware {
-  async createUser(req: Request, res: Response): Promise<void> {
-    // TODO добавить try cacth
-    const { email, password, characterId } = req.body
-    if (!email || !password) {
-      res
-        .status(400)
-        .json({ message: "Не хватает обязательных полей email или password" })
+  async createUser(req: Request, res: Response) {
+    try {
+      const { characterId } = req.body
+      await CharacterService.isTiedForUser(characterId)
+      const createdUser = await UserService.create(req.body)
+      await CharacterService.addUserId(characterId, createdUser._id)
+      res.json(!!createdUser)
+    } catch (e) {
+      throw createError(400, e)
     }
-    // Проверить есть ли пользователь с такой почтой в чате
-    const user = await UserModel.findOne({
-      email: req.body.email,
-    }).catch((e) => ServiceHelper.defaultErrorResponse(res, e))
-    if (user) {
-      ServiceHelper.defaultErrorResponse(
-        res,
-        "Пользователь с такой почтой уже существует"
-      )
-    }
-    // TODO делать проверку на то, привязан ли пользователь к другому персонажу!
-    const character = await CharacterModel.findOne({
-      characterId,
-    }).catch((e) => ServiceHelper.defaultErrorResponse(res, e))
-    if (!character)
-      ServiceHelper.defaultErrorResponse(
-        res,
-        "Указанного пользователя не существует"
-      )
-    // TODO добавить к персонажу userId
-    const status = await UserModel.create({
-      email,
-      password: bcrypt.hashSync(password, 7),
-      characterId: character._id,
-    }).catch((e) => ServiceHelper.defaultErrorResponse(res, e))
-    res.send(!!status)
   }
 
   async login(req: Request, res: Response) {
@@ -71,7 +37,8 @@ class UserMiddleware {
       if (!validPassword) {
         return res.status(400).json({ message: "Пароли не совпадают" })
       }
-      const token = generateToken(user._id, user.role, user.characterId)
+      // @ts-ignore
+      const token = GenerateToken(user._id, user.role, user.characterId)
       res.send({
         token,
       })

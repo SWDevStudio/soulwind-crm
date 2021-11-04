@@ -1,9 +1,11 @@
-import { Router } from "express"
+import { Response, Request, Router } from "express"
 import { check } from "express-validator"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
+import ValidationFields from "../middleware/ValidationFields"
+import ErrorCatch from "../middleware/ErrorCatch"
+import expressAsyncHandler from "express-async-handler"
 import UserService from "./user.middleware"
-
 const UserController = Router()
 
 /**
@@ -67,7 +69,16 @@ UserController.get("/:id", AuthorizeMiddleware, UserService.getUser)
  *         $ref: "#/definitions/ErrorResponse"
  *
  */
-UserController.post("/register", UserService.createUser)
+UserController.post(
+  "/register",
+  // [
+  //   check("email", "email is required field").notEmpty(),
+  //   check("password", "password is required").notEmpty(),
+  // ],
+  // ValidationFields,
+  expressAsyncHandler(UserService.createUser),
+  ErrorCatch
+)
 /**
  * @swagger
  *  /user/login:
@@ -91,7 +102,10 @@ UserController.post("/register", UserService.createUser)
  */
 UserController.post(
   "/login",
-  [check("email", "email is required field").notEmpty()],
+  [
+    check("email", "email is required field").notEmpty(),
+    check("password", "password is required").notEmpty(),
+  ],
   UserService.login
 )
 

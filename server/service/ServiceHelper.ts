@@ -1,11 +1,17 @@
-import { Response } from "express"
+import { Request, Response } from "express"
+import { validationResult } from "express-validator"
 
 export class ServiceHelper {
+  readonly res: Response
+  constructor(res: Response) {
+    this.res = res
+  }
+
   static defaultErrorResponse(res: Response, message: Error | string) {
     res.status(400).json({ message })
   }
 
-  static ErrorResponse(res: Response, message: any, status?: number) {
+  errorResponse(res: Response, message: any, status?: number) {
     res.status(status || 400).json({ message })
   }
 }

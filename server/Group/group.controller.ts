@@ -1,7 +1,7 @@
 import { Router } from "express"
 import RolesMiddleware from "../middleware/RolesMiddleware"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
-import CharacterService from "../Character/character.service"
+import CharacterService from "../Character/character.middleware"
 import GroupService from "./group.service"
 const GroupController = Router()
 
