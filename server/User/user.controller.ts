@@ -71,11 +71,12 @@ UserController.get("/:id", AuthorizeMiddleware, UserService.getUser)
  */
 UserController.post(
   "/register",
-  // [
-  //   check("email", "email is required field").notEmpty(),
-  //   check("password", "password is required").notEmpty(),
-  // ],
-  // ValidationFields,
+  [
+    check("email", "email is required field").notEmpty(),
+    check("password", "password is required").notEmpty(),
+    check("characterId", "character is required").notEmpty(),
+  ],
+  ValidationFields,
   expressAsyncHandler(UserService.createUser),
   ErrorCatch
 )
