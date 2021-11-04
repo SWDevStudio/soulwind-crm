@@ -20,17 +20,30 @@ class UserService {
     })
   }
 
-  static async load(filter: object) {
-    const user = await UserModel.findOne(filter)
+  static async load(filter: object, needPass: boolean = false) {
+    const user = needPass
+      ? await UserModel.findOne(filter)
+      : await UserModel.findOne(filter).select("-password")
     if (!user) {
       throw createError(400, "Пользователь не найден")
     }
     return user
   }
 
-  static loadAll() {}
+  static async loadAll(needPass: boolean = false) {
+    const user = needPass
+      ? await UserModel.find()
+      : await UserModel.find().select("-password")
+    if (!user) {
+      throw createError(400, "При получении пользователей, что то пошло не так")
+    }
+    return user
+  }
+
   static update() {}
+
   static delete() {}
+
   static validPassword(password: string, userPassword: string) {
     const validPassword = bcrypt.compareSync(password, userPassword)
     if (!validPassword) {

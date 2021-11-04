@@ -48,7 +48,12 @@ UserController.get("", AuthorizeMiddleware, UserService.getUsers)
  *         $ref: "#/definitions/ErrorResponse"
  *
  */
-UserController.get("/:id", AuthorizeMiddleware, UserService.getUser)
+UserController.get(
+  "/:id",
+  AuthorizeMiddleware,
+  expressAsyncHandler(UserService.getUser),
+  ErrorCatch
+)
 /**
  * @swagger
  *  /user/register:

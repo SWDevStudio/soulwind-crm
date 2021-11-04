@@ -24,7 +24,7 @@ class UserMiddleware {
   async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body
-      const user = await UserService.load({ email })
+      const user = await UserService.load({ email }, true)
       UserService.validPassword(password, user?.password)
       res.json({
         token: GenerateToken(user._id, user.role, user?.characterId),
@@ -35,14 +35,17 @@ class UserMiddleware {
   }
 
   async getUser(req: any, res: any): Promise<void> {
-    const users: UserResponseDto[] = await UserModel.find({
-      _id: req.params.id,
-    }).select("-password")
-    res.send(users[0])
+    const _id = req.params.id
+    const user = await UserService.load({ _id }).catch((e) => {
+      throw createError(400, e)
+    })
+    res.send(user)
   }
 
   async getUsers(req: any, res: any): Promise<void> {
-    const users: UserResponseDto[] = await UserModel.find().select("-password")
+    const users = await UserService.loadAll().catch((e) => {
+      throw createError(400, e)
+    })
     res.send(users)
   }
 }
