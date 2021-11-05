@@ -1,5 +1,5 @@
 import createError from "http-errors"
-import { HasValidPermissionFields } from "../utils/permissions/HasValidPermissionFields"
+import { HasValidPermissionFields } from "../middleware/HasValidPermissionFields"
 import PermissionModel from "./dto/permission.model"
 import {
   PermissionDto,
@@ -31,15 +31,13 @@ export default class PermissionService {
 
   static async update(name: string, update: PermissionDto) {
     try {
-      if (typeof update.fields === "object") {
-        HasValidPermissionFields(update.fields)
-        await PermissionModel.findOneAndUpdate(
-          { name },
-          {
-            fields: update.fields,
-          }
-        )
-      }
+      await PermissionModel.findOneAndUpdate(
+        { name },
+        {
+          fields: update.fields,
+        }
+      )
+
       return PermissionModel.findOne({ name })
     } catch (e) {
       throw createError(400, e)

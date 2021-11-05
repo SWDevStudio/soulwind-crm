@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { HasValidPermissionFields } from "../utils/permissions/HasValidPermissionFields"
+import { HasValidPermissionFields } from "../middleware/HasValidPermissionFields"
 import PermissionService from "./permission.service"
 
 class PermissionMiddleware {

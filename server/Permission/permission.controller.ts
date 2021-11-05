@@ -2,7 +2,7 @@ import { Router } from "express"
 import ErrorCatch from "../middleware/ErrorCatch"
 import PermissionMiddleware from "./permission.middleware"
 import expressAsyncHandler from "express-async-handler"
-
+import { HasValidPermissionFields } from "../middleware/HasValidPermissionFields"
 const permissionController = Router()
 
 // получить право
@@ -24,6 +24,7 @@ permissionController.get(
 )
 permissionController.patch(
   "/:name",
+  expressAsyncHandler(HasValidPermissionFields),
   expressAsyncHandler(PermissionMiddleware.update),
   ErrorCatch
 )
