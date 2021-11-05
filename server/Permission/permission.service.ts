@@ -1,23 +1,48 @@
-import { Request, Response } from "express"
-import { ServiceHelper } from "../service/ServiceHelper"
-import PermissionUtils from "./permission.utils"
+import createError from "http-errors"
+import { HasValidPermissionFields } from "../utils/permissions/HasValidPermissionFields"
 import PermissionModel from "./dto/permission.model"
-class PermissionService {
-  async create(req: Request, res: Response) {
-    try {
-      res.json(await PermissionUtils.createPermission(req.body))
-    } catch (e) {
-      ServiceHelper.defaultErrorResponse(res, e)
-    }
+import {
+  PermissionDto,
+  PermissionResponse,
+} from "~/server/Permission/dto/permission.dto"
+
+export default class PermissionService {
+  static async create(payload: PermissionDto): Promise<PermissionResponse> {
+    return await PermissionModel.create(payload).catch((e) => {
+      throw createError(400, e)
+    })
   }
 
-  async findAll(req: Request, res: Response) {
+  static delete(name: string) {
+    return PermissionModel.findOneAndDelete({ name })
+  }
+
+  static loadAll() {
+    return PermissionModel.find().catch((e) => {
+      throw createError(400, e)
+    })
+  }
+
+  static load(name: string) {
+    return PermissionModel.findOne({ name }).catch((e) => {
+      throw createError(400, e)
+    })
+  }
+
+  static async update(name: string, update: PermissionDto) {
     try {
-      res.json(await PermissionModel.find())
+      if (typeof update.fields === "object") {
+        HasValidPermissionFields(update.fields)
+        await PermissionModel.findOneAndUpdate(
+          { name },
+          {
+            fields: update.fields,
+          }
+        )
+      }
+      return PermissionModel.findOne({ name })
     } catch (e) {
-      ServiceHelper.defaultErrorResponse(res, e)
+      throw createError(400, e)
     }
   }
 }
-
-export default new PermissionService()
