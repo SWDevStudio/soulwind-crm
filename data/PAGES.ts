@@ -7,4 +7,5 @@ export const PAGES = {
   dropout: "/dropout",
   guildEvent: "/guild-event",
   profile: "/profile",
+  permission: "/permission",
 }

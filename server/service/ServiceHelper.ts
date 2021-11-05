@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { validationResult } from "express-validator"
-
+// TODO подлежит удалению
 export class ServiceHelper {
   readonly res: Response
   constructor(res: Response) {

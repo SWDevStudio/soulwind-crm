@@ -2,7 +2,7 @@ import { PAGES } from "~/data/PAGES"
 
 export const SIDEBAR_MENU = [
   {
-    icon: 'ph-user',
+    icon: "ph-user",
     title: "Профиль",
     to: PAGES.profile,
   },
@@ -30,5 +30,10 @@ export const SIDEBAR_MENU = [
     icon: "ph-prohibit",
     title: "Черный список",
     to: PAGES.blackList,
+  },
+  {
+    icon: "ph-prohibit",
+    title: "Права",
+    to: PAGES.permission,
   },
 ]

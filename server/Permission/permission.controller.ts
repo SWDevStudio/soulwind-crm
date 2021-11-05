@@ -1,8 +1,8 @@
 import { Router } from "express"
-import ErrorCatch from "../middleware/ErrorCatch"
-import PermissionMiddleware from "./permission.middleware"
 import expressAsyncHandler from "express-async-handler"
+import ErrorCatch from "../middleware/ErrorCatch"
 import { HasValidPermissionFields } from "../middleware/HasValidPermissionFields"
+import PermissionMiddleware from "./permission.middleware"
 const permissionController = Router()
 
 // получить право
@@ -17,6 +17,10 @@ permissionController.get(
   expressAsyncHandler(PermissionMiddleware.findAll),
   ErrorCatch
 )
+permissionController.get("/err", (req, res) => {
+  res.status(400)
+  res.json({ message: "special feil" })
+})
 permissionController.get(
   "/:name",
   expressAsyncHandler(PermissionMiddleware.find),
@@ -28,9 +32,11 @@ permissionController.patch(
   expressAsyncHandler(PermissionMiddleware.update),
   ErrorCatch
 )
+
 permissionController.delete(
   "/:name",
   expressAsyncHandler(PermissionMiddleware.delete),
   ErrorCatch
 )
+
 export default permissionController
