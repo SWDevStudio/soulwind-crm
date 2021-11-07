@@ -39,14 +39,14 @@ import { UI } from "~/data/UI"
 export default class DialogConfirm extends Vue {
   UI = UI
   isOpen: boolean = false
-  popupController = { resolve: null, reject: null }
+  popupController: any = { resolve: null, reject: null }
   text: string = ""
   closeModal() {
     this.isOpen = false
     this.popupController?.resolve(false)
   }
 
-  confirm(e) {
+  confirm(e: Event) {
     e.preventDefault()
     this.isOpen = false
     this.popupController?.resolve(true)
