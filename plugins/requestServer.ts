@@ -1,36 +1,44 @@
 import Vue from "vue"
 import { Context, Inject, NuxtApp } from "@nuxt/types/app"
-
+import { AxiosRequestConfig, AxiosResponse } from "axios"
+type RequestServerFunc = (
+  url: string,
+  options: AxiosRequestConfig
+) => Promise<any>
 declare module "vue/types/vue" {
   interface Vue {
-    $testFunc(): void
+    $requestServer: RequestServerFunc
   }
 }
 
 declare module "@nuxt/types" {
   // nuxtContext.app.$myInjectedFunction inside asyncData, fetch, plugins, middleware, nuxtServerInit
   interface NuxtAppOptions {
-    $testFunc(): void
+    $requestServer: RequestServerFunc
   }
   // nuxtContext.$myInjectedFunction
   interface Context {
-    $testFunc(): void
+    $requestServer: RequestServerFunc
   }
 }
 
 declare module "vuex/types/index" {
   // this.$myInjectedFunction inside Vuex stores
   interface Store<S> {
-    $testFunc(): void
+    $requestServer: RequestServerFunc
   }
 }
 
 export default (ctx: Context, inject: Inject) => {
   ctx.$axios.onError((error) => {
-    console.log(error)
-    ctx.redirect("http://google.com")
+    const info = error.response as AxiosResponse
+    if (info?.status === 403) {
+      ctx.error({ statusCode: 403 })
+    }
+    return error.response
   })
-  inject("testFunc", () => {
-    console.log("hello world")
+
+  inject("requestServer", (url: string, options: AxiosRequestConfig) => {
+    return ctx.$axios(url, options)
   })
 }
