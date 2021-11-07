@@ -1,4 +1,4 @@
-export function CompareArrays(arr1: string[], arr2: string[]): boolean {
+export function CompareArrays(arr1: any[], arr2: any[]): boolean {
   if (arr1.length !== arr2.length) return false
   const len = arr1.length
   const sorted1 = arr1.sort()
