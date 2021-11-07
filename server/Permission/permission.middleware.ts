@@ -22,7 +22,7 @@ class PermissionMiddleware {
   }
 
   async delete(req: Request, res: Response) {
-    res.json(await PermissionService.delete(req.params.name.toUpperCase()))
+    res.json(await PermissionService.delete(req.params.name))
   }
 }
 

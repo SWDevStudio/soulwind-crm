@@ -17,10 +17,10 @@ permissionController.get(
   expressAsyncHandler(PermissionMiddleware.findAll),
   ErrorCatch
 )
-permissionController.get("/err", (req, res) => {
-  res.status(400)
-  res.json({ message: "special feil" })
-})
+// permissionController.get("/err", (req, res) => {
+//   res.status(400)
+//   res.json({ message: "special feil" })
+// })
 permissionController.get(
   "/:name",
   expressAsyncHandler(PermissionMiddleware.find),

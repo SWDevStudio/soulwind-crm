@@ -36,4 +36,9 @@ export const SIDEBAR_MENU = [
     title: "Права",
     to: PAGES.permission,
   },
+  {
+    icon: "ph-prohibit",
+    title: "Админ. панель",
+    to: PAGES.admin,
+  },
 ]

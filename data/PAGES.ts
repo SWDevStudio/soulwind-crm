@@ -8,4 +8,5 @@ export const PAGES = {
   guildEvent: "/guild-event",
   profile: "/profile",
   permission: "/permission",
+  admin: "/admin",
 }

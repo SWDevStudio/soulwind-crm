@@ -1,5 +1,5 @@
 import { Transliterate } from "~/utils/Transliterate"
-
+// TODO перенести
 describe("Transliterate.ts", function () {
   it("Это функция?", function () {
     expect(Transliterate).toBeInstanceOf(Function)

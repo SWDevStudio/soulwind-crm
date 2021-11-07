@@ -1,10 +1,11 @@
 import Vue from "vue"
 import { Context, Inject, NuxtApp } from "@nuxt/types/app"
 import { AxiosRequestConfig, AxiosResponse } from "axios"
+import { getToken } from "~/utils/Token"
 type RequestServerFunc = (
   url: string,
-  options: AxiosRequestConfig
-) => Promise<any>
+  options?: AxiosRequestConfig
+) => Promise<AxiosResponse>
 declare module "vue/types/vue" {
   interface Vue {
     $requestServer: RequestServerFunc
@@ -30,6 +31,8 @@ declare module "vuex/types/index" {
 }
 
 export default (ctx: Context, inject: Inject) => {
+  ctx.$axios.setHeader("token", getToken())
+
   ctx.$axios.onError((error) => {
     const info = error.response as AxiosResponse
     if (info?.status === 403) {
@@ -38,7 +41,7 @@ export default (ctx: Context, inject: Inject) => {
     return error.response
   })
 
-  inject("requestServer", (url: string, options: AxiosRequestConfig) => {
+  inject("requestServer", (url: string, options?: AxiosRequestConfig) => {
     return ctx.$axios(url, options)
   })
 }
