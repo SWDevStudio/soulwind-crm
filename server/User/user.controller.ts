@@ -79,7 +79,6 @@ UserController.post(
   [
     check("email", "email is required field").notEmpty(),
     check("password", "password is required").notEmpty(),
-    check("characterId", "character is required").notEmpty(),
   ],
   ValidationFields,
   expressAsyncHandler(UserService.createUser),
@@ -145,7 +144,7 @@ UserController.patch(
     check("characterId", "characterId is required").notEmpty().isString(),
   ],
   ValidationFields,
-  expressAsyncHandler(UserService.setRole),
+  expressAsyncHandler(UserService.setCharacter),
   ErrorCatch
 )
 export default UserController

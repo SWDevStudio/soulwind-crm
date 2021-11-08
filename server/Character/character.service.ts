@@ -28,10 +28,19 @@ class CharacterService {
   }
 
   static addUserId(characterId: string, userId: string) {
-    return CharacterModel.updateOne(
+    return CharacterModel.findOneAndUpdate(
       { _id: characterId },
       {
-        userId: "12312323123",
+        userId,
+      }
+    )
+  }
+
+  static removeUserId(characterId: string) {
+    return CharacterModel.findOneAndUpdate(
+      { _id: characterId },
+      {
+        userId: null,
       }
     )
   }

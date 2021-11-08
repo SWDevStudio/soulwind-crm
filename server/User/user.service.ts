@@ -40,7 +40,9 @@ class UserService {
     return user
   }
 
-  static update() {}
+  static update(id: string, body: any) {
+    return UserModel.findOneAndUpdate({ _id: id }, body)
+  }
 
   static delete() {}
 

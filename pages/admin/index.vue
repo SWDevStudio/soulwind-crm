@@ -23,6 +23,7 @@
                           item-text="lastName"
                           :value="item.characterId"
                           item-value="_id"
+                          @change="setCharacter($event, item._id)"
                         />
                       </td>
                       <td>
@@ -31,6 +32,7 @@
                           :color="UI.actionColor.color"
                           :items="permissionList"
                           :value="item.role"
+                          @change="setRole($event, item._id)"
                         />
                       </td>
                       <td>
@@ -96,6 +98,24 @@ export default class Index extends CharacterStoreMixin {
       method: "patch",
       data: {
         value,
+        id,
+      },
+    })
+  }
+
+  async setRole(role: string, id: string) {
+    const res: any = await this.$requestServer(UserApi.setRole, {
+      method: "patch",
+      data: { role, id },
+    })
+  }
+
+  async setCharacter(characterId: string, id: string) {
+    // console.log(characterId, id)
+    const res = await this.$requestServer(UserApi.updateCharacter, {
+      method: "patch",
+      data: {
+        characterId,
         id,
       },
     })

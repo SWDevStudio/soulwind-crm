@@ -12,9 +12,14 @@ class UserMiddleware {
   async createUser(req: Request, res: Response) {
     try {
       const { characterId } = req.body
-      await CharacterService.isTiedForUser(characterId)
+      if (characterId) {
+        await CharacterService.isTiedForUser(characterId)
+      }
+
       const createdUser = await UserService.create(req.body)
-      await CharacterService.addUserId(characterId, createdUser._id)
+      if (characterId) {
+        await CharacterService.addUserId(characterId, createdUser._id)
+      }
       res.json(!!createdUser)
     } catch (e) {
       throw createError(400, e)
@@ -81,8 +86,13 @@ class UserMiddleware {
   async setCharacter(req: Request, res: Response) {
     try {
       const { characterId, id } = req.body
+      const user: any = await UserService.load({ _id: id })
       await CharacterService.isTiedForUser(characterId)
+      if (user.characterId) {
+        await CharacterService.removeUserId(user.characterId)
+      }
       await CharacterService.addUserId(characterId, id)
+      await UserService.update(id, { characterId })
       res.json(await UserModel.findOne({ _id: req.body.id }))
     } catch (e) {
       throw createError(400, e)

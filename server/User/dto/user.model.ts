@@ -10,7 +10,7 @@ const schema = new Schema<UserDto>({
   email: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, default: "USER" },
-  characterId: { type: String, required: true, default: null },
+  characterId: { type: String, default: null },
   activeUser: { type: Boolean, default: false },
 })
 const UserModel: mongoose.Model<UserResponseDto> =
