@@ -117,4 +117,24 @@ UserController.post(
   ErrorCatch
 )
 
+UserController.patch(
+  "/active",
+  [
+    check("id", "id is required field").notEmpty().isString(),
+    check("value", "value is required").notEmpty().isBoolean(),
+  ],
+  ValidationFields,
+  expressAsyncHandler(UserService.toggleActiveUser),
+  ErrorCatch
+)
+UserController.patch(
+  "/role",
+  [
+    check("id", "id is required field").notEmpty().isString(),
+    check("role", "value is required").notEmpty(),
+  ],
+  ValidationFields,
+  expressAsyncHandler(UserService.setRole),
+  ErrorCatch
+)
 export default UserController

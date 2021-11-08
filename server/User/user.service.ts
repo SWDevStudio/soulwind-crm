@@ -10,7 +10,7 @@ import {
 // т.е если мне нужно сначала проверить существование, а потом создать если нет делаем это в middleware
 class UserService {
   static async create({ email, password, characterId }: UserRegisterDto) {
-    const isUserCreated = await UserService.load({ email })
+    const isUserCreated = await UserModel.findOne({ email })
     if (isUserCreated)
       throw createError(400, "Пользователь с такой почтой уже существует")
     return UserModel.create({

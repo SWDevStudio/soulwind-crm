@@ -48,6 +48,35 @@ class UserMiddleware {
     })
     res.send(users)
   }
+
+  async toggleActiveUser(req: Request, res: Response): Promise<void> {
+    try {
+      await UserModel.findOneAndUpdate(
+        { _id: req.body.id },
+        {
+          activeUser: req.body.value,
+        }
+      )
+
+      res.json(await UserModel.findOne({ _id: req.body.id }))
+    } catch (e) {
+      throw createError(400, e)
+    }
+  }
+
+  async setRole(req: Request, res: Response): Promise<void> {
+    try {
+      await UserModel.findOneAndUpdate(
+        { _id: req.body.id },
+        {
+          role: req.body.role,
+        }
+      )
+      res.json(await UserModel.findOne({ _id: req.body.id }))
+    } catch (e) {
+      throw createError(400, e)
+    }
+  }
 }
 
 export default new UserMiddleware()
