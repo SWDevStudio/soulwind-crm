@@ -137,4 +137,15 @@ UserController.patch(
   expressAsyncHandler(UserService.setRole),
   ErrorCatch
 )
+
+UserController.patch(
+  "/character",
+  [
+    check("id", "id is required field").notEmpty().isString(),
+    check("characterId", "characterId is required").notEmpty().isString(),
+  ],
+  ValidationFields,
+  expressAsyncHandler(UserService.setRole),
+  ErrorCatch
+)
 export default UserController

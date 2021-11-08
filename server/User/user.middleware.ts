@@ -77,6 +77,17 @@ class UserMiddleware {
       throw createError(400, e)
     }
   }
+
+  async setCharacter(req: Request, res: Response) {
+    try {
+      const { characterId, id } = req.body
+      await CharacterService.isTiedForUser(characterId)
+      await CharacterService.addUserId(characterId, id)
+      res.json(await UserModel.findOne({ _id: req.body.id }))
+    } catch (e) {
+      throw createError(400, e)
+    }
+  }
 }
 
 export default new UserMiddleware()
