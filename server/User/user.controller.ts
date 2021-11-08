@@ -131,7 +131,7 @@ UserController.patch(
   "/role",
   [
     check("id", "id is required field").notEmpty().isString(),
-    check("role", "value is required").notEmpty(),
+    check("role", "role is required").notEmpty().isString(),
   ],
   ValidationFields,
   expressAsyncHandler(UserService.setRole),
