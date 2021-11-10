@@ -26,6 +26,19 @@ class UserMiddleware {
     }
   }
 
+  async deleteUser(req: Request, res: Response) {
+    try {
+      const { _id } = req.body
+      const user: UserResponseDto = await UserService.load({ _id })
+      if (user.characterId) {
+        await CharacterService.removeUserId(user.characterId)
+      }
+      res.json(!!(await UserService.delete(_id)))
+    } catch (e) {
+      throw createError(400, e)
+    }
+  }
+
   async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body

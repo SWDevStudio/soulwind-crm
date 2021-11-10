@@ -44,7 +44,9 @@ class UserService {
     return UserModel.findOneAndUpdate({ _id: id }, body)
   }
 
-  static delete() {}
+  static delete(_id: string) {
+    return UserModel.findByIdAndRemove(_id)
+  }
 
   static validPassword(password: string, userPassword: string) {
     const validPassword = bcrypt.compareSync(password, userPassword)

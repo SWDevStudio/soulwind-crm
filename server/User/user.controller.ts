@@ -5,7 +5,7 @@ import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
 import ValidationFields from "../middleware/ValidationFields"
 import ErrorCatch from "../middleware/ErrorCatch"
-import UserService from "./user.middleware"
+import UserMiddleware from "./user.middleware"
 const UserController = Router()
 
 /**
@@ -27,7 +27,7 @@ const UserController = Router()
  *         $ref: "#/definitions/ErrorResponse"
  *
  */
-UserController.get("", AuthorizeMiddleware, UserService.getUsers)
+UserController.get("", AuthorizeMiddleware, UserMiddleware.getUsers)
 /**
  * @swagger
  * /user/{id}:
@@ -51,7 +51,7 @@ UserController.get("", AuthorizeMiddleware, UserService.getUsers)
 UserController.get(
   "/:id",
   AuthorizeMiddleware,
-  expressAsyncHandler(UserService.getUser),
+  expressAsyncHandler(UserMiddleware.getUser),
   ErrorCatch
 )
 /**
@@ -81,7 +81,7 @@ UserController.post(
     check("password", "password is required").notEmpty(),
   ],
   ValidationFields,
-  expressAsyncHandler(UserService.createUser),
+  expressAsyncHandler(UserMiddleware.createUser),
   ErrorCatch
 )
 /**
@@ -112,7 +112,7 @@ UserController.post(
     check("password", "password is required").notEmpty(),
   ],
   ValidationFields,
-  expressAsyncHandler(UserService.login),
+  expressAsyncHandler(UserMiddleware.login),
   ErrorCatch
 )
 
@@ -123,7 +123,7 @@ UserController.patch(
     check("value", "value is required").notEmpty().isBoolean(),
   ],
   ValidationFields,
-  expressAsyncHandler(UserService.toggleActiveUser),
+  expressAsyncHandler(UserMiddleware.toggleActiveUser),
   ErrorCatch
 )
 UserController.patch(
@@ -133,7 +133,7 @@ UserController.patch(
     check("role", "role is required").notEmpty().isString(),
   ],
   ValidationFields,
-  expressAsyncHandler(UserService.setRole),
+  expressAsyncHandler(UserMiddleware.setRole),
   ErrorCatch
 )
 
@@ -144,7 +144,16 @@ UserController.patch(
     check("characterId", "characterId is required").notEmpty().isString(),
   ],
   ValidationFields,
-  expressAsyncHandler(UserService.setCharacter),
+  expressAsyncHandler(UserMiddleware.setCharacter),
   ErrorCatch
 )
+
+UserController.delete(
+  "/delete",
+  [check("_id", "_id is required field").notEmpty().isString()],
+  ValidationFields,
+  expressAsyncHandler(UserMiddleware.deleteUser),
+  ErrorCatch
+)
+
 export default UserController
