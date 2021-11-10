@@ -9,14 +9,13 @@ import {
 // TODO 1 функция одно действие, логикой должен заниматься middleware
 // т.е если мне нужно сначала проверить существование, а потом создать если нет делаем это в middleware
 class UserService {
-  static async create({ email, password, characterId }: UserRegisterDto) {
-    const isUserCreated = await UserModel.findOne({ email })
+  static async create(body: UserRegisterDto) {
+    const isUserCreated = await UserModel.findOne({ email: body.email })
     if (isUserCreated)
       throw createError(400, "Пользователь с такой почтой уже существует")
     return UserModel.create({
-      email,
-      password: bcrypt.hashSync(password, 7),
-      characterId,
+      ...body,
+      password: bcrypt.hashSync(body.password, 7),
     })
   }
 
@@ -30,7 +29,7 @@ class UserService {
     return user
   }
 
-  static async loadAll(needPass: boolean = false) {
+  static async loadAll(needPass: boolean = false): Promise<UserResponseDto[]> {
     const user = needPass
       ? await UserModel.find()
       : await UserModel.find().select("-password")
@@ -54,6 +53,10 @@ class UserService {
       throw createError(400, "Пароль пользователя не совпадает")
     }
     return true
+  }
+
+  static get superUserName() {
+    return "SUPER_ADMIN"
   }
 }
 

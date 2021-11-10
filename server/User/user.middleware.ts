@@ -12,10 +12,16 @@ class UserMiddleware {
   async createUser(req: Request, res: Response) {
     try {
       const { characterId } = req.body
+
       if (characterId) {
         await CharacterService.isTiedForUser(characterId)
       }
-
+      // TODO думаю можно придумать более оптимальный способ проверки 1го аккаунта который будет с супер правами
+      const users = await UserService.loadAll()
+      if (!users.length) {
+        req.body.role = UserService.superUserName
+        req.body.activeUser = true
+      }
       const createdUser = await UserService.create(req.body)
       if (characterId) {
         await CharacterService.addUserId(characterId, createdUser._id)
@@ -30,6 +36,7 @@ class UserMiddleware {
     try {
       const { _id } = req.body
       const user: UserResponseDto = await UserService.load({ _id })
+
       if (user.characterId) {
         await CharacterService.removeUserId(user.characterId)
       }
