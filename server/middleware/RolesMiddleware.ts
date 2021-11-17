@@ -36,7 +36,12 @@ export default function RolesMiddleware(permissionPath: string): any {
         (i) => i.name === user.role
       )
       // TODO нужно сделать проверку прав и возможность управления правами
-      if (needPermissionGroup?.name) return next()
+      // if (needPermissionGroup?.name) return next()
+      if (!user.activeUser) {
+        return res.status(403).json({
+          message: "Ваш аккаунт еще не активирован, сообщите username",
+        })
+      }
       if (needPermissionGroup) {
         if (!needPermissionGroup.fields[perm[0]][perm[1]]) {
           return res.status(403).json({ message: "Недостаточно прав" })
