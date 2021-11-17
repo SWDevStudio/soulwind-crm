@@ -56,7 +56,6 @@
 import { PAGES } from "~/data/PAGES"
 import MixinToken from "~/mixins/MixinToken"
 import { UI } from "~/data/UI"
-import CharacterApi from "~/api/CharacterApi"
 
 export default {
   name: "SignIn",
@@ -83,7 +82,10 @@ export default {
   }),
 
   async created() {
-    this.characters = await CharacterApi.loadGeneralInfo(() => {})
+    this.characters = await this.$requestServer(
+      "/api/character/general",
+      {}
+    ).catch(() => [])
   },
   methods: {
     async comparePass() {

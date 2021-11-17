@@ -5,8 +5,10 @@ import {
   MutationAction,
   VuexModule,
 } from "vuex-module-decorators"
-import CharacterApi from "~/api/CharacterApi"
+import { CharacterApi } from "~/api/character.api"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
+import { $requestServer } from "~/server/utils/api"
+import { ErrorResponse } from "~/structs/ErrorResponse"
 
 @Module({
   name: "characters",
@@ -21,10 +23,11 @@ export default class Characters extends VuexModule {
     this.characters = val || []
   }
 
-  @Action({ rawError: true })
+  @Action({ rawError: true, commit: "setCharacter" })
   async updateCharacter() {
-    const res = await CharacterApi.loadCharacters(() => {})
-    if (res) this.setCharacter(res)
+    return await $requestServer<CharacterDTOResponse[]>(
+      CharacterApi.loadCharacters
+    ).catch(() => [])
   }
 
   get activeCharacters(): CharacterDTOResponse[] {

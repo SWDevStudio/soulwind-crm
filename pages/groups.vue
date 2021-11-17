@@ -74,7 +74,7 @@ import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import GlobalStoreMixin from "~/mixins/GlobalStoreMixin.vue"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import GroupApi from "~/api/GroupApi"
-import CharacterApi from "~/api/CharacterApi"
+import { CharacterApi } from "~/api/character.api"
 
 @Component({
   name: "Groups",
@@ -111,10 +111,11 @@ export default class Groups extends mixins<
   }
 
   async deleteCharacterInGroup(id: string) {
-    const res = await CharacterApi.patchCharacter(id, { partyId: "" }, () => {})
-    if (res) {
-      await this.storeUpdateCharacters()
-    }
+    const res = await this.$requestServer(CharacterApi.patch + id, {
+      method: "patch",
+      data: { partyId: "" },
+    }).catch(() => null)
+    if (res) await this.storeUpdateCharacters()
   }
 }
 </script>
