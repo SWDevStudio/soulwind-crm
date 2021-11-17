@@ -149,9 +149,10 @@ import {
   GuildEventDtoResponse,
   Participants,
 } from "~/server/GuildEvent/dto/guildEvent.dto"
-import GuildEventApi from "~/api/GuildEventApi"
 import { ErrorResponse } from "~/structs/ErrorResponse"
 import GlobalStoreMixin from "~/mixins/GlobalStoreMixin.vue"
+import { GuildEventApi } from "~/api/guildEvent.api"
+
 @Component({
   name: "FormGuildEvent",
 })
@@ -232,17 +233,34 @@ export default class FormGuildEvent extends mixins(
     )
   }
 
+  async updateEvent(): Promise<GuildEventDtoResponse | void> {
+    return await this.$requestServer<GuildEventDtoResponse>(
+      GuildEventApi.update + this.selectDateEdit,
+      {
+        method: "PATCH",
+        data: this.form,
+      }
+    ).catch(this.errorCallback)
+  }
+
+  async createEvent(): Promise<GuildEventDtoResponse | void> {
+    return await this.$requestServer<GuildEventDtoResponse>(
+      GuildEventApi.create,
+      {
+        method: "POST",
+        data: this.form,
+      }
+    ).catch(this.errorCallback)
+  }
+
+  errorCallback(response: ErrorResponse) {
+    this.serverErrorResponse = response.message
+  }
+
   async sendForm() {
-    const errorCallback = (response: AxiosResponse<ErrorResponse>) => {
-      this.serverErrorResponse = response.data.message
-    }
     const resp = this.editMode
-      ? await GuildEventApi.updateEvent(
-          this.selectDateEdit,
-          this.form,
-          errorCallback
-        )
-      : await GuildEventApi.createEvent(this.form, errorCallback)
+      ? await this.updateEvent()
+      : await this.createEvent()
     if (resp) {
       this.$emit("updateData", resp)
       this.closeModal()

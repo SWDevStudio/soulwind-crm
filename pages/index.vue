@@ -66,10 +66,10 @@ import {
 } from "chartist"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import { CHARACTER_CLASSES } from "~/data/CHARACTER_CLASSES"
-import GuildEventApi from "~/api/GuildEventApi"
 import { GuildEventDtoResponse } from "~/server/GuildEvent/dto/guildEvent.dto"
 import Chart from "~/components/Chart.vue"
 import { EventStatus } from "~/types/GuildEvents/EventStatus"
+import { GuildEventApi } from "~/api/guildEvent.api"
 
 @Component({
   name: "index",
@@ -251,13 +251,15 @@ export default class Index extends mixins(CharacterStoreMixin) {
   }
 
   async created() {
-    this.guildEvents = await GuildEventApi.loadEvents(
+    this.guildEvents = await this.$requestServer<GuildEventDtoResponse[]>(
+      GuildEventApi.loadEvent,
       {
-        from: moment().subtract("days", 13).format("YYYY-MM-DD"),
-        to: moment().format("YYYY-MM-DD"),
-      },
-      () => {}
-    )
+        params: {
+          from: moment().subtract("days", 13).format("YYYY-MM-DD"),
+          to: moment().format("YYYY-MM-DD"),
+        },
+      }
+    ).catch(() => [])
   }
 
   gearScore() {
