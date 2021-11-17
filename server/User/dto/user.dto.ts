@@ -14,6 +14,7 @@ export interface UserTokenInfo extends JwtPayload {
   id: string
   role: Roles
   characterId: string | null
+  activeUser: boolean
 }
 
 export interface UserRegisterDto {

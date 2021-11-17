@@ -52,7 +52,12 @@ class UserMiddleware {
       const user = await UserService.load({ email }, true)
       UserService.validPassword(password, user?.password)
       res.json({
-        token: GenerateToken(user._id, user.role, user?.characterId),
+        token: GenerateToken(
+          user._id,
+          user.role,
+          user?.characterId,
+          user.activeUser
+        ),
       })
     } catch (e) {
       throw createError(400, e)
