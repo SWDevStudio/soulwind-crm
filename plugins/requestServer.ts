@@ -32,8 +32,8 @@ declare module "vuex/types/index" {
 
 export default (ctx: Context, inject: Inject) => {
   ctx.$axios.setHeader("token", getToken())
-
   ctx.$axios.onError((error) => {
+    alert(error)
     const info = error.response as AxiosResponse
     if (info?.status === 403) {
       ctx.error({ statusCode: 403 })
