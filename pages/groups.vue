@@ -5,7 +5,7 @@
         <v-row class="justify-end">
           <v-col cols="auto">
             <v-dialog v-model="modalCreateGroup" max-width="600">
-              <template v-slot:activator="{ on, attrs }">
+              <template #activator="{ on, attrs }">
                 <v-btn
                   class="ml-auto col col-auto"
                   fab

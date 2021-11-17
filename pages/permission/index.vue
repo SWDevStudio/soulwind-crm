@@ -41,13 +41,13 @@
                     >удалить группу</v-btn
                   >
                   <v-btn
+                    class="ml-auto"
                     @click="
                       sendPermission(
                         permissionGroup.name,
                         permissionGroup.fields
                       )
                     "
-                    class="ml-auto"
                   >
                     Установить права
                   </v-btn>

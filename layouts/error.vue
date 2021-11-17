@@ -5,7 +5,7 @@
     <nuxt-link v-if="error.statusCode === 403" to="/authentication">
       страница авторизации
     </nuxt-link>
-    <NuxtLink to="/" v-else> Home page </NuxtLink>
+    <NuxtLink v-else to="/"> Home page </NuxtLink>
   </v-app>
 </template>
 
