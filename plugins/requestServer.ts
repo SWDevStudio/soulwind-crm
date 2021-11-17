@@ -5,7 +5,7 @@ import { ErrorResponse } from "~/structs/ErrorResponse"
 export type RequestServerFunc = <T = any>(
   url: string,
   options?: AxiosRequestConfig
-) => Promise<T | null>
+) => Promise<T>
 declare module "vue/types/vue" {
   interface Vue {
     $requestServer: RequestServerFunc
