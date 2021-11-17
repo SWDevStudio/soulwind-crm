@@ -1,12 +1,11 @@
 <template>
   <v-app dark>
-    <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <NuxtLink to="/"> Home page </NuxtLink>
+    <h1>{{ error.message || "Что то пошло не так" }}</h1>
+
+    <nuxt-link v-if="error.statusCode === 403" to="/authentication">
+      страница авторизации
+    </nuxt-link>
+    <NuxtLink to="/" v-else> Home page </NuxtLink>
   </v-app>
 </template>
 
@@ -24,7 +23,7 @@ export default {
   data() {
     return {
       pageNotFound: "404 Not Found",
-      otherError: "An error occurred",
+      otherError: "An error occurreds",
     }
   },
   head() {
@@ -34,11 +33,7 @@ export default {
       title,
     }
   },
-  created() {
-    if (this.error.statusCode === 403) {
-      this.$router.push(PAGES.authentication)
-    }
-  },
+  created() {},
 }
 </script>
 
