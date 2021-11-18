@@ -45,9 +45,9 @@
 <script lang="ts">
 import Component, { mixins } from "nuxt-class-component"
 import { GroupDto } from "~/server/Group/dto/group.dto"
-import GroupApi from "~/api/GroupApi"
 import MixinModal from "~/mixins/MixinModal.vue"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
+import { GroupApi } from "~/api/group.api"
 
 @Component({
   name: "FormGroup",
@@ -60,8 +60,10 @@ export default class FormGroup extends mixins(MixinModal, CharacterStoreMixin) {
   async createGroup(event: Event): Promise<void> {
     event.preventDefault()
     if (this.VForm.validate()) {
-      const res = await GroupApi.create(this.form, this.showError)
-      console.log(res)
+      const res = await this.$requestServer(GroupApi.create, {
+        method: "post",
+        data: this.form,
+      }).catch(this.showError)
       if (res) {
         this.VForm.reset()
         this.closeModal()

@@ -73,8 +73,9 @@ import FormGroup from "~/components/forms/FormGroup.vue"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import GlobalStoreMixin from "~/mixins/GlobalStoreMixin.vue"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
-import GroupApi from "~/api/GroupApi"
 import { CharacterApi } from "~/api/character.api"
+import { GroupApi } from "~/api/group.api"
+import { GroupDtoModel } from "~/server/Group/dto/group.dto"
 
 @Component({
   name: "Groups",
@@ -104,7 +105,12 @@ export default class Groups extends mixins<
   }
 
   async deleteGroup(groupId: string) {
-    const res = await GroupApi.deleteGroup(groupId, () => {})
+    const res = await this.$requestServer<GroupDtoModel | null>(
+      GroupApi.delete + groupId,
+      {
+        method: "delete",
+      }
+    ).catch(() => null)
     if (res) {
       await this.actionUpdateGroup()
     }
