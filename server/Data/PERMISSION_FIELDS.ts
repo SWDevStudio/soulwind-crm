@@ -1,4 +1,9 @@
-export const PERMISSION_FIELDS = {
+import {
+  PermissionDto,
+  PermissionResponse,
+} from "~/server/Permission/dto/permission.dto"
+
+export const PERMISSION_FIELDS: PermissionDto["fields"] = {
   character: {
     create: false,
     update: false,

@@ -11,24 +11,10 @@ export interface PermissionDto {
   // Прописать список прав, которые нам нужны
   fields: {
     [key: string]: PermissionBase
-    character: {
-      create: boolean
-      update: boolean
-      delete: boolean
-      view: boolean
-    }
-    group: {
-      create: boolean
-      update: boolean
-      delete: boolean
-      view: boolean
-    }
-    guildEvent: {
-      create: boolean
-      update: boolean
-      delete: boolean
-      view: boolean
-    }
+    character: PermissionBase
+    group: PermissionBase
+    guildEvent: PermissionBase
+    permission: PermissionBase
   }
 }
 
