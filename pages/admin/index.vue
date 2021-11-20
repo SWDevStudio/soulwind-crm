@@ -85,12 +85,12 @@ export default class Index extends CharacterStoreMixin {
 
   async loadUsers() {
     const res: any = await this.$requestServer(UserApi.get)
-    this.users = res.data
+    this.users = res
   }
 
   async loadGroups() {
     const res: any = await this.$requestServer(PermissionApi.get)
-    this.permissionList = [...res.data.map((i: any) => i.name), "SUPER_ADMIN"]
+    this.permissionList = [...res.map((i: any) => i.name), "SUPER_ADMIN"]
   }
 
   async setActive(value: boolean, id: string) {
