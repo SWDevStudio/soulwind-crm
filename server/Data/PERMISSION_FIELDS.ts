@@ -17,4 +17,10 @@ export const PERMISSION_FIELDS = {
     delete: false,
     view: false,
   },
+  permission: {
+    create: false,
+    update: false,
+    delete: false,
+    view: false,
+  },
 }

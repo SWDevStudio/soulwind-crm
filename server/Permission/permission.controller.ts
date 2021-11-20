@@ -2,6 +2,7 @@ import { Router } from "express"
 import expressAsyncHandler from "express-async-handler"
 import ErrorCatch from "../middleware/ErrorCatch"
 import { HasValidPermissionFields } from "../middleware/HasValidPermissionFields"
+import RolesMiddleware from "../middleware/RolesMiddleware"
 import PermissionMiddleware from "./permission.middleware"
 const permissionController = Router()
 
@@ -9,11 +10,13 @@ const permissionController = Router()
 // получить группу прав
 permissionController.post(
   "",
+  RolesMiddleware("permission.create"),
   expressAsyncHandler(PermissionMiddleware.create),
   ErrorCatch
 )
 permissionController.get(
   "",
+  RolesMiddleware("permission.view"),
   expressAsyncHandler(PermissionMiddleware.findAll),
   ErrorCatch
 )
@@ -23,11 +26,13 @@ permissionController.get(
 // })
 permissionController.get(
   "/:name",
+  RolesMiddleware("permission.view"),
   expressAsyncHandler(PermissionMiddleware.find),
   ErrorCatch
 )
 permissionController.patch(
   "/:name",
+  RolesMiddleware("permission.update"),
   expressAsyncHandler(HasValidPermissionFields),
   expressAsyncHandler(PermissionMiddleware.update),
   ErrorCatch
@@ -35,6 +40,7 @@ permissionController.patch(
 
 permissionController.delete(
   "/:name",
+  RolesMiddleware("permission.delete"),
   expressAsyncHandler(PermissionMiddleware.delete),
   ErrorCatch
 )

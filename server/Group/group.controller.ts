@@ -3,9 +3,15 @@ import RolesMiddleware from "../middleware/RolesMiddleware"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import CharacterService from "../Character/character.middleware"
 import GroupService from "./group.service"
+
 const GroupController = Router()
 
-GroupController.get("", AuthorizeMiddleware, GroupService.get)
+GroupController.get(
+  "",
+  AuthorizeMiddleware,
+  RolesMiddleware("group.view"),
+  GroupService.get
+)
 GroupController.post(
   "/create",
   AuthorizeMiddleware,
