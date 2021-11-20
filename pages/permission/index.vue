@@ -92,7 +92,7 @@ export default class Index extends Vue {
   @Watch("createGroup")
   async loadGroups() {
     const res = await this.$requestServer(PermissionApi.get)
-    this.permissionList = res.data
+    this.permissionList = res
   }
 
   @Ref("dialog") Dialog!: DialogConfirm
