@@ -2,15 +2,17 @@
   <v-dialog v-model="isOpen" width="400px">
     <v-card>
       <v-card-title>
+        <div class="d-flex" style="width: 100%">
+          <v-icon
+            :color="UI.actionColor.color"
+            class="ml-auto"
+            style="cursor: pointer"
+            @click="closeModal"
+          >
+            mdi-close
+          </v-icon>
+        </div>
         {{ text || "Подтвердите действие" }}
-        <v-icon
-          :color="UI.actionColor.color"
-          class="ml-auto"
-          style="cursor: pointer"
-          @click="closeModal"
-        >
-          mdi-close
-        </v-icon>
       </v-card-title>
       <v-card-text>
         <v-form>
@@ -23,6 +25,7 @@
             >подтвердить</v-btn
           >
         </v-form>
+        <p v-if="errorText" class="error--text">{{ errorText }}</p>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -37,16 +40,18 @@ import { UI } from "~/data/UI"
   name: "DialogConfirm",
 })
 export default class DialogConfirm extends Vue {
-  UI = UI
-  isOpen: boolean = false
-  popupController: any = { resolve: null, reject: null }
-  text: string = ""
-  closeModal() {
+  private readonly UI = UI
+  private isOpen: boolean = false
+  private popupController: any = { resolve: null, reject: null }
+  private text: string = ""
+  private errorText: string = ""
+  private closeModal() {
     this.isOpen = false
+    this.errorText = ""
     this.popupController?.resolve(false)
   }
 
-  confirm(e: Event) {
+  private confirm(e: Event) {
     e.preventDefault()
     this.isOpen = false
     this.popupController?.resolve(true)
@@ -63,6 +68,11 @@ export default class DialogConfirm extends Vue {
     this.popupController = { resolve, reject }
     this.isOpen = true
     return popupPromise
+  }
+
+  async setError(message: string) {
+    this.errorText = message || ""
+    return await this.open(this.text)
   }
 }
 </script>
