@@ -1,6 +1,8 @@
 import { Router } from "express"
+import expressAsyncHandler from "express-async-handler"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
+import ErrorCatch from "../middleware/ErrorCatch"
 import CharacterMiddleware from "./character.middleware"
 const CharacterController = Router()
 
@@ -27,6 +29,13 @@ CharacterController.get(
   AuthorizeMiddleware,
   RolesMiddleware("character.view"),
   CharacterMiddleware.getCharacters
+)
+
+CharacterController.get(
+  "/my-info",
+  AuthorizeMiddleware,
+  expressAsyncHandler(CharacterMiddleware.getMyCharacterInfo),
+  ErrorCatch
 )
 
 CharacterController.get("/general", CharacterMiddleware.getCharactersGenerals)

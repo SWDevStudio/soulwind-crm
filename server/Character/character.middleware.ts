@@ -1,5 +1,6 @@
 import { Request, Response } from "express"
 import CharacterModel from "./dto/character.model"
+import CharacterService from "./character.service"
 import {
   CharacterDto,
   CharacterDTOResponse,
@@ -20,6 +21,15 @@ class CharacterMiddleware {
     } catch (e) {
       res.status(400).json({ message: e })
     }
+  }
+
+  async getMyCharacterInfo(req: Request, res: Response) {
+    const characterId = res.locals._user.characterId
+    if (characterId) {
+      res.json(await CharacterService.load({ _id: characterId }))
+      return
+    }
+    res.json(null)
   }
 
   async createCharacter(req: Request, res: Response) {
