@@ -1,4 +1,4 @@
-import { Response, Request, Router } from "express"
+import { Router } from "express"
 import { check } from "express-validator"
 import expressAsyncHandler from "express-async-handler"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
@@ -51,6 +51,7 @@ UserController.get("", AuthorizeMiddleware, UserMiddleware.getUsers)
 UserController.get(
   "/:id",
   AuthorizeMiddleware,
+  RolesMiddleware("user.view"),
   expressAsyncHandler(UserMiddleware.getUser),
   ErrorCatch
 )
@@ -123,6 +124,7 @@ UserController.patch(
     check("value", "value is required").notEmpty().isBoolean(),
   ],
   ValidationFields,
+  RolesMiddleware("user.update"),
   expressAsyncHandler(UserMiddleware.toggleActiveUser),
   ErrorCatch
 )
@@ -133,6 +135,7 @@ UserController.patch(
     check("role", "role is required").notEmpty().isString(),
   ],
   ValidationFields,
+  RolesMiddleware("user.update"),
   expressAsyncHandler(UserMiddleware.setRole),
   ErrorCatch
 )
@@ -144,6 +147,7 @@ UserController.patch(
     check("characterId", "characterId is required").notEmpty().isString(),
   ],
   ValidationFields,
+  RolesMiddleware("user.update"),
   expressAsyncHandler(UserMiddleware.setCharacter),
   ErrorCatch
 )
@@ -152,6 +156,7 @@ UserController.delete(
   "/delete",
   [check("_id", "_id is required field").notEmpty().isString()],
   ValidationFields,
+  RolesMiddleware("user.delete"),
   expressAsyncHandler(UserMiddleware.deleteUser),
   ErrorCatch
 )

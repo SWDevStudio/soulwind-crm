@@ -15,6 +15,7 @@ export interface PermissionDto {
     group: PermissionBase
     guildEvent: PermissionBase
     permission: PermissionBase
+    user: PermissionBase
   }
 }
 

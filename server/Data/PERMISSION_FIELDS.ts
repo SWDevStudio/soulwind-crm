@@ -28,4 +28,10 @@ export const PERMISSION_FIELDS: PermissionDto["fields"] = {
     delete: false,
     view: false,
   },
+  user: {
+    create: false,
+    update: false,
+    delete: false,
+    view: false,
+  },
 }
