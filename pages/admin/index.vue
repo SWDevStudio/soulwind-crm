@@ -42,6 +42,9 @@
                           @change="setActive(!item.activeUser, item._id)"
                         />
                       </td>
+                      <td>
+                        <v-btn @click="deleteUser(item)">Удалить</v-btn>
+                      </td>
                     </tr>
                   </tbody>
                 </template>
@@ -51,19 +54,24 @@
         </v-tab-item>
       </v-tabs>
     </v-card>
+    <dialog-confirm ref="dialog"></dialog-confirm>
   </v-row>
 </template>
 
 <script lang="ts">
 import Component from "nuxt-class-component"
+import { Ref } from "nuxt-property-decorator"
 import { UI } from "~/data/UI"
 import { UserApi } from "~/api/user.api"
 import { PermissionResponse } from "~/server/Permission/dto/permission.dto"
 import { PermissionApi } from "~/api/permission.api"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
+import DialogConfirm from "~/components/dialog/dialog-confirm.vue"
+import { UserResponseDto } from "~/server/User/dto/user.dto"
 
 @Component({
   name: "Index",
+  components: { DialogConfirm },
 })
 export default class Index extends CharacterStoreMixin {
   // TODO при рендере таблицы с таким подходом страдает адаптивность таблицы! Найти решение
@@ -74,6 +82,7 @@ export default class Index extends CharacterStoreMixin {
     { text: "Привязанный персонаж", value: "characterId" },
     { text: "Роль", value: "role" },
     { text: "Активация", value: "activeUser" },
+    { text: "" },
   ]
 
   permissionList: PermissionResponse[] = []
@@ -83,9 +92,10 @@ export default class Index extends CharacterStoreMixin {
     this.loadGroups()
   }
 
+  @Ref("dialog") dialog!: DialogConfirm
+
   async loadUsers() {
-    const res: any = await this.$requestServer(UserApi.get)
-    this.users = res
+    this.users = await this.$requestServer(UserApi.get).catch(() => [])
   }
 
   async loadGroups() {
@@ -111,7 +121,6 @@ export default class Index extends CharacterStoreMixin {
   }
 
   async setCharacter(characterId: string, id: string) {
-    // console.log(characterId, id)
     const res = await this.$requestServer(UserApi.updateCharacter, {
       method: "patch",
       data: {
@@ -119,6 +128,22 @@ export default class Index extends CharacterStoreMixin {
         id,
       },
     })
+  }
+
+  async deleteUser(user: UserResponseDto) {
+    const res = await this.dialog.open(`Удалить пользователя ${user.email}`)
+    if (res) {
+      await this.$requestServer(UserApi.delete, {
+        method: "DELETE",
+        data: {
+          _id: user._id,
+        },
+      }).catch((e) => {
+        this.dialog.setError(e.data.message)
+        this.deleteUser(user)
+      })
+      await this.loadUsers()
+    }
   }
 }
 </script>

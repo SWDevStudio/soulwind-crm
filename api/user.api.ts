@@ -3,4 +3,5 @@ export enum UserApi {
   setRole = "/api/user/role",
   active = "/api/user/active",
   updateCharacter = "/api/user/character",
+  delete = "api/user/delete",
 }
