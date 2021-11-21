@@ -1,9 +1,11 @@
 import { Router } from "express"
 import { check } from "express-validator"
+import expressAsyncHandler from "express-async-handler"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
-import UserService from "./user.service"
-
+import ValidationFields from "../middleware/ValidationFields"
+import ErrorCatch from "../middleware/ErrorCatch"
+import UserMiddleware from "./user.middleware"
 const UserController = Router()
 
 /**
@@ -25,7 +27,7 @@ const UserController = Router()
  *         $ref: "#/definitions/ErrorResponse"
  *
  */
-UserController.get("" , AuthorizeMiddleware, UserService.getUsers)
+UserController.get("", AuthorizeMiddleware, UserMiddleware.getUsers)
 /**
  * @swagger
  * /user/{id}:
@@ -46,7 +48,13 @@ UserController.get("" , AuthorizeMiddleware, UserService.getUsers)
  *         $ref: "#/definitions/ErrorResponse"
  *
  */
-UserController.get("/:id", AuthorizeMiddleware, UserService.getUser)
+UserController.get(
+  "/:id",
+  AuthorizeMiddleware,
+  RolesMiddleware("user.view"),
+  expressAsyncHandler(UserMiddleware.getUser),
+  ErrorCatch
+)
 /**
  * @swagger
  *  /user/register:
@@ -67,7 +75,16 @@ UserController.get("/:id", AuthorizeMiddleware, UserService.getUser)
  *         $ref: "#/definitions/ErrorResponse"
  *
  */
-UserController.post("/register", UserService.createUser)
+UserController.post(
+  "/register",
+  [
+    check("email", "email is required field").notEmpty(),
+    check("password", "password is required").notEmpty(),
+  ],
+  ValidationFields,
+  expressAsyncHandler(UserMiddleware.createUser),
+  ErrorCatch
+)
 /**
  * @swagger
  *  /user/login:
@@ -91,8 +108,57 @@ UserController.post("/register", UserService.createUser)
  */
 UserController.post(
   "/login",
-  [check("email", "email is required field").notEmpty()],
-  UserService.login
+  [
+    check("email", "email is required field").notEmpty(),
+    check("password", "password is required").notEmpty(),
+  ],
+  ValidationFields,
+  expressAsyncHandler(UserMiddleware.login),
+  ErrorCatch
+)
+
+UserController.patch(
+  "/active",
+  [
+    check("id", "id is required field").notEmpty().isString(),
+    check("value", "value is required").notEmpty().isBoolean(),
+  ],
+  ValidationFields,
+  RolesMiddleware("user.update"),
+  expressAsyncHandler(UserMiddleware.toggleActiveUser),
+  ErrorCatch
+)
+UserController.patch(
+  "/role",
+  [
+    check("id", "id is required field").notEmpty().isString(),
+    check("role", "role is required").notEmpty().isString(),
+  ],
+  ValidationFields,
+  RolesMiddleware("user.update"),
+  expressAsyncHandler(UserMiddleware.setRole),
+  ErrorCatch
+)
+
+UserController.patch(
+  "/character",
+  [
+    check("id", "id is required field").notEmpty().isString(),
+    check("characterId", "characterId is required").notEmpty().isString(),
+  ],
+  ValidationFields,
+  RolesMiddleware("user.update"),
+  expressAsyncHandler(UserMiddleware.setCharacter),
+  ErrorCatch
+)
+
+UserController.delete(
+  "/delete",
+  [check("_id", "_id is required field").notEmpty().isString()],
+  ValidationFields,
+  RolesMiddleware("user.delete"),
+  expressAsyncHandler(UserMiddleware.deleteUser),
+  ErrorCatch
 )
 
 export default UserController

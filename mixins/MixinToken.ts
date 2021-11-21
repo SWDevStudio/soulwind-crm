@@ -1,6 +1,5 @@
 import Vue from "vue"
 import Component from "nuxt-class-component"
-import Cookies from "js-cookie"
 import { PAGES } from "~/data/PAGES"
 import { getToken } from "~/utils/Token"
 @Component({

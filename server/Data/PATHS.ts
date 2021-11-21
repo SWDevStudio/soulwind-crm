@@ -4,5 +4,6 @@ export namespace ServerData {
     CHARACTER: "/character",
     GROUP: "/group",
     GUILD_EVENT: "/guild-event",
+    PERMISSION: "/permission",
   }
 }

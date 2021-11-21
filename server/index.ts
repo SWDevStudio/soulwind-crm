@@ -11,10 +11,9 @@ import { ServerData } from "./Data/PATHS"
 import CharacterController from "./Character/character.controller"
 import { swaggerOptions } from "./documentation/config/swaggerOption"
 import isDev from "./utils/IsDev"
-
+import PermissionController from "./Permission/permission.controller"
 const start = () => {
   // Подключаемся к бд
-  // ConnectDataBase()
   ConnectDataBase()
   // Создаем express
   const app: core.Express = express()
@@ -30,6 +29,7 @@ const start = () => {
   app.use(ServerData.PATHS.USER, UserController)
   app.use(ServerData.PATHS.CHARACTER, CharacterController)
   app.use(ServerData.PATHS.GUILD_EVENT, GuildEventController)
+  app.use(ServerData.PATHS.PERMISSION, PermissionController)
   return app
 }
 

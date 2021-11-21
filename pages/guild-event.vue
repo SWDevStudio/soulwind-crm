@@ -109,10 +109,10 @@ import {
   GuildEventDtoResponse,
   Participants,
 } from "~/server/GuildEvent/dto/guildEvent.dto"
-import GuildEventApi from "~/api/GuildEventApi"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import FormGuildEvent from "~/components/forms/FormGuildEvent.vue"
-
+import { GuildEventApi } from "~/api/guildEvent.api"
+// TODO на беке посмотреть при обновлении ивентов не приходит ответ который я хочу, падает filter в template
 @Component({
   name: "GuildEvent",
   components: { FormGuildEvent },
@@ -160,8 +160,7 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
         }
       })
     })
-
-    return charactersId.map((charactersId) => {
+    const allCharacter = charactersId.map((charactersId) => {
       const characterEventInfo: any = {
         lastName: charactersId,
       }
@@ -176,10 +175,13 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
 
       return characterEventInfo
     })
+    this.getActiveCharacters.forEach((el) => {
+      if (!allCharacter.find((i) => i.lastName === el._id)) {
+        allCharacter.push({ lastName: el._id })
+      }
+    })
+    return allCharacter
   }
-
-  // computed
-  // get fullName(): string {}
 
   get dateRangeText(): string {
     return this.dates.join("  ~  ")
@@ -206,11 +208,12 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
   events: GuildEventDtoResponse[] = []
 
   async loadEvents() {
-    this.events = await GuildEventApi.loadEvents(
-      { from: this.dates[0], to: this.dates[1] },
-      () => {}
-    )
-
+    this.events = await this.$requestServer<GuildEventDtoResponse[]>(
+      GuildEventApi.loadEvent,
+      {
+        params: { from: this.dates[0], to: this.dates[1] },
+      }
+    ).catch(() => [])
   }
 
   created(): void {

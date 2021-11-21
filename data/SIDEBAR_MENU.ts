@@ -2,28 +2,43 @@ import { PAGES } from "~/data/PAGES"
 
 export const SIDEBAR_MENU = [
   {
-    icon: "mdi-account",
+    icon: "ph-user",
+    title: "Профиль",
+    to: PAGES.profile,
+  },
+  {
+    icon: "ph-user-list",
     title: "Состав",
     to: PAGES.membership,
   },
   {
-    icon: "mdi-close",
-    title: "Черный список",
-    to: PAGES.blackList,
-  },
-  {
-    icon: "mdi-close",
-    title: "Исключенные",
-    to: PAGES.dropout,
-  },
-  {
-    icon: "mdi-account-multiple",
+    icon: "ph-users",
     title: "Группы",
     to: PAGES.groups,
   },
   {
-    icon: "mdi-account",
+    icon: "ph-cookie",
     title: "Ивенты",
     to: PAGES.guildEvent,
+  },
+  {
+    icon: "ph-smiley-x-eyes",
+    title: "Исключенные",
+    to: PAGES.dropout,
+  },
+  {
+    icon: "ph-prohibit",
+    title: "Черный список",
+    to: PAGES.blackList,
+  },
+  {
+    icon: "ph-prohibit",
+    title: "Права",
+    to: PAGES.permission,
+  },
+  {
+    icon: "ph-prohibit",
+    title: "Админ. панель",
+    to: PAGES.admin,
   },
 ]

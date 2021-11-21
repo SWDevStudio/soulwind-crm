@@ -28,6 +28,13 @@
       :type="show2 ? 'text' : 'password'"
       @click:append="show2 = !show2"
     />
+    <v-select
+      v-model="form.characterId"
+      :items="characters"
+      label="select your character"
+      item-text="lastName"
+      item-value="_id"
+    />
     <p v-if="notCorrectPass" class="error--text text-sm-caption">
       {{ notCorrectPass }}
     </p>
@@ -69,8 +76,17 @@ export default {
       email: "",
       password: "",
       repeatPass: "",
+      characterId: "",
     },
+    characters: [],
   }),
+
+  async created() {
+    this.characters = await this.$requestServer(
+      "/api/character/general",
+      {}
+    ).catch(() => [])
+  },
   methods: {
     async comparePass() {
       if (this.form.password === this.form.repeatPass) {
@@ -79,6 +95,7 @@ export default {
           .post("/api/user/register", {
             email: this.form.email,
             password: this.form.password,
+            characterId: this.form.characterId,
           })
           .catch((e) => e.response)
         if (registerResponse.status === 200) {

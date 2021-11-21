@@ -1,152 +1,172 @@
 <template>
-  <v-dialog
-    :value="value"
-    max-width="1200"
-    overlay-color="teal accent-4"
-    overlay-opacity="0.1"
-    persistent
-    @keydown.esc="closeModal"
-  >
-    <v-card @keydown.enter="sendForm">
-      <v-card-title
-        class="font-weight-regular d-flex justify-space-between"
-        :class="UI.actionColor.textClass"
-      >
-        {{ editMode ? "Редактирование" : "Создание" }} персонажа
-        <v-icon :color="UI.actionColor.color" @click="closeModal"
-          >mdi-close
-        </v-icon>
-      </v-card-title>
-      <v-card-text>
-        <v-form ref="form" v-model="valid" lazy-validation @submit="sendForm">
-          <v-row>
-            <v-col cols="6">
-              <v-text-field
-                v-model="form.lastName"
-                label="Фамилия персонажа"
-                :rules="rules"
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-                required
-              />
-            </v-col>
-            <v-col cols="6">
-              <v-text-field
-                v-model="form.firstName"
-                label="Имя персонажа"
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="3">
-              <v-text-field
-                v-model.number="form.level"
-                label="Уровень"
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-              />
-            </v-col>
-            <v-col cols="3">
-              <v-text-field
-                v-model.number="form.ap"
-                label="Атака"
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-              />
-            </v-col>
-            <v-col cols="3">
-              <v-text-field
-                v-model.number="form.awakeningAp"
-                label="Атака проб. оружием"
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-              />
-            </v-col>
-            <v-col cols="3">
-              <v-text-field
-                v-model.number="form.dp"
-                label="Защита"
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="6">
-              <v-autocomplete
-                v-model="form.class"
-                label="Класс"
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-                :items="CHARACTER_CLASS"
-              />
-            </v-col>
-            <v-col cols="6">
-              <v-autocomplete
-                v-model="form.partyId"
-                label="Группа"
-                clearable
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-                :items="groups"
-                item-text="name"
-                item-value="_id"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="6">
-              <v-autocomplete
-                v-model="form.rankParty"
-                label="Ранг в пати"
-                clearable
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-                :items="RANK_PARTY"
-              />
-            </v-col>
-            <v-col cols="6">
-              <v-autocomplete
-                v-model="form.pvpRank"
-                label="PVP ранг"
-                :color="UI.actionColor.color"
-                :item-color="UI.actionColor.color"
-                :items="PVP_RANK"
-                item-text="name"
-                item-value="_id"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-              <v-textarea
-                v-model="form.note"
-                label="Заметка"
-                :color="UI.actionColor.color"
-                rows="1"
-              />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-btn
-                :color="UI.actionColor.color"
-                block
-                outlined
-                large
-                class="mt-3 mb-4"
-                :disabled="!valid"
-                @click="sendForm"
-                >{{ editMode ? "Редактировать" : "Добавить персонажа" }}
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+  <v-card @keydown.enter="sendForm" @keydown.esc="closeModal">
+    <v-card-title
+      v-if="!staticMode"
+      class="font-weight-regular d-flex justify-space-between"
+      :class="UI.actionColor.textClass"
+    >
+      {{ editMode ? "Редактирование" : "Создание" }} персонажа
+      <v-icon :color="UI.actionColor.color" @click="closeModal"
+        >mdi-close
+      </v-icon>
+    </v-card-title>
+    <v-card-text>
+      <v-form ref="form" v-model="valid" lazy-validation @submit="sendForm">
+        <v-row>
+          <v-col cols="6">
+            <v-text-field
+              v-model="form.lastName"
+              label="Фамилия персонажа"
+              :rules="rules"
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
+              required
+            />
+          </v-col>
+          <v-col cols="6">
+            <v-text-field
+              v-model="form.firstName"
+              label="Имя персонажа"
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="3">
+            <v-text-field
+              v-model.number="form.level"
+              label="Уровень"
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
+            />
+          </v-col>
+          <v-col cols="3">
+            <v-text-field
+              v-model.number="form.ap"
+              label="Атака"
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
+            />
+          </v-col>
+          <v-col cols="3">
+            <v-text-field
+              v-model.number="form.awakeningAp"
+              label="Атака проб. оружием"
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
+            />
+          </v-col>
+          <v-col cols="3">
+            <v-text-field
+              v-model.number="form.dp"
+              label="Защита"
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :disabled="!itEdit"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="6">
+            <v-autocomplete
+              v-model="form.class"
+              label="Класс"
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :items="CHARACTER_CLASS"
+              :disabled="!itEdit"
+            />
+          </v-col>
+          <v-col cols="6">
+            <v-autocomplete
+              v-model="form.partyId"
+              label="Группа"
+              clearable
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :items="groups"
+              item-text="name"
+              item-value="_id"
+              :disabled="staticMode"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="6">
+            <v-autocomplete
+              v-model="form.rankParty"
+              label="Ранг в пати"
+              clearable
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :items="RANK_PARTY"
+              :disabled="staticMode"
+            />
+          </v-col>
+          <v-col cols="6">
+            <v-autocomplete
+              v-model="form.pvpRank"
+              label="PVP ранг"
+              :color="UI.actionColor.color"
+              :item-color="UI.actionColor.color"
+              :items="PVP_RANK"
+              item-text="name"
+              item-value="_id"
+              :disabled="staticMode"
+            />
+          </v-col>
+        </v-row>
+        <v-row v-if="!staticMode">
+          <v-col>
+            <v-textarea
+              v-model="form.note"
+              label="Заметка"
+              :color="UI.actionColor.color"
+              rows="1"
+            />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-btn
+              v-if="!itEdit"
+              :color="UI.actionColor.color"
+              block
+              outlined
+              large
+              class="mt-3 mb-4"
+              :disabled="!valid"
+              @click="itEdit = true"
+              >Редактировать
+            </v-btn>
+            <v-btn
+              v-else
+              :color="UI.actionColor.color"
+              block
+              outlined
+              large
+              class="mt-3 mb-4"
+              :disabled="!valid"
+              @click="sendForm"
+              >{{
+                staticMode
+                  ? "Сохранить изменения"
+                  : editMode
+                  ? "Редактировать"
+                  : "Добавить персонажа"
+              }}
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -170,13 +190,13 @@ import { PVP_RANK } from "~/data/PVP_RANK"
 export default class CharacterCreationForm extends Vue {
   @Ref("form") VForm!: any
 
-  @Prop() value!: boolean
-
   @State((state) => state.global.groups) groups!: GroupDtoModel[]
 
   UI = UI
   valid: boolean = true
   editMode: boolean = false
+  itEdit: boolean = false
+  @Prop({ default: false }) staticMode!: boolean
   CHARACTER_CLASS = CHARACTER_CLASS
   RANK_PARTY = RANK_PARTY
   PVP_RANK = PVP_RANK
@@ -196,11 +216,24 @@ export default class CharacterCreationForm extends Vue {
     level: undefined,
     status: "ACTIVE",
     rankParty: undefined,
+    userId: null,
+  }
+
+  created() {
+    if (this.staticMode) {
+      this.editMode = true
+    } else {
+      this.itEdit = true
+    }
   }
 
   closeModal(): void {
-    this.clearForm()
-    this.editMode = false
+    if (!this.staticMode) {
+      this.clearForm()
+      this.editMode = false
+    } else {
+      this.itEdit = false
+    }
     this.$emit("input", false)
   }
 

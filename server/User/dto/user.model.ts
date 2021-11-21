@@ -1,13 +1,18 @@
 import { Schema, model } from "mongoose"
 import * as mongoose from "mongoose"
-import { UserRegisterDto } from "~/server/User/dto/user.dto"
-
-const schema = new Schema<UserRegisterDto>({
+import {
+  UserDto,
+  UserRegisterDto,
+  UserResponseDto,
+} from "~/server/User/dto/user.dto"
+// TODO проверить типизацию
+const schema = new Schema<UserDto>({
   email: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, default: "USER" },
-  characterId: { type: String, required: true, default: null },
-  activeUser: { type: Boolean, default: false }
+  characterId: { type: String, default: null },
+  activeUser: { type: Boolean, default: false },
 })
-
-export default mongoose.models.User || model<UserRegisterDto>("User", schema)
+const UserModel: mongoose.Model<UserResponseDto> =
+  mongoose.models.User || model<UserResponseDto>("User", schema)
+export default UserModel

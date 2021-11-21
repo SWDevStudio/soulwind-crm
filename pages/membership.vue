@@ -1,12 +1,9 @@
 <script lang="ts">
 import Component from "nuxt-class-component"
-import CharacterCreationForm from "~/components/forms/FormCreationCharacter.vue"
-import FormDismissCharacter from "~/components/forms/FormDismissCharacter.vue"
 import MixinMembership from "~/mixins/MixinMembership.vue"
 
 @Component({
   name: "membership",
-  components: { FormDismissCharacter, CharacterCreationForm },
 })
 export default class Membership extends MixinMembership {
   constructor() {

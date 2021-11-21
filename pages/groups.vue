@@ -5,7 +5,7 @@
         <v-row class="justify-end">
           <v-col cols="auto">
             <v-dialog v-model="modalCreateGroup" max-width="600">
-              <template v-slot:activator="{ on, attrs }">
+              <template #activator="{ on, attrs }">
                 <v-btn
                   class="ml-auto col col-auto"
                   fab
@@ -73,8 +73,9 @@ import FormGroup from "~/components/forms/FormGroup.vue"
 import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import GlobalStoreMixin from "~/mixins/GlobalStoreMixin.vue"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
-import GroupApi from "~/api/GroupApi"
-import CharacterApi from "~/api/CharacterApi"
+import { CharacterApi } from "~/api/character.api"
+import { GroupApi } from "~/api/group.api"
+import { GroupDtoModel } from "~/server/Group/dto/group.dto"
 
 @Component({
   name: "Groups",
@@ -104,17 +105,23 @@ export default class Groups extends mixins<
   }
 
   async deleteGroup(groupId: string) {
-    const res = await GroupApi.deleteGroup(groupId, () => {})
+    const res = await this.$requestServer<GroupDtoModel | null>(
+      GroupApi.delete + groupId,
+      {
+        method: "delete",
+      }
+    ).catch(() => null)
     if (res) {
       await this.actionUpdateGroup()
     }
   }
 
   async deleteCharacterInGroup(id: string) {
-    const res = await CharacterApi.patchCharacter(id, { partyId: "" }, () => {})
-    if (res) {
-      await this.storeUpdateCharacters()
-    }
+    const res = await this.$requestServer(CharacterApi.patch + id, {
+      method: "patch",
+      data: { partyId: "" },
+    }).catch(() => null)
+    if (res) await this.storeUpdateCharacters()
   }
 }
 </script>

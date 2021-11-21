@@ -1,6 +1,7 @@
 import { Module, Mutation, VuexModule, Action } from "vuex-module-decorators"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
-import GroupApi from "~/api/GroupApi"
+import { $requestServer } from "~/server/utils/api"
+import { GroupApi } from "~/api/group.api"
 
 @Module({
   name: "global",
@@ -17,9 +18,10 @@ export default class Global extends VuexModule {
 
   @Action
   async loadGlobalData() {
-    const res = await GroupApi.loadGroups((res) => {
-      console.error(res.data.message, "vuex global/loadGlobalData")
+    const res = await $requestServer(GroupApi.load).catch((e) => {
+      console.log(e.message, "vuex global/loadGlobalData")
     })
+
     if (res) {
       this.setGroups(res)
     }
@@ -27,8 +29,8 @@ export default class Global extends VuexModule {
 
   @Action
   async updateGroups() {
-    const res = await GroupApi.loadGroups((res) => {
-      console.error(res.data.message, "vuex global/updateGroups")
+    const res = await $requestServer(GroupApi.load).catch((e) => {
+      console.log(e.message, "vuex global/updateGroups")
     })
     if (res) this.setGroups(res)
   }

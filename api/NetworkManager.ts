@@ -1,3 +1,4 @@
+// TODO отказаться от API модулей, использовать axiosInstance из nuxt при помощи метода inject
 import axios, { AxiosInstance, AxiosResponse } from "axios"
 import { getToken } from "~/utils/Token"
 import { PAGES } from "~/data/PAGES"

@@ -24,8 +24,8 @@ export default class MixinModal extends Vue {
     this.$emit("input", false)
   }
 
-  showError(info: AxiosResponse<ErrorResponse>) {
-    this.serverErrorResponse = info.data.message
+  showError(info: ErrorResponse) {
+    this.serverErrorResponse = info.message
   }
 }
 </script>

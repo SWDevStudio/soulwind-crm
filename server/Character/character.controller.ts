@@ -1,7 +1,9 @@
 import { Router } from "express"
+import expressAsyncHandler from "express-async-handler"
 import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
-import CharacterService from "./character.service"
+import ErrorCatch from "../middleware/ErrorCatch"
+import CharacterMiddleware from "./character.middleware"
 const CharacterController = Router()
 
 /**
@@ -25,9 +27,18 @@ const CharacterController = Router()
 CharacterController.get(
   "",
   AuthorizeMiddleware,
-  RolesMiddleware(["USER", "ADMIN"]),
-  CharacterService.getCharacters
+  RolesMiddleware("character.view"),
+  CharacterMiddleware.getCharacters
 )
+
+CharacterController.get(
+  "/my-info",
+  AuthorizeMiddleware,
+  expressAsyncHandler(CharacterMiddleware.getMyCharacterInfo),
+  ErrorCatch
+)
+
+CharacterController.get("/general", CharacterMiddleware.getCharactersGenerals)
 /**
  * @swagger
  *  /character:
@@ -48,8 +59,8 @@ CharacterController.get(
 CharacterController.post(
   "",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
-  CharacterService.createCharacter
+  RolesMiddleware("character.create"),
+  CharacterMiddleware.createCharacter
 )
 /**
  * @swagger
@@ -71,8 +82,8 @@ CharacterController.post(
 CharacterController.patch(
   "/:id",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
-  CharacterService.patchCharacter
+  RolesMiddleware("character.update"),
+  CharacterMiddleware.patchCharacter
 )
 /**
  * @swagger
@@ -97,7 +108,7 @@ CharacterController.patch(
 CharacterController.delete(
   "/:id",
   AuthorizeMiddleware,
-  RolesMiddleware(["ADMIN"]),
+  RolesMiddleware("character.delete"),
   (req, res) => res.json("Метод еще не реализован")
 )
 
