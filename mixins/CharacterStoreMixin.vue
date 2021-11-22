@@ -27,6 +27,9 @@ export default class CharacterStoreMixin extends Vue {
   @Getter("characters/blackListCharacters")
   getBlackListCharacters!: CharacterDTOResponse[]
 
+  @Getter("characters/freeCharacters")
+  getFreeCharacters!: CharacterDTOResponse[]
+
   CharacterMixinFindName(id: string): string {
     return this.getAllCharacters.find((i) => i._id === id)?.lastName || id
   }
