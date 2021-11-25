@@ -35,6 +35,7 @@ declare module "vuex/types/index" {
 export default (ctx: Context, inject: Inject) => {
   inject("checkPermission", (area: PermissionArea, field: PermissionField) => {
     const USER_PERMISSION = ctx.store.state.global.userPermission
+    if (USER_PERMISSION === null) return false
     if (typeof USER_PERMISSION === "boolean") {
       return USER_PERMISSION
     }

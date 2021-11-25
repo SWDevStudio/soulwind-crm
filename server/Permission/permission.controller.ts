@@ -25,7 +25,6 @@ permissionController.get(
 permissionController.get(
   "/my-permission",
   AuthorizeMiddleware,
-  RolesMiddleware("permission.view"),
   expressAsyncHandler(PermissionMiddleware.findMyPermission),
   ErrorCatch
 )
