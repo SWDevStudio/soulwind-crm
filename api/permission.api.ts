@@ -3,4 +3,5 @@ export enum PermissionApi {
   patch = "/api/permission/",
   createGroup = "/api/permission/",
   delete = "/api/permission/",
+  myPermission = "/api/permission/my-permission",
 }

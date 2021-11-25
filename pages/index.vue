@@ -251,15 +251,17 @@ export default class Index extends mixins(CharacterStoreMixin) {
   }
 
   async created() {
-    this.guildEvents = await this.$requestServer<GuildEventDtoResponse[]>(
-      GuildEventApi.loadEvent,
-      {
-        params: {
-          from: moment().subtract("days", 13).format("YYYY-MM-DD"),
-          to: moment().format("YYYY-MM-DD"),
-        },
-      }
-    ).catch(() => [])
+    if (this.$checkPermission("guildEvent", "view")) {
+      this.guildEvents = await this.$requestServer<GuildEventDtoResponse[]>(
+        GuildEventApi.loadEvent,
+        {
+          params: {
+            from: moment().subtract("days", 13).format("YYYY-MM-DD"),
+            to: moment().format("YYYY-MM-DD"),
+          },
+        }
+      ).catch(() => [])
+    }
   }
 
   gearScore() {

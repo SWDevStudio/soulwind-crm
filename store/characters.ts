@@ -41,4 +41,8 @@ export default class Characters extends VuexModule {
   get blackListCharacters(): CharacterDTOResponse[] {
     return this.characters.filter((i) => i.status === "BLACK_LIST")
   }
+
+  get freeCharacters(): CharacterDTOResponse[] {
+    return this.characters.filter((i) => i.status === "ACTIVE" && !i.userId)
+  }
 }

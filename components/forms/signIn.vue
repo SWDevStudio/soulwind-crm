@@ -30,7 +30,7 @@
     />
     <v-select
       v-model="form.characterId"
-      :items="characters"
+      :items="freeCharacters"
       label="select your character"
       item-text="lastName"
       item-value="_id"
@@ -53,10 +53,9 @@
 </template>
 
 <script>
-import { PAGES } from "~/data/PAGES"
 import MixinToken from "~/mixins/MixinToken"
 import { UI } from "~/data/UI"
-
+import { CharacterApi } from "~/api/character.api"
 export default {
   name: "SignIn",
   mixins: [MixinToken],
@@ -80,17 +79,20 @@ export default {
     },
     characters: [],
   }),
-
+  computed: {
+    freeCharacters() {
+      return this.characters.filter((i) => !i.userId)
+    },
+  },
   async created() {
     this.characters = await this.$requestServer(
-      "/api/character/general",
+      CharacterApi.loadGeneralInfo,
       {}
     ).catch(() => [])
   },
   methods: {
     async comparePass() {
       if (this.form.password === this.form.repeatPass) {
-        console.log("the password is correct")
         const registerResponse = await this.$axios
           .post("/api/user/register", {
             email: this.form.email,
@@ -99,11 +101,10 @@ export default {
           })
           .catch((e) => e.response)
         if (registerResponse.status === 200) {
-          const loginResponse = await this.$axios
-            .post("/api/user/login", this.form)
-            .catch((e) => e.response)
-          this.setToken(loginResponse.data?.token)
-          await this.$router.push(PAGES.root)
+          alert(
+            "Регистрация прошла успешно, ожидайте подтверждения от администратора"
+          )
+          window.location.reload()
         }
       } else {
         this.notCorrectPass = "Пароли не совпадают"

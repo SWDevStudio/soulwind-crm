@@ -1,12 +1,10 @@
 import { Request, Response } from "express"
-import bcrypt from "bcrypt"
-import { validationResult } from "express-validator"
 import createError from "http-errors"
 import CharacterService from "../Character/character.service"
 import GenerateToken from "../utils/GenerateToken"
 import UserModel from "./dto/user.model"
 import UserService from "./user.service"
-import { UserDto, UserResponseDto } from "~/server/User/dto/user.dto"
+import { UserResponseDto } from "~/server/User/dto/user.dto"
 
 class UserMiddleware {
   async createUser(req: Request, res: Response) {
@@ -96,6 +94,13 @@ class UserMiddleware {
 
   async setRole(req: Request, res: Response): Promise<void> {
     try {
+      const userRole = res.locals._user.role
+      if (req.body.role === "SUPER_ADMIN" && userRole !== "SUPER_ADMIN") {
+        throw createError(
+          400,
+          "Только системный админестратор может выдавать роль SUPER_ADMIN"
+        )
+      }
       await UserModel.findOneAndUpdate(
         { _id: req.body.id },
         {
