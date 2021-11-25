@@ -25,7 +25,11 @@ export default {
   // TODO найти способ пофиксить ошибки использования SSR
   ssr: false,
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["~plugins/requestServer.ts", "~plugins/axios-accessor.ts"],
+  plugins: [
+    "~plugins/requestServer.ts",
+    "~plugins/axios-accessor.ts",
+    "~plugins/checkPermission.ts",
+  ],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
