@@ -53,13 +53,16 @@ import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import MixinToken from "~/mixins/MixinToken"
 
 import "chartist/dist/chartist.min.css"
+import PermissionMixin from "~/mixins/PermissionMixin.vue"
 
 @Component({
-  name: "default"
+  name: "default",
 })
-export default class Default extends mixins<CharacterStoreMixin,
-  MixinToken
-  >(CharacterStoreMixin, MixinToken) {
+export default class Default extends mixins<
+  CharacterStoreMixin,
+  MixinToken,
+  PermissionMixin
+>(CharacterStoreMixin, MixinToken, PermissionMixin) {
   clipped: boolean = false
   drawer: boolean = false
   fixed: boolean = false
@@ -75,6 +78,7 @@ export default class Default extends mixins<CharacterStoreMixin,
 
   created() {
     this.$store.dispatch("global/loadGlobalData")
+    this.$store.dispatch("global/loadPermission")
     // this.$store.dispatch("characters/updateCharacter")
     this.storeUpdateCharacters()
   }
