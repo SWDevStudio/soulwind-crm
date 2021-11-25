@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-import { HasValidPermissionFields } from "../middleware/HasValidPermissionFields"
 import PermissionService from "./permission.service"
 
 class PermissionMiddleware {
@@ -23,6 +22,15 @@ class PermissionMiddleware {
 
   async delete(req: Request, res: Response) {
     res.json(await PermissionService.delete(req.params.name))
+  }
+
+  async findMyPermission(req: Request, res: Response) {
+    const role = res.locals._user.role
+    if (role === "SUPER_ADMIN") {
+      res.json(true)
+      return
+    }
+    res.json(await PermissionService.load(res.locals.role.toUpperCase()))
   }
 }
 

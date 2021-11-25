@@ -2,8 +2,10 @@ import { Router } from "express"
 import expressAsyncHandler from "express-async-handler"
 import ErrorCatch from "../middleware/ErrorCatch"
 import { HasValidPermissionFields } from "../middleware/HasValidPermissionFields"
+import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
 import PermissionMiddleware from "./permission.middleware"
+
 const permissionController = Router()
 
 // получить право
@@ -18,6 +20,13 @@ permissionController.get(
   "",
   RolesMiddleware("permission.view"),
   expressAsyncHandler(PermissionMiddleware.findAll),
+  ErrorCatch
+)
+permissionController.get(
+  "/my-permission",
+  AuthorizeMiddleware,
+  RolesMiddleware("permission.view"),
+  expressAsyncHandler(PermissionMiddleware.findMyPermission),
   ErrorCatch
 )
 // permissionController.get("/err", (req, res) => {
