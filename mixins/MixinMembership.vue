@@ -30,6 +30,7 @@
               outlined
               class="ml-auto"
               :color="UI.actionColor.color"
+              :disabled="$checkPermission('character', 'create', true)"
               @click="modal = !modal"
             >
               <v-icon dark> mdi-plus</v-icon>
@@ -45,8 +46,17 @@
         hide-default-footer
       >
         <template #item.actions="{ item }">
-          <v-icon @click="editCharacter(item)" class="mr-2">mdi-pencil</v-icon>
-          <v-icon  @click="startDismiss(item)">mdi-delete-forever-outline</v-icon>
+          <v-icon
+            class="mr-2"
+            :disabled="$checkPermission('character', 'update', true)"
+            @click="editCharacter(item)"
+            >mdi-pencil
+          </v-icon>
+          <v-icon
+            :disabled="$checkPermission('character', 'delete', true)"
+            @click="startDismiss(item)"
+            >mdi-delete-forever-outline
+          </v-icon>
         </template>
         <template #item.partyId="{ item }">
           {{ findGroupName(item.partyId) }}
@@ -111,11 +121,7 @@ export default class MixinMembership extends mixins<CharacterStoreMixin>(
   get sortCharacters() {
     if (!this.form.partyId) return this[this.needCharacters] || []
     const arr: any[] = this[this.needCharacters] || []
-    return (
-      arr?.filter(
-        (item) => item.partyId === this.form.partyId
-      ) || []
-    )
+    return arr?.filter((item) => item.partyId === this.form.partyId) || []
   }
 
   @Watch("modal")
