@@ -6,7 +6,8 @@ import {
 
 type CheckPermissionFunction = (
   area: PermissionArea,
-  field: PermissionField
+  field: PermissionField,
+  isBtn?: boolean
 ) => boolean
 declare module "vue/types/vue" {
   interface Vue {
@@ -33,15 +34,20 @@ declare module "vuex/types/index" {
 }
 
 export default (ctx: Context, inject: Inject) => {
-  inject("checkPermission", (area: PermissionArea, field: PermissionField) => {
-    const USER_PERMISSION = ctx.store.state.global.userPermission
-    if (USER_PERMISSION === null) return false
-    if (typeof USER_PERMISSION === "boolean") {
-      return USER_PERMISSION
+  inject(
+    "checkPermission",
+    (area: PermissionArea, field: PermissionField, isBtn = false) => {
+      const USER_PERMISSION = ctx.store.state.global.userPermission
+      if (USER_PERMISSION === null) return isBtn
+      if (typeof USER_PERMISSION === "boolean") {
+        return isBtn ? !USER_PERMISSION : USER_PERMISSION
+      }
+      if (typeof USER_PERMISSION === "object") {
+        return isBtn
+          ? !USER_PERMISSION.fields[area][field]
+          : USER_PERMISSION.fields[area][field]
+      }
+      return isBtn
     }
-    if (typeof USER_PERMISSION === "object") {
-      return USER_PERMISSION.fields[area][field]
-    }
-    return false
-  })
+  )
 }
