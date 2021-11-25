@@ -45,20 +45,8 @@
         hide-default-footer
       >
         <template #item.actions="{ item }">
-          <ph-paint-brush
-            :size="16"
-            weight="bold"
-            class="v-icon mr-2"
-            style="cursor: pointer"
-            @click="editCharacter(item)"
-          />
-          <ph-x
-            :size="16"
-            weight="bold"
-            class="v-icon"
-            style="cursor: pointer"
-            @click="startDismiss(item)"
-          />
+          <v-icon @click="editCharacter(item)" class="mr-2">mdi-pencil</v-icon>
+          <v-icon  @click="startDismiss(item)">mdi-delete-forever-outline</v-icon>
         </template>
         <template #item.partyId="{ item }">
           {{ findGroupName(item.partyId) }}
@@ -94,15 +82,13 @@ import { CharacterDTOResponse } from "~/server/Character/dto/character.dto"
 import CharacterCreationForm from "~/components/forms/FormCreationCharacter.vue"
 import FormDismissCharacter from "~/components/forms/FormDismissCharacter.vue"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
-import MixinIcon from "~/mixins/MixinIcon"
 
 @Component({
   name: "MixinMembership",
   components: { FormDismissCharacter, CharacterCreationForm },
 })
-export default class MixinMembership extends mixins<CharacterStoreMixin, MixinIcon>(
-  CharacterStoreMixin,
-  MixinIcon
+export default class MixinMembership extends mixins<CharacterStoreMixin>(
+  CharacterStoreMixin
 ) {
   @State((state) => state.global.groups) groups!: GroupDtoModel[]
 

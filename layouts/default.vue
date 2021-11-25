@@ -17,11 +17,7 @@
           exact
         >
           <v-list-item-action>
-            <component
-              :is="item.icon"
-              v-if="item.icon.split('-')[0] === 'ph'"
-            ></component>
-            <v-icon v-else>{{ item.icon }}</v-icon>
+            <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title v-text="item.title" />
@@ -57,15 +53,13 @@ import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import MixinToken from "~/mixins/MixinToken"
 
 import "chartist/dist/chartist.min.css"
-import MixinIcon from "~/mixins/MixinIcon"
+
 @Component({
-  name: "default",
+  name: "default"
 })
-export default class Default extends mixins<
-  CharacterStoreMixin,
-  MixinToken,
-  MixinIcon
->(CharacterStoreMixin, MixinToken, MixinIcon) {
+export default class Default extends mixins<CharacterStoreMixin,
+  MixinToken
+  >(CharacterStoreMixin, MixinToken) {
   clipped: boolean = false
   drawer: boolean = false
   fixed: boolean = false
