@@ -130,6 +130,7 @@ UserController.patch(
 )
 UserController.patch(
   "/role",
+  AuthorizeMiddleware,
   [
     check("id", "id is required field").notEmpty().isString(),
     check("role", "role is required").notEmpty().isString(),

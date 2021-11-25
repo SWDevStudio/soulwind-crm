@@ -117,7 +117,7 @@ export default class Index extends CharacterStoreMixin {
     const res: any = await this.$requestServer(UserApi.setRole, {
       method: "patch",
       data: { role, id },
-    })
+    }).catch(() => {})
   }
 
   async setCharacter(characterId: string, id: string) {
