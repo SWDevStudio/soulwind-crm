@@ -30,7 +30,7 @@ class PermissionMiddleware {
       res.json(true)
       return
     }
-    res.json(await PermissionService.load(res.locals.role.toUpperCase()))
+    res.json(await PermissionService.load(role))
   }
 }
 
