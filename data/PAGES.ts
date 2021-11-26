@@ -9,4 +9,5 @@ export const PAGES = {
   profile: "/profile",
   permission: "/permission",
   admin: "/admin",
+  statistics: "/statistics",
 }
