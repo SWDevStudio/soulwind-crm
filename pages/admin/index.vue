@@ -17,7 +17,7 @@
                     <tr v-for="(item, key) in items" :key="key">
                       <td>{{ item.email }}</td>
                       <td>
-                        <v-select
+                        <v-autocomplete
                           style="max-width: 250px"
                           :items="getActiveCharacters"
                           item-text="lastName"
@@ -127,7 +127,7 @@ export default class Index extends CharacterStoreMixin {
         characterId,
         id,
       },
-    })
+    }).catch(() => {})
   }
 
   async deleteUser(user: UserResponseDto) {
