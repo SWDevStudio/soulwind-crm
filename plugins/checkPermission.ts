@@ -43,6 +43,10 @@ export default (ctx: Context, inject: Inject) => {
         return isBtn ? !USER_PERMISSION : USER_PERMISSION
       }
       if (typeof USER_PERMISSION === "object") {
+        if (!USER_PERMISSION.fields[area]) {
+          console.error("Ошибка поиска прав, отказано в доступе")
+          return isBtn
+        }
         return isBtn
           ? !USER_PERMISSION.fields[area][field]
           : USER_PERMISSION.fields[area][field]
