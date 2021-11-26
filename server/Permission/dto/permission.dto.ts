@@ -10,6 +10,7 @@ export interface PermissionDto {
   name: string
   // Прописать список прав, которые нам нужны
   fields: {
+    // TODO не совсем корректный подход указывать, что тут могут быть любые ключи
     [key: string]: PermissionBase
     character: PermissionBase
     group: PermissionBase
