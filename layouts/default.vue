@@ -11,7 +11,7 @@
       <v-list>
         <template v-for="(item, i) in items">
           <v-list-item
-            v-if="showItem(item.area)"
+            v-if="item.area ? showItem(item.area) : true"
             :key="i"
             :to="item.to"
             router
@@ -96,7 +96,6 @@ export default class Default extends mixins<CharacterStoreMixin, MixinToken>(
       }
       return true
     } else {
-      console.log(this.$checkPermission(permission, "view"))
       return this.$checkPermission(permission, "view")
     }
   }

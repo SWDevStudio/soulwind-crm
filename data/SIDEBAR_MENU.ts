@@ -5,8 +5,13 @@ export const SIDEBAR_MENU: {
   icon: string
   title: string
   to: string
-  area: PermissionArea | PermissionArea[]
+  area?: PermissionArea | PermissionArea[]
 }[] = [
+  {
+    icon: "mdi-home-outline",
+    title: "Главная",
+    to: PAGES.root,
+  },
   {
     icon: "mdi-account-outline",
     title: "Профиль",
