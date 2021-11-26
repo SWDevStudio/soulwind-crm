@@ -11,7 +11,7 @@
       <v-list>
         <template v-for="(item, i) in items">
           <v-list-item
-            v-if="$checkPermission(item.area, 'view')"
+            v-if="showItem(item.area)"
             :key="i"
             :to="item.to"
             router
@@ -55,6 +55,7 @@ import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import MixinToken from "~/mixins/MixinToken"
 
 import "chartist/dist/chartist.min.css"
+import { PermissionArea } from "~/server/Data/PERMISSION_FIELDS"
 
 @Component({
   name: "default",
@@ -84,6 +85,20 @@ export default class Default extends mixins<CharacterStoreMixin, MixinToken>(
 
     // this.$store.dispatch("characters/updateCharacter")
     await this.storeUpdateCharacters()
+  }
+
+  showItem(permission: PermissionArea | PermissionArea[]): boolean {
+    if (Array.isArray(permission)) {
+      for (const i of permission) {
+        if (!this.$checkPermission(i, "view")) {
+          return false
+        }
+      }
+      return true
+    } else {
+      console.log(this.$checkPermission(permission, "view"))
+      return this.$checkPermission(permission, "view")
+    }
   }
 }
 </script>

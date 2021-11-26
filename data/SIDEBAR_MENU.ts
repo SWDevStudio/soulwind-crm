@@ -5,7 +5,7 @@ export const SIDEBAR_MENU: {
   icon: string
   title: string
   to: string
-  area: PermissionArea
+  area: PermissionArea | PermissionArea[]
 }[] = [
   {
     icon: "mdi-account-outline",
@@ -54,5 +54,11 @@ export const SIDEBAR_MENU: {
     title: "Админ. панель",
     to: PAGES.admin,
     area: "user",
+  },
+  {
+    icon: "mdi-form-dropdown",
+    title: "Статистика",
+    to: PAGES.statistics,
+    area: ["character", "guildEvent"],
   },
 ]
