@@ -202,6 +202,7 @@ export default class CharacterCreationForm extends Vue {
   PVP_RANK = PVP_RANK
   rules = [(value: string) => !!value || "Заполни меня"]
   editId: null | string = null
+
   form: CharacterDto = {
     firstName: undefined,
     lastName: "",
@@ -256,6 +257,17 @@ export default class CharacterCreationForm extends Vue {
   }
 
   async editCharacter(): Promise<void> {
+    if (this.staticMode) {
+      const res = await this.$axios
+        .patch("/api/character/profile", this.form, {
+          headers: {
+            token: getToken(),
+          },
+        })
+        .catch((error) => error.response)
+      this.itEdit = false
+      return
+    }
     const res = await this.$axios
       .patch("/api/character/" + this.editId, this.form, {
         headers: {
