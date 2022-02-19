@@ -19,10 +19,19 @@
                       <td>
                         <v-autocomplete
                           style="max-width: 250px"
-                          :items="getActiveCharacters"
+                          :items="getAllCharacters"
                           item-text="lastName"
                           :value="item.characterId"
                           item-value="_id"
+                          clearable
+                          :hint="
+                            getAllCharacters.find(
+                              (i) => i._id === item.characterId
+                            ).status !== 'ACTIVE'
+                              ? 'Персонаж исключен!'
+                              : ''
+                          "
+                          persistent-hint
                           @change="setCharacter($event, item._id)"
                         />
                       </td>
@@ -95,7 +104,8 @@ export default class Index extends CharacterStoreMixin {
   @Ref("dialog") dialog!: DialogConfirm
 
   async loadUsers() {
-    this.users = await this.$requestServer(UserApi.get).catch(() => [])
+    const realUsers = await this.$requestServer(UserApi.get).catch(() => [])
+    this.users = realUsers
   }
 
   async loadGroups() {
@@ -118,6 +128,13 @@ export default class Index extends CharacterStoreMixin {
       method: "patch",
       data: { role, id },
     }).catch(() => {})
+  }
+
+  checkStatusCharacter(id: string): boolean {
+    if (this.getAllCharacters) {
+      return !!this.getAllCharacters?.find((i) => i._id === id)
+    }
+    return false
   }
 
   async setCharacter(characterId: string, id: string) {

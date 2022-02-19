@@ -54,6 +54,15 @@ class CharacterMiddleware {
     try {
       // TODO сделать проверку полей
       const data = req.body as CharacterDTOResponse
+      const user = await CharacterModel.findOne({
+        lastName: data.lastName,
+      })
+      if (user && String(user._id) !== String(req.body._id)) {
+        res.status(400).json({
+          message: "Пользователь с такой фамилией существует",
+        })
+        return
+      }
       const resp = await CharacterModel.findOneAndUpdate(
         { _id: req.params.id },
         data
