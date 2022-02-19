@@ -25,9 +25,7 @@
                           item-value="_id"
                           clearable
                           :hint="
-                            getAllCharacters.find(
-                              (i) => i._id === item.characterId
-                            ).status !== 'ACTIVE'
+                            checkStatusCharacter(item.characterId)
                               ? 'Персонаж исключен!'
                               : ''
                           "
@@ -131,10 +129,7 @@ export default class Index extends CharacterStoreMixin {
   }
 
   checkStatusCharacter(id: string): boolean {
-    if (this.getAllCharacters) {
-      return !!this.getAllCharacters?.find((i) => i._id === id)
-    }
-    return false
+    return this.getAllCharacters?.find((i) => i._id === id)?.status !== "ACTIVE"
   }
 
   async setCharacter(characterId: string, id: string) {
