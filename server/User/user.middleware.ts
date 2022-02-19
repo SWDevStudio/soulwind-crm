@@ -117,14 +117,18 @@ class UserMiddleware {
     try {
       const { characterId, id } = req.body
       const user: any = await UserService.load({ _id: id })
-      await CharacterService.isTiedForUser(characterId)
+      if (characterId === null) {
+      } else {
+        await CharacterService.isTiedForUser(characterId)
+      }
+
       if (user.characterId) {
         await CharacterService.removeUserId(user.characterId)
       }
       await CharacterService.addUserId(characterId, id)
       await UserService.update(id, { characterId })
       res.json(await UserModel.findOne({ _id: req.body.id }))
-    } catch (e) {
+    } catch (e: any) {
       throw createError(400, e)
     }
   }
