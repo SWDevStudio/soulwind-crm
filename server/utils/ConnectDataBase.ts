@@ -3,7 +3,7 @@ import isDev from "./IsDev"
 export function ConnectDataBase(
   login: string = "KotaroSW",
   passwd: string = "KotaroSW2015",
-  db: string = "myFirstDatabase"
+  db: string = "SoulWind"
 ) {
   const uri = isDev()
     ? `mongodb+srv://${login}:${passwd}@cluster0.v6u1x.mongodb.net/${db}?retryWrites=true&w=majority`
