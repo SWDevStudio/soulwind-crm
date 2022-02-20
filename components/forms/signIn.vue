@@ -10,7 +10,7 @@
     />
     <v-text-field
       v-model="form.password"
-      label="password"
+      label="Пароль"
       :rules="passwordRules"
       :color="UI.actionColor.color"
       required
@@ -31,7 +31,7 @@
     <v-select
       v-model="form.characterId"
       :items="freeCharacters"
-      label="select your character"
+      label="Ваш персонаж (необязательно)"
       item-text="lastName"
       item-value="_id"
     />
@@ -85,10 +85,12 @@ export default {
     },
   },
   async created() {
-    this.characters = await this.$requestServer(
+    const characters = await this.$requestServer(
       CharacterApi.loadGeneralInfo,
       {}
     ).catch(() => [])
+
+    this.characters = characters.filter(i => i.status === 'ACTIVE')
   },
   methods: {
     async comparePass() {

@@ -4,6 +4,7 @@ import AuthorizeMiddleware from "../middleware/AuthorizeMiddleware"
 import RolesMiddleware from "../middleware/RolesMiddleware"
 import ErrorCatch from "../middleware/ErrorCatch"
 import CharacterMiddleware from "./character.middleware"
+
 const CharacterController = Router()
 
 /**
@@ -62,6 +63,14 @@ CharacterController.post(
   RolesMiddleware("character.create"),
   CharacterMiddleware.createCharacter
 )
+
+// TODO возможно методы для обновления профиля стоит вынести отдельно в будущем.
+CharacterController.patch(
+  "/profile",
+  AuthorizeMiddleware,
+  CharacterMiddleware.patchCharacter
+)
+
 /**
  * @swagger
  *  /character/{id}:

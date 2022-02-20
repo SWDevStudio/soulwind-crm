@@ -1,5 +1,8 @@
 <template>
-  <form-creation-character ref="characterForm" :static-mode="true" />
+  <div v-if="character">
+    <form-creation-character ref="characterForm" :static-mode="true" />
+  </div>
+  <div v-else>К вашему аккаунту не привязан персонаж</div>
 </template>
 
 <script lang="ts">

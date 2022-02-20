@@ -143,10 +143,7 @@ UserController.patch(
 
 UserController.patch(
   "/character",
-  [
-    check("id", "id is required field").notEmpty().isString(),
-    check("characterId", "characterId is required").notEmpty().isString(),
-  ],
+  [check("id", "id is required field").notEmpty().isString()],
   ValidationFields,
   RolesMiddleware("user.update"),
   expressAsyncHandler(UserMiddleware.setCharacter),
