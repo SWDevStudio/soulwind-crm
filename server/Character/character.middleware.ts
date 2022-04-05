@@ -64,7 +64,7 @@ class CharacterMiddleware {
         return
       }
       const resp = await CharacterModel.findOneAndUpdate(
-        { _id: req.body._id },
+        { _id: req.body._id || req.params.id },
         data
       )
       res.json(resp)
