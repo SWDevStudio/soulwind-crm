@@ -137,7 +137,7 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
   get headers() {
     const cols = this.events.map((event) => {
       return {
-        text: moment(event.date * 1000).format("DD.MM"),
+        text: `${moment(event.date * 1000).format("DD.MM")} / ${event.eventType}`,
         value: event._id,
       }
     })

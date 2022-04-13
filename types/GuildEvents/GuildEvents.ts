@@ -1,1 +1,1 @@
-export type GuildEvents = "Осада" | "Собрание" | "Тренировка"
+export type GuildEvents = "Осада" | "Собрание" | "Тренировка" | "Замок"
