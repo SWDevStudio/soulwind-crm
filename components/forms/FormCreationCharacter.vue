@@ -132,6 +132,16 @@
             />
           </v-col>
         </v-row>
+        <v-row v-if="editMode">
+          <v-col>
+            <div>
+              Был создан: {{ time.createdAt }}
+            </div>
+            <div v-if="time.createdAt !== time.updatedAt">
+              Был восстановлен в гильдии: {{ time.updatedAt }}
+            </div>
+          </v-col>
+        </v-row>
         <v-row>
           <v-col cols="12">
             <v-btn
@@ -173,6 +183,7 @@
 import Component from "nuxt-class-component"
 import { Prop, Ref, State } from "nuxt-property-decorator"
 import Vue from "vue"
+import moment from "moment/moment";
 import { CHARACTER_CLASS } from "~/server/Data/CHARACTER_CLASS"
 import { RANK_PARTY } from "~/data/RANK_PARTY"
 import { UI } from "~/data/UI"
@@ -183,6 +194,7 @@ import {
 } from "~/server/Character/dto/character.dto"
 import { GroupDtoModel } from "~/server/Group/dto/group.dto"
 import { PVP_RANK } from "~/data/PVP_RANK"
+import {Types} from "~/types";
 
 @Component({
   name: "CharacterCreationForm",
@@ -218,6 +230,15 @@ export default class CharacterCreationForm extends Vue {
     status: "ACTIVE",
     rankParty: undefined,
     userId: null,
+    createdAt: null,
+    updatedAt: null
+  }
+
+  get time() {
+    return {
+      createdAt: moment((this.form.createdAt || 0) * 1000).format(Types.DEFAULT_FORMAT_DATE),
+      updatedAt:  moment((this.form.updatedAt || 0) * 1000).format(Types.DEFAULT_FORMAT_DATE)
+    }
   }
 
   created() {
@@ -245,8 +266,12 @@ export default class CharacterCreationForm extends Vue {
   }
 
   async createdCharacter(): Promise<void> {
+    const form: CharacterDto = JSON.parse(JSON.stringify(this.form))
+    form.createdAt = moment().unix()
+    form.updatedAt = moment().unix()
+    console.log(form)
     const res = await this.$axios
-      .post("/api/character", this.form, {
+      .post("/api/character", form, {
         headers: {
           token: getToken(),
         },

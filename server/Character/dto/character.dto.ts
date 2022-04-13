@@ -20,6 +20,8 @@ export interface CharacterDto {
   status: CharacterStatus
   rankParty?: CharacterRankParty
   userId: string | null
+  createdAt: number | null
+  updatedAt: number | null
 }
 
 export interface CharacterDTOResponse extends CharacterDto, Document {}

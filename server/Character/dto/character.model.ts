@@ -17,6 +17,8 @@ const schema = new Schema<CharacterDto>({
   status: { type: String, default: "ACTIVE" },
   rankParty: { type: String, default: "Рядовой" },
   userId: { type: String, default: null },
+  createdAt: { type: Number, default: 1649710800 },
+  updatedAt: { type: Number, default: 1649710800 }
 })
 const CharacterModel: mongoose.Model<CharacterDto> =
   mongoose.models.Character || model<CharacterDto>("Character", schema)
