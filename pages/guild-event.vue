@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center" class="mt-2 pb-2">
+  <v-row v-if="getAllCharacters.length" justify="center" class="mt-2 pb-2">
     <v-card width="100%">
       <v-card-title>
         <v-row>
@@ -73,11 +73,25 @@
           hide-default-footer
         >
           <template #item.lastName="{ item }"
-            >{{
-              getAllCharacters.find(
-                (character) => item.lastName === character._id
-              ).lastName
-            }}
+          >
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr))">
+              <div> {{
+                  findUserFromId(item.lastName).lastName
+                }}
+              </div>
+              <div>
+                {{
+                  findGroupFromId(findUserFromId(item.lastName).partyId) || 'Без группы'
+                }}
+              </div>
+              <div>
+                {{
+                  moment(findUserFromId(item.lastName).updatedAt * 1000).format(Types.DEFAULT_FORMAT_DATE)
+                }}
+              </div>
+            </div>
+
+
           </template>
         </v-data-table>
       </v-card-text>
@@ -101,23 +115,27 @@
 </template>
 
 <script lang="ts">
-import Component, { mixins } from "nuxt-class-component"
-import { Prop, Ref } from "nuxt-property-decorator"
+import Component, {mixins} from "nuxt-class-component"
+import {Prop, Ref} from "nuxt-property-decorator"
 import moment from "moment/moment"
-import { UI } from "~/data/UI"
+import {UI} from "~/data/UI"
 import {
   GuildEventDtoResponse,
   Participants,
 } from "~/server/GuildEvent/dto/guildEvent.dto"
 import CharacterStoreMixin from "~/mixins/CharacterStoreMixin.vue"
 import FormGuildEvent from "~/components/forms/FormGuildEvent.vue"
-import { GuildEventApi } from "~/api/guildEvent.api"
+import {GuildEventApi} from "~/api/guildEvent.api"
+import GlobalStoreMixin from "~/mixins/GlobalStoreMixin.vue";
+import {Types} from '~/types'
 // TODO на беке посмотреть при обновлении ивентов не приходит ответ который я хочу, падает filter в template
 @Component({
   name: "GuildEvent",
-  components: { FormGuildEvent },
+  components: {FormGuildEvent},
 })
-export default class GuildEvent extends mixins(CharacterStoreMixin) {
+export default class GuildEvent extends mixins(CharacterStoreMixin, GlobalStoreMixin) {
+  moment = moment
+  Types = Types
   // data
   form: object = {
     name: "",
@@ -141,7 +159,7 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
         value: event._id,
       }
     })
-    return [{ text: "Фамилия", value: "lastName" }, ...cols]
+    return [{text: "Фамилия / Группа / Дата вступления", value: "lastName"}, ...cols]
   }
 
   updateEvent(arr: GuildEventDtoResponse[]) {
@@ -172,12 +190,11 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
           characterEventInfo[event._id] = checkCharacter.status
         }
       })
-
       return characterEventInfo
     })
     this.getActiveCharacters.forEach((el) => {
       if (!allCharacter.find((i) => i.lastName === el._id)) {
-        allCharacter.push({ lastName: el._id })
+        allCharacter.push({lastName: el._id})
       }
     })
     return allCharacter
@@ -197,6 +214,16 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
     this.modalCreateEvent = true
   }
 
+  findUserFromId(id: string) {
+    return this.getAllCharacters.find((character) => id === character._id)
+    // return {}
+  }
+
+  findGroupFromId(id: string) {
+    if (!id) return ''
+    return this.storeGroups.find(i => i._id === id)?.name
+  }
+
   // watch
   // @Watch("form.name")
   // startWork(val: string, oldVal: string): void {}
@@ -211,7 +238,7 @@ export default class GuildEvent extends mixins(CharacterStoreMixin) {
     this.events = await this.$requestServer<GuildEventDtoResponse[]>(
       GuildEventApi.loadEvent,
       {
-        params: { from: this.dates[0], to: this.dates[1] },
+        params: {from: this.dates[0], to: this.dates[1]},
       }
     ).catch(() => [])
   }
