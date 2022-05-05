@@ -24,4 +24,5 @@ export const CHARACTER_CLASS: CharacterClass[] = [
   "Нова",
   "Мудрец",
   "Корсар",
+  "Дракания"
 ]
