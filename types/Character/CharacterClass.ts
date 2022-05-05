@@ -22,3 +22,4 @@ export type CharacterClass =
   | "Нова"
   | "Мудрец"
   | "Корсар"
+  | "Дракания"
