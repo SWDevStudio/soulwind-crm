@@ -71,6 +71,8 @@
           :items="items"
           disable-pagination
           hide-default-footer
+          fixed-header
+          :height="800"
         >
           <template #item.lastName="{ item }"
           >
@@ -248,3 +250,18 @@ export default class GuildEvent extends mixins(CharacterStoreMixin, GlobalStoreM
   }
 }
 </script>
+
+<style>
+.v-data-table-header {
+  width: 100%;
+  position: sticky;
+  background-color: #1e1e1e;
+}
+
+/*.v-data-table .v-data-table__wrapper table thead {*/
+/*  position: fixed;*/
+/*}*/
+/*.v-data-table__wrapper {*/
+/*  overflow: unset !important;*/
+/*}*/
+</style>
