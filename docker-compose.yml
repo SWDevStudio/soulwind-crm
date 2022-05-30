@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  soulwind-crm:
+    container_name: soulwind-crm
+    build:
+      dockerfile: 'Dockerfile'
+      context: '.'
+    ports:
+      - "3000:3000"
